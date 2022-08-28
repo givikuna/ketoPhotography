@@ -1,0 +1,16 @@
+[
+    {
+        "name": "data.json",
+        "location": [
+            "data",
+            "gallery_data"
+        ]
+    },
+    {
+        "name": "data.json",
+        "location": [
+            "data",
+            "pageTxtInfo"
+        ]
+    }
+]
