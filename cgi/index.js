@@ -58,7 +58,19 @@ function pageNullChecker(nameOfPage) {
         return "y";
     } catch (error) {
         console.log("index.js ERROR: " + error);
-        return "index.js ERROR: " + error;
+        return "n";
+    }
+}
+
+function fileExistanceChecker(pathToFile) {
+    try {
+        if (fs.existsSync(pathToFile)) { //checking if the file exists
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.log("index.js fileExistanceChecker() ERROR: " + error);
+        return false;
     }
 }
 
@@ -73,11 +85,15 @@ app.get('/', function (req, res) {
             htmFilePath = globalPathFinder(["www", "main"], giveInformationAboutPage(infoFromURL.page) + ".htm");
         }
 
-        fs.readFile(htmFilePath, 'utf-8', function (err, data) {
-            var dataToString = data.toString();
-            res.write(dataToString);
-            return res.end();
-        });
+        if (fileExistanceChecker(htmFilePath) == true) { //checking if the file exists
+            fs.readFile(htmFilePath, 'utf-8', function (err, data) {
+                var dataToString = data.toString();
+                res.write(dataToString);
+                return res.end();
+            });
+        } else {
+            // wrongPageErrorHTML();
+        }
     } catch (error) {
         console.log("index.js ERROR: " + error);
     }
