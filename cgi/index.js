@@ -49,12 +49,25 @@ function giveInformationAboutPage(pageName) {
     }
 }
 
+function pageNullChecker(nameOfPage) {
+    try {
+        console.log("------------");
+        if (!nameOfPage || nameOfPage == "" || nameOfPage == '' || typeof nameOfPage !== 'string') {
+            return "n";
+        }
+        return "y";
+    } catch (error) {
+        console.log("index.js ERROR: " + error);
+        return "index.js ERROR: " + error;
+    }
+}
+
 app.get('/', function (req, res) {
     try {
         var infoFromURL = url.parse(req.url, true).query;
         var htmFilePath = null;
 
-        if (infoFromURL.page !== null || infoFromURL.page !== undefined) {
+        if (pageNullChecker(infoFromURL.page) == "n") {
             htmFilePath = globalPathFinder(["www", "main"], "index.htm");
         } else {
             htmFilePath = globalPathFinder(["www", "main"], giveInformationAboutPage(infoFromURL.page) + ".htm");
