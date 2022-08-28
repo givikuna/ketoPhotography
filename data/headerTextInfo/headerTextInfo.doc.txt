@@ -1,1 +1,0 @@
-/data/headerTextInfo/ folder has all the translations for the header text (and other texts found on every page of the website), this is used as a way of ensuring perfect translation of the website for the clients wishing to use a language other than English.
