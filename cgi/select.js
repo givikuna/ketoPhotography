@@ -36,7 +36,21 @@ if (!module.parent) {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
 
-            res.write("huh");
+            var locArr = JSON.parse(readArrayFile(globalPathFinder(["data", "array_information"], "arraysFromCGI.json")).toString());
+            var mainArr = null;
+    
+            for (let i = 0; i < locArr.length; i++) {
+                var tempArr = JSON.parse(readArrayFile(globalPathFinder(locArr[i].location, locArr[i].name)).toString());
+                if (mainArr == null) {
+                    mainArr = tempArr;
+                } else {
+                    mainArr = JSON.stringify(mainArr) + "," + JSON.stringify(tempArr);
+                }
+    
+            }
+            mainArr = "[" + mainArr + "]";
+    
+            res.write(mainArr);
             return res.end();
         } catch (error) {
             console.log("select.js ERROR: " + error);
