@@ -1,0 +1,1 @@
+/data/gallery_data/ folder has all the information about the galleries and the albums

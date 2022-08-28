@@ -1,0 +1,1 @@
+/www/img/ folder has most images shown on pages outside of the album images on the website

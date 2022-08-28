@@ -1,0 +1,1 @@
+/www/main/error/ folder has all the error html code for the website

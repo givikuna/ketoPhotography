@@ -1,0 +1,1 @@
+/data/about_keto/ge/ contains the translation for the site's 'about me' into the Georgian language

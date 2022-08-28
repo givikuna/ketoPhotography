@@ -1,0 +1,3 @@
+/img/albums/ has images for every album shown on the website.
+
+NOTE: albums do not get their own docs explaning their function, as this explains them quite well enough.

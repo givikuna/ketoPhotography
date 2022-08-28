@@ -1,0 +1,1 @@
+/www/ folder has all the information the client will actually see on the front side

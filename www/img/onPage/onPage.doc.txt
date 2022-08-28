@@ -1,0 +1,1 @@
+/www/img/onPage/ has images shown on the website's front end, especially the home page

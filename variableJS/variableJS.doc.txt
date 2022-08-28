@@ -1,0 +1,3 @@
+/variableJS/ folder is used to transition the site from public from private when launching it or editing it.
+
+Used only by the devs working on the project to ensure perfect transitions
