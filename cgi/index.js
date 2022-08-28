@@ -94,6 +94,20 @@ function languageChooser(langInfo) {
     }
 }
 
+function errorTextFunc(sentLang, ketoGmail) {
+    try {
+        if (sentLang == "rus") {
+            return "ОШИБКА: веб-сайт в настоящее время не работает, повторите попытку позже или свяжитесь с нами по адресу: " + ketoGmail;
+        } else if (sentLang == "geo") {
+            return "შეცდომა: ვებგვერდი ამჟამად გათიშულია, სცადეთ მოგვიანებით ან დაგვიკავშირდით მისამართზე: " + ketoGmail;
+        }
+        return "ERROR: the website is currently down, try again later or contact us at: " + ketoGmail;
+    } catch (error) {
+        console.log("index.js errorTextFunc() ERROR: " + error);
+        return "ERROR: the website is currently down, try again later";
+    }
+}
+
 app.get('/', function (req, res) {
     try {
         var infoFromURL = url.parse(req.url, true).query;
@@ -101,8 +115,8 @@ app.get('/', function (req, res) {
 
         function wrongPageErrorHTML() {
             console.log("The user is trying to enter a non-existant page.");
-            res.send("ERROR: the website is currently down, try again later");
-            return res.end();
+            res.send(errorTextFunc(languageChooser(infoFromURL.lang), fs.readFileSync(pathToGmailInfo).toString()));
+            return res.end(); // if just using "return;" it'll keep going, with "res.end()" it won't. Just a little note
         }
 
         if (pageNullChecker(infoFromURL.page) == "n") {
