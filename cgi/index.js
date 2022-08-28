@@ -34,6 +34,21 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     }
 }
 
+function giveInformationAboutPage(pageName) {
+    try {
+        if (typeof pageName == 'string') {
+            pageName = pageName.toLowerCase();
+            if (pageName == "aboutme" || pageName == "in_gallery" || pageName == "album" || pageName == "contact" || pageName == "equipment" || pageName == "index" || pageName == "model" || pageName == "prices") {
+                return pageName;
+            }
+        }
+        return "n";
+    } catch (error) {
+        console.log("index.js ERROR: " + error);
+        return "index.js ERROR: " + error;
+    }
+}
+
 app.get('/', function (req, res) {
     try {
         var infoFromURL = url.parse(req.url, true).query;
@@ -53,7 +68,6 @@ app.get('/', function (req, res) {
     } catch (error) {
         console.log("index.js ERROR: " + error);
     }
-
 });
 app.listen(8091);
 console.log('Server running at http://127.0.0.1:8091/');
