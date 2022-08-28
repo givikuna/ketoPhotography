@@ -30,12 +30,23 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     }
 }
 
+function readArrayFile(givenLoc) {
+    try {
+        var theArr = fs.readFileSync(givenLoc);
+        return theArr;
+    } catch (error) {
+        console.log("select.js getArrayFile() function ERROR: " + error);
+        return "select.js getArrayFile() function ERROR: " + error;
+    }
+}
+
 function getArr(theArr, theName) {
-    return JSON.parse(fs.readFileSync(globalPathFinder(theArr, theName)).toString());
+    return JSON.parse(readArrayFile(globalPathFinder(theArr, theName)).toString());
 }
 
 function selectReqRes() {
     try {
+        // "../data/array_information/arraysFromCGI.json";
         var locArr = getArr(["data", "array_information"], "arraysFromCGI.json");
         var mainArr = null;
 
@@ -70,4 +81,12 @@ if (!module.parent) {
         }
     }).listen(8093);
     console.log('Server running at http://127.0.0.1:8093/');
+}
+
+// If we're running under Node, 
+if (typeof exports !== 'undefined') {
+    exports.selectReqRes = selectReqRes;
+    exports.readArrayFile = readArrayFile;
+    exports.globalPathFinder = globalPathFinder;
+    exports.getArr = getArr;
 }
