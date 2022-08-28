@@ -1,0 +1,1 @@
+/www/img/onPage/cover/ folder has the image used as the cover image of the home page

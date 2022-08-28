@@ -1,0 +1,1 @@
+/data/array_information/ folder contains a JSON array which, simply put, is a list of the locations of every other array used in this website.

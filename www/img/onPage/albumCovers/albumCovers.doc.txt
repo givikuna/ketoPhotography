@@ -1,0 +1,1 @@
+/www/img/onPage/albumCovers has the images used as album covers

@@ -1,0 +1,7 @@
+/data/ folder contains all the data (excluding the images) needed to run the website.
+
+Examples include information like, but not limited to:
+Texts to be used in the website
+JSON arrays which contain information about the website
+Translations for the texts which are used in the website into the Russian and Georgian languages
+Links to Keto's social media accounts

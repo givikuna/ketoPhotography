@@ -1,0 +1,1 @@
+/data/about_keto/en/ contains the translation for the site's 'about me' into the English language

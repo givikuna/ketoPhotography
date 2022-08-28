@@ -1,0 +1,1 @@
+/www/js/ folder has most of the front end JavaScript code for the website

@@ -1,0 +1,1 @@
+/www/main/ folder has all the html front end code of the website
