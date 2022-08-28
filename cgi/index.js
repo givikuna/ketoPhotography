@@ -4,8 +4,10 @@ const path = require('path');
 const fs = require('fs');
 const url = require('url');
 
-const pathToGmailInfo = "../data/contactGmail.txt";
-
+const pathToGmailInfo = {
+    "arr": ["data", "contactGmail"],
+    "name": "data.txt"
+};
 function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     try {
         var currentPath = "";
