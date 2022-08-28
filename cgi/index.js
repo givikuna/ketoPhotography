@@ -108,16 +108,52 @@ function errorTextFunc(sentLang, ketoGmail) {
     }
 }
 
+function replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail) {
+    try {
+        var pageName = "index";
+        if ("page" in infoFromURL) {
+            pageName = giveInformationAboutPage(infoFromURL.page);
+        }
+
+        if (dataToString.includes("@lang")) {
+            var daLang = languageChooser(infoFromURL.lang);
+            dataToString = dataToString.replace(/@lang/g, daLang);
+        }
+
+        if (dataToString.includes("@infoForTheIDOfTheArrayOfTheGallery")) {
+            dataToString = dataToString.replace(/@infoForTheIDOfTheArrayOfTheGallery/g, infoFromURL.galleryID);
+        }
+
+        if (dataToString.includes("@lang")) {
+            dataToString = dataToString.replace(/@lang/g, "eng");
+        }
+
+        if (dataToString.includes("@dynamicLink")) {
+            dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
+        }
+
+        if (dataToString.includes("@infoForTheNameOfThisPage")) {
+            dataToString = dataToString.replace(/@infoForTheNameOfThisPage/g, pageName);
+        }
+        return dataToString;
+    } catch (error) {
+        console.log("index.js replaceText() ERROR: " + error);
+        return errorTextFunc("eng", ketoGmail);
+    }
+}
+
 app.get('/', function (req, res) {
     try {
+        // const currentDynLink = "http://127.0.0.1";
         var infoFromURL = url.parse(req.url, true).query;
-        var htmFilePath = null;
 
         function wrongPageErrorHTML() {
             console.log("The user is trying to enter a non-existant page.");
             res.send(errorTextFunc(languageChooser(infoFromURL.lang), fs.readFileSync(pathToGmailInfo).toString()));
             return res.end(); // if just using "return;" it'll keep going, with "res.end()" it won't. Just a little note
         }
+
+        var htmFilePath = null;
 
         if (pageNullChecker(infoFromURL.page) == "n") {
             htmFilePath = globalPathFinder(["www", "main"], "index.htm");
@@ -128,7 +164,8 @@ app.get('/', function (req, res) {
         if (fileExistanceChecker(htmFilePath) == true) { //checking if the file exists
             fs.readFile(htmFilePath, 'utf-8', function (err, data) {
                 var dataToString = data.toString();
-                res.write(dataToString);
+                //changement of the code is finished
+                res.write(replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail));
                 return res.end();
             });
         } else {
