@@ -1,13 +1,23 @@
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - MODULES AND GLOBAL VARIABLES:
+
+
+
 const express = require('express');
 const app = express();
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
 
-const pathToGmailInfo = {
-    "arr": ["data", "contactGmail"],
-    "name": "data.txt"
-};
+const pathToGmailInfo = "../data/contactGmail.txt";
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - ASSISTANT FUNCTIONS:
+
+
 
 function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     try {
@@ -29,48 +39,46 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
         }
         return path.join(currentPath, nameOfFile);
     } catch (error) {
-        console.log("index.js ERROR: " + error);
-        return "index.js ERROR: " + error;
-    }
-}
-
-function giveInformationAboutPage(pageName) {
-    try {
-        if (typeof pageName == 'string') {
-            pageName = pageName.toLowerCase();
-            if (pageName == "aboutme" || pageName == "in_gallery" || pageName == "album" || pageName == "contact" || pageName == "equipment" || pageName == "index" || pageName == "model" || pageName == "prices") {
-                return pageName;
-            }
-        }
-        return "n";
-    } catch (error) {
-        console.log("index.js ERROR: " + error);
-        return "index.js ERROR: " + error;
-    }
-}
-
-function pageNullChecker(nameOfPage) {
-    try {
-        console.log("------------");
-        if (!nameOfPage || nameOfPage == "" || nameOfPage == '' || typeof nameOfPage !== 'string') {
-            return "n";
-        }
-        return "y";
-    } catch (error) {
-        console.log("index.js ERROR: " + error);
-        return "n";
+        console.log("index.js globalPathFinder() ERROR: " + error);
+        return "index.js globalPathFinder() ERROR: " + error;
     }
 }
 
 function fileExistanceChecker(pathToFile) {
     try {
-        if (fs.existsSync(pathToFile)) {
+        if (fs.existsSync(pathToFile)) { //checking if the file exists
             return true;
         }
         return false;
     } catch (error) {
         console.log("index.js fileExistanceChecker() ERROR: " + error);
         return false;
+    }
+}
+
+function pageNullChecker(nameOfPage) {
+    try {
+        if (!nameOfPage || nameOfPage == "" || nameOfPage == '' || typeof nameOfPage !== 'string') {
+            return "n";
+        }
+        return "y";
+    } catch (error) {
+        console.log("index.js pageNullChecker() ERROR: " + error);
+        return "n";
+    }
+}
+
+function errorTextFunc(sentLang, ketoGmail) {
+    try {
+        if (sentLang == "rus") {
+            return "ОШИБКА: веб-сайт в настоящее время не работает, повторите попытку позже или свяжитесь с нами по адресу: " + ketoGmail;
+        } else if (sentLang == "geo") {
+            return "შეცდომა: ვებგვერდი ამჟამად გათიშულია, სცადეთ მოგვიანებით ან დაგვიკავშირდით მისამართზე: " + ketoGmail;
+        }
+        return "ERROR: the website is currently down, try again later or contact us at: " + ketoGmail;
+    } catch (error) {
+        console.log("index.js errorTextFunc() ERROR: " + error);
+        return "ERROR: the website is currently down, try again later";
     }
 }
 
@@ -94,47 +102,63 @@ function languageChooser(langInfo) {
     }
 }
 
-function errorTextFunc(sentLang, ketoGmail) {
+function giveInformationAboutPage(pageName) {
     try {
-        if (sentLang == "rus") {
-            return "ОШИБКА: веб-сайт в настоящее время не работает, повторите попытку позже или свяжитесь с нами по адресу: " + ketoGmail;
-        } else if (sentLang == "geo") {
-            return "შეცდომა: ვებგვერდი ამჟამად გათიშულია, სცადეთ მოგვიანებით ან დაგვიკავშირდით მისამართზე: " + ketoGmail;
+        if (typeof pageName == 'string') {
+            pageName = pageName.toLowerCase();
+            if (pageName == "aboutme" || pageName == "in_gallery" || pageName == "album" || pageName == "contact" || pageName == "equipment" || pageName == "index" || pageName == "model" || pageName == "prices") {
+                return pageName;
+            }
         }
-        return "ERROR: the website is currently down, try again later or contact us at: " + ketoGmail;
+        return "n";
     } catch (error) {
-        console.log("index.js errorTextFunc() ERROR: " + error);
-        return "ERROR: the website is currently down, try again later";
+        console.log("index.js giveInformationAboutPage() ERROR: " + error);
+        return "n";
     }
 }
 
 function replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail) {
     try {
         var pageName = "index";
-        if ("page" in infoFromURL) {
-            pageName = giveInformationAboutPage(infoFromURL.page);
+
+        if (typeof dataToString == 'string') {
+            if (infoFromURL !== null && infoFromURL !== [] && infoFromURL !== {} && infoFromURL !== undefined && typeof infoFromURL !== 'undefined' && typeof infoFromURL == 'object') {
+                if ("page" in infoFromURL) {
+                    pageName = giveInformationAboutPage(infoFromURL.page);
+                }
+
+                if (dataToString.includes("@lang")) {
+                    var daLang = "eng";
+                    if ("lang" in infoFromURL) {
+                        daLang = languageChooser(infoFromURL.lang);
+                    }
+                    dataToString = dataToString.replace(/@lang/g, daLang);
+                }
+
+                if (dataToString.includes("@infoForTheIDOfTheArrayOfTheGallery")) {
+                    if ("galleryID" in infoFromURL) {
+                        dataToString = dataToString.replace(/@infoForTheIDOfTheArrayOfTheGallery/g, infoFromURL.galleryID);
+                    }
+                }
+            } else {
+                if (dataToString.includes("@lang")) {
+                    dataToString = dataToString.replace(/@lang/g, "eng");
+                }
+            }
+
+            if (dataToString.includes("@dynamicLink")) {
+                if ((currentDynLink && currentDynLink !== "" && currentDynLink !== null && currentDynLink !== undefined && typeof currentDynLink !== 'number') || (currentDynLink !== "" && typeof currentDynLink == 'string')) {
+                    dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
+                } else {
+                    dataToString = dataToString.replace(/@dynamicLink/g, "ERROR");
+                }
+            }
+
+            if (dataToString.includes("@infoForTheNameOfThisPage")) {
+                dataToString = dataToString.replace(/@infoForTheNameOfThisPage/g, pageName);
+            }
         }
 
-        if (dataToString.includes("@lang")) {
-            var daLang = languageChooser(infoFromURL.lang);
-            dataToString = dataToString.replace(/@lang/g, daLang);
-        }
-
-        if (dataToString.includes("@infoForTheIDOfTheArrayOfTheGallery")) {
-            dataToString = dataToString.replace(/@infoForTheIDOfTheArrayOfTheGallery/g, infoFromURL.galleryID);
-        }
-
-        if (dataToString.includes("@lang")) {
-            dataToString = dataToString.replace(/@lang/g, "eng");
-        }
-
-        if (dataToString.includes("@dynamicLink")) {
-            dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
-        }
-
-        if (dataToString.includes("@infoForTheNameOfThisPage")) {
-            dataToString = dataToString.replace(/@infoForTheNameOfThisPage/g, pageName);
-        }
         return dataToString;
     } catch (error) {
         console.log("index.js replaceText() ERROR: " + error);
@@ -142,9 +166,15 @@ function replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail) {
     }
 }
 
+//
+
+/* // */
+
+//
+
 app.get('/', function (req, res) {
     try {
-        // const currentDynLink = "http://127.0.0.1";
+        const currentDynLink = "http://127.0.0.1";
         var infoFromURL = url.parse(req.url, true).query;
 
         function wrongPageErrorHTML() {
@@ -156,9 +186,11 @@ app.get('/', function (req, res) {
         var htmFilePath = null;
 
         if (pageNullChecker(infoFromURL.page) == "n") {
-            htmFilePath = globalPathFinder(["www", "main"], "index.htm");
+            htmFilePath = globalPathFinder(["www", "main", "page"], "index.htm");
+        } else if (giveInformationAboutPage(infoFromURL.page) == "model") {
+            htmFilePath = globalPathFinder(["www", "main", "page", "model"], giveInformationAboutPage(infoFromURL.page) + ".html");
         } else {
-            htmFilePath = globalPathFinder(["www", "main"], giveInformationAboutPage(infoFromURL.page) + ".htm");
+            htmFilePath = globalPathFinder(["www", "main", "page"], giveInformationAboutPage(infoFromURL.page) + ".html");
         }
 
         if (fileExistanceChecker(htmFilePath) == true) { //checking if the file exists
@@ -174,9 +206,26 @@ app.get('/', function (req, res) {
     } catch (error) {
         console.log("index.js ERROR: " + error);
     }
+
 });
-app.listen(8091);
-console.log('Server running at http://127.0.0.1:8091/');
+if (!module.parent) {
+    app.listen(8091);
+    console.log('Server running at http://127.0.0.1:8091/');
+}
+
+// If we're running under Node, 
+if (typeof exports !== 'undefined') {
+    exports.replaceText = replaceText;
+    exports.giveInformationAboutPage = giveInformationAboutPage;
+    exports.languageChooser = languageChooser;
+    exports.errorTextFunc = errorTextFunc;
+    exports.pageNullChecker = pageNullChecker;
+    exports.fileExistanceChecker = fileExistanceChecker;
+    exports.globalPathFinder = globalPathFinder;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - OTHER COMMENTS;
 
 /*
 
