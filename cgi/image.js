@@ -41,10 +41,36 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
 }
 
 http.createServer(function (req, res) {
+    var infoFromURL = url.parse(req.url, true).query;
+    res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
+    var imageLocation;
+
     try {
-        var infoFromURL = url.parse(req.url, true).query;
+        function sendImage(imageLocation) {
+            if (imgExistanceChecker(imageLocation) == true) {
+                fs.readFile(imageLocation, function (err, data) {
+                    res.write(data);
+                    return res.end();
+                });
+            } else {
+                res.write("");
+                return res.end();
+            }
+        }
+
+        if (infoFromURL.type == "icon") { imageLocation = globalPathFinder(["www", "img", "icons"], infoFromURL.img); }
+        else if (infoFromURL.type == "cover") { imageLocation = globalPathFinder(["www", "img", "onPage", "cover"], "cover.jpg"); }
+        else if (infoFromURL.type == "albumCover") { imageLocation = globalPathFinder(["www", "img", "onPage", "AlbumCovers"], infoFromURL.coverImg); }
+        else if (infoFromURL.type == "img") { imageLocation = globalPathFinder(["img", "albums", infoFromURL.albumName], infoFromURL.requestedImage); }
+        sendImage(imageLocation);
     } catch (error) {
         console.log("image.js ERROR: " + error);
     }
 }).listen(8092);
 console.log('Server running at http://127.0.0.1:8092/');
+
+// If we're running under Node, 
+if (typeof exports !== 'undefined') {
+    exports.globalPathFinder = globalPathFinder;
+    exports.imgExistanceChecker = imgExistanceChecker;
+}
