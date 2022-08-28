@@ -8,6 +8,7 @@ const pathToGmailInfo = {
     "arr": ["data", "contactGmail"],
     "name": "data.txt"
 };
+
 function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     try {
         var currentPath = "";
@@ -36,6 +37,19 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
 app.get('/', function (req, res) {
     try {
         var infoFromURL = url.parse(req.url, true).query;
+        var htmFilePath = null;
+
+        if (infoFromURL.page !== null || infoFromURL.page !== undefined) {
+            htmFilePath = globalPathFinder(["www", "main"], "index.htm");
+        } else {
+            htmFilePath = globalPathFinder(["www", "main"], giveInformationAboutPage(infoFromURL.page) + ".htm");
+        }
+
+        fs.readFile(htmFilePath, 'utf-8', function (err, data) {
+            var dataToString = data.toString();
+            res.write(dataToString);
+            return res.end();
+        });
     } catch (error) {
         console.log("index.js ERROR: " + error);
     }
