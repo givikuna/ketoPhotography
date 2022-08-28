@@ -3,6 +3,18 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path');
 
+function imgExistanceChecker(imgPath) { //TESTED VIA tests/image.test.js
+    try {
+        if (fs.existsSync(imgPath)) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.log("image.js imgExistanceChecker() ERROR: " + error);
+        return "image.js imgExistanceChecker() ERROR: " + error;
+    }
+}
+
 function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     try {
         var currentPath = "";
