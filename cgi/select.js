@@ -34,27 +34,36 @@ function getArr(theArr, theName) {
     return JSON.parse(fs.readFileSync(globalPathFinder(theArr, theName)).toString());
 }
 
+function selectReqRes() {
+    try {
+        var locArr = getArr(["data", "array_information"], "arraysFromCGI.json");
+        var mainArr = null;
+
+        for (let i = 0; i < locArr.length; i++) {
+            var tempArr = getArr(locArr[i].location, locArr[i].name);
+            if (mainArr == null) {
+                mainArr = tempArr;
+            } else {
+                mainArr = JSON.stringify(mainArr) + "," + JSON.stringify(tempArr);
+            }
+
+        }
+        mainArr = "[" + mainArr + "]";
+
+        return mainArr;
+    } catch (error) {
+        console.log("select.js selectReqRes() function ERROR: " + error);
+        return "select.js selectReqRes() function ERROR: " + error;
+    }
+}
+
 if (!module.parent) {
     http.createServer(function (req, res) {
         try {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
 
-            var locArr = getArr(["data", "array_information"], "arraysFromCGI.json");
-            var mainArr = null;
-
-            for (let i = 0; i < locArr.length; i++) {
-                var tempArr = getArr(locArr[i].location, locArr[i].name);
-                if (mainArr == null) {
-                    mainArr = tempArr;
-                } else {
-                    mainArr = JSON.stringify(mainArr) + "," + JSON.stringify(tempArr);
-                }
-
-            }
-            mainArr = "[" + mainArr + "]";
-
-            res.write(mainArr);
+            res.write(selectReqRes().toString());
             return res.end();
         } catch (error) {
             console.log("select.js ERROR: " + error);
