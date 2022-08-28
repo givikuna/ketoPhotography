@@ -1,0 +1,1 @@
+/www/main/page/ folder has all the html front end code regarding the pages which the user is actually likely to see
