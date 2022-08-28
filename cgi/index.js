@@ -64,7 +64,7 @@ function pageNullChecker(nameOfPage) {
 
 function fileExistanceChecker(pathToFile) {
     try {
-        if (fs.existsSync(pathToFile)) { //checking if the file exists
+        if (fs.existsSync(pathToFile)) {
             return true;
         }
         return false;
@@ -79,6 +79,12 @@ app.get('/', function (req, res) {
         var infoFromURL = url.parse(req.url, true).query;
         var htmFilePath = null;
 
+        function wrongPageErrorHTML() {
+            console.log("The user is trying to enter a non-existant page.");
+            res.send("ERROR: the website is currently down, try again later");
+            return res.end();
+        }
+
         if (pageNullChecker(infoFromURL.page) == "n") {
             htmFilePath = globalPathFinder(["www", "main"], "index.htm");
         } else {
@@ -92,7 +98,7 @@ app.get('/', function (req, res) {
                 return res.end();
             });
         } else {
-            // wrongPageErrorHTML();
+            wrongPageErrorHTML();
         }
     } catch (error) {
         console.log("index.js ERROR: " + error);
