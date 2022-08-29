@@ -396,6 +396,28 @@ describe('main.js', () => {
             expect(lStub.callCount).be.be.at.least(3);
         });
     });
+
+    context('checkJob()', () => {
+        beforeEach(() => {
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        afterEach(() => {
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        it('sends \'(\"translation_for_lang_names\")\', expects checkJob() to return true', () => {
+            expect(mainJS.checkJob("translation_for_lang_names")).to.be.true;
+        });
+
+        it('sends \'(\"translation_for_the_main_text\")\', expects checkJob() to return true', () => {
+            expect(mainJS.checkJob("translation_for_the_main_text")).to.be.true;
+        });
+
+        it('sends \'(\"bruh\")\', expects checkJob() to return false', () => {
+            expect(mainJS.checkJob("bruh")).to.be.false;
+        });
+    });
 });
 
 /*
