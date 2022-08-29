@@ -135,6 +135,7 @@ function bodyOnloadFunc(contactedSiteInfo) {
 				var mainArray = fullArray[0][0];
 				var headerTextArray = fullArray[0][1];
 				var ketoSocialMediaArray = fullArray[0][2];
+				addSocialMediasToFooter(ketoSocialMediaArray);
 				fillGalleries(headerTextArray, mainArray);
 				if (contactedSiteInfo == 'index') {
 					fillPortfolioSection(mainArray);
@@ -205,8 +206,13 @@ function fillBlanks(language, headerTextArray) { //ISN'T TESTED VIA test.js
 	}
 }
 
-function makeFooter() {
-	//
+function addSocialMediasToFooter(ketoSocialMediaArray) {
+	var footerSocialMediaPDiv = document.getElementById('footerSocialMediaP');
+	footerSocialMediaPDiv.innerHTML = "";
+	for (var i = 0; i < ketoSocialMediaArray.length; i++) {
+		var toSend = "<a class=\"footerImgA\" href=\"" + ketoSocialMediaArray[i].link + "\"><img class=\"footerImg\" width=40px length=40px src=\"@dynamicLink:8092/?type=icon&img=" + ketoSocialMediaArray[i].platformName + ".png\"></a>";
+		footerSocialMediaPDiv.innerHTML = footerSocialMediaPDiv.innerHTML + toSend;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - EXPORTING OF FUNCTIONS:
