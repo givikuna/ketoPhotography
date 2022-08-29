@@ -456,6 +456,56 @@ describe('main.js', () => {
             expect(mainJS.checkOtherInfo(1.56)).to.be.false;
         });
     });
+
+    context('ketoTranslatorHelper_SecurityManager()', () => {
+        beforeEach(() => {
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        afterEach(() => {
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        it('sends \'(4, 5)\', and expects to be false', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager(4, 5)).to.be.false;
+        });
+
+        it('sends \'([], 5)\', and expects to be false', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager([], 5)).to.be.false;
+        });
+
+        it('sends \'([undefined], 5)\', and expects to be false', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager([undefined], 5)).to.be.false;
+        });
+
+        it('sends \'([null], 5)\', and expects to be false', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager([null], 5)).to.be.false;
+        });
+
+        it('sends \'([\"hi\", \"giiviieieerieu\", []], 5)\', and expects to be false', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager(["hi", "giiviieieerieu", []], 5)).to.be.false;
+        });
+
+        it('sends \'([\"hi\", \"giiviieieerieu\", null], 5)\', and expects to be false', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager(["hi", "giiviieieerieu", null], 5)).to.be.false;
+        });
+
+        it('sends \'([\"hi\", \"giiviieieerieu\", undefined], 5)\', and expects to be false', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager(["hi", "giiviieieerieu", undefined], 5)).to.be.false;
+        });
+
+        it('sends \'([\"hi\", \"oii\"], 5)\', and expects to be true', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager(["hi", "oii"], 5)).to.be.true;
+        });
+
+        it('sends \'(\"hi\", 5)\', and expects to be false', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager("hi", 5)).to.be.false;
+        });
+
+        it('sends \'([\"givi\"], 5)\', and expects to be true', () => {
+            expect(mainJS.ketoTranslatorHelper_SecurityManager(["givi"], 5)).to.be.true;
+        });
+    });
 });
 
 /*
