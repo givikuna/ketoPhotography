@@ -166,6 +166,50 @@ describe('main.js', () => {
             expect(oStub).to.have.returned(true);
         })
     });
+
+    context('ketoTranslatorHelper()', () => {
+        var smStub, atStub;
+
+        beforeEach(() => {
+            smStub = sinon.stub(mainJS, 'ketoTranslatorHelper_SecurityManager').returns(true);
+            atStub = sinon.stub(mainJS, 'actualTranslator').returns(true);
+
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        afterEach(() => {
+            smStub.restore();
+            atStub.restore();
+
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        it('sends \'(\"rus\", [{textRus: \"mother russia\"}], 0)\' and expects \"mother russia\"', () => {
+            atStub = sinon.stub(mainJS, 'actualTranslator').returns("mother russia");
+
+            mainJS.__set__('ketoTranslatorHelper_SecurityManager', smStub);
+            mainJS.__set__('actualTranslator', atStub);
+
+            expect(mainJS.ketoTranslatorHelper("rus", [{ textRus: "blin" }], 0)).to.equal("mother russia");
+            expect(atStub.calledOnce).to.be.true;
+            expect(smStub.calledOnce).to.be.true;
+            expect(smStub()).to.be.true;
+            expect(atStub()).to.equal("mother russia");
+        });
+
+        it('sends \'(null, null, null)\', but changes smStub to false and expects \"error\"', () => {
+            smStub = sinon.stub(mainJS, 'ketoTranslatorHelper_SecurityManager').returns(false);
+
+            mainJS.__set__('ketoTranslatorHelper_SecurityManager', smStub);
+            mainJS.__set__('actualTranslator', atStub);
+
+            expect(mainJS.ketoTranslatorHelper(null, null, null)).to.equal("error");
+            expect(atStub.called).to.be.false;
+            expect(smStub.calledOnce).to.be.true;
+            expect(smStub()).to.be.false;
+            expect(atStub()).to.equal(true);
+        });
+    });
 });
 
 /*
