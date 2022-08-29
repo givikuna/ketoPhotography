@@ -69,3 +69,11 @@ function fillPortfolioSection(mainArray) { //ISN'T TESTED VIA test.js
 		viewMyWorkHomePageId_DIV.innerHTML = viewMyWorkHomePageId_DIV.innerHTML + "<a class=\"viewMyWorkA\" href=\"@dynamicLink:8091/?page=in_gallery&galleryID=" + mainArray[i].id + "&galleryfolderName=" + mainArray[i].folderName + "&lang=" + maingLang_G + "\"> <img class=\"viewMyWorkImg\" width=550px height=400px src=\"@dynamicLink:8092/?type=albumCover&coverImg=" + coverImg + "\"> </a>";
 	}
 }
+
+function fillBlanks(language, headerTextArray) { //ISN'T TESTED VIA test.js
+	for (let i = 0; i < headerTextArray.length; i++) {
+		if (document.getElementById(headerTextArray[i].id) !== null) {
+			document.getElementById(headerTextArray[i].id).innerHTML = ketoTranslator(language, "translation_for_the_main_text", i, headerTextArray);
+		}
+	}
+}
