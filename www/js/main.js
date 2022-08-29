@@ -28,6 +28,19 @@ function checkLang(lang) {
 	return false;
 }
 
+function ketoTranslator_SecurityManager(a, b, c, d) {
+	if (checkJob(b) == true && checkOtherInfo(c) == true && d !== null && d[0] !== undefined && typeof d !== 'underfined' && Array.isArray(d)) {
+		if (checkLang(a) == true) {
+			return true;
+		} else {
+			return "eng"
+		}
+	} else {
+		askForHelp(null);
+		return false;
+	}
+}
+
 function ketoTranslator(neededLang, job, otherInfo, givenArr) {
 	securityKey = ketoTranslator_SecurityManager(neededLang, job, otherInfo, givenArr);
 	if (securityKey == true) { } else if (securityKey == "eng") {
