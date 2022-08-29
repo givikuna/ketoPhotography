@@ -114,3 +114,16 @@
 .footerContactAPopOutDiv:hover {
 	transform: scale(1.004);
 }
+
+* {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+	align-items: center;
+}
+
+.headerKetoPhotographyA {
+	color: #ffffff;
+	font-size: 26px;
+}
