@@ -91,3 +91,16 @@
 .viewMyWorkA {
 	text-decoration: none;
 }
+
+#footerContactMeA {
+	cursor: pointer;
+	text-decoration: underline;
+	color: rgb(32, 32, 32);
+	font-size: 25px;
+	opacity: 0.9;
+}
+
+#footerContactMeA:hover {
+	opacity: 1;
+	color: rgb(0, 0, 0);
+}
