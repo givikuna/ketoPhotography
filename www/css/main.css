@@ -222,3 +222,8 @@
 .dropdown:hover .dropdown-content {
 	display: block;
 }
+
+.colorStart {
+	background-color: #1b1b1b;
+	filter: brightness(1);
+}
