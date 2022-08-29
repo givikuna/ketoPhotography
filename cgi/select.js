@@ -46,7 +46,7 @@ function getArr(theArr, theName) {
 
 function selectReqRes() {
     try {
-        var locArr = getArr(["data", "array_information"], "arraysFromCGI.json");
+        var locArr = getArr(["data", "array_information"], "data.json");
         var mainArr = null;
 
         for (let i = 0; i < locArr.length; i++) {
