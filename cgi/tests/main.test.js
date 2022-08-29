@@ -418,6 +418,44 @@ describe('main.js', () => {
             expect(mainJS.checkJob("bruh")).to.be.false;
         });
     });
+
+    context('checkOtherInfo()', () => {
+        beforeEach(() => {
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        afterEach(() => {
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        it('sends \'(null)\', expects it to be false', () => {
+            expect(mainJS.checkOtherInfo(null)).to.be.false;
+        });
+
+        it('sends \'(undefined)\', expects it to be false', () => {
+            expect(mainJS.checkOtherInfo(undefined)).to.be.false;
+        });
+
+        it('sends \'(\"StringAAAA\")\', expects it to be false', () => {
+            expect(mainJS.checkOtherInfo("StringAAAA")).to.be.false;
+        });
+
+        it('sends \'(-4)\', expects it to be false', () => {
+            expect(mainJS.checkOtherInfo(-4)).to.be.false;
+        });
+
+        it('sends \'(0)\', expects it to be true', () => {
+            expect(mainJS.checkOtherInfo(0)).to.be.true;
+        });
+
+        it('sends \'(567)\', expects it to be true', () => {
+            expect(mainJS.checkOtherInfo(567)).to.be.true;
+        });
+
+        it('sends \'(1.56)\', expects it to be false', () => {
+            expect(mainJS.checkOtherInfo(1.56)).to.be.false;
+        });
+    });
 });
 
 /*
