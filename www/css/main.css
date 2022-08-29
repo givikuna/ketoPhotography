@@ -66,3 +66,20 @@
 	border-radius: 7px;
 	transform: scale(1.005);
 }
+
+.imgForIn_Gallery {
+	border-radius: 6px;
+	margin-left:10px;
+	margin-right:10px;
+	max-height:505px;
+	max-width:600px;
+	height:auto;
+	width:auto;
+	
+	transition: transform .15s;
+}
+
+.imgForIn_Gallery:hover {
+	border-radius: 7px;
+	transform: scale(1.005);
+}
