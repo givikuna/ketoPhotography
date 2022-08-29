@@ -1,10 +1,3 @@
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - MODULES AND GLOBAL VARIABLES:
-
-
-
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -16,12 +9,6 @@ const pathToGmailInfo = {
     name: "data.txt"
 };
 // "../data/contactGmail.txt";
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - ASSISTANT FUNCTIONS:
-
-
 
 function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     try {
