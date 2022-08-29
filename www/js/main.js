@@ -28,6 +28,16 @@ function checkLang(lang) {
 	return false;
 }
 
+function fillGalleries(headerTextArray, mainArray) {
+	var galleriesContent_DIV = document.getElementById('galleriesContent');
+	galleriesContent_DIV.innerHTML = "";
+
+	for (var i = 0; i < mainArray.length; i++) {
+		galleriesContent_DIV.innerHTML = galleriesContent_DIV.innerHTML + "<a class=\"a2\" href=\"@dynamicLink:8091/?page=in_gallery&galleryID=" + mainArray[i].id + "&lang=" + maingLang_G + "\">" + ketoTranslator(maingLang_G, "translation_for_lang_names", i, mainArray) + "</a> ";
+	}
+	fillBlanks(maingLang_G, headerTextArray);
+}
+
 function fillImagesInGalleries(galleryID, mainArray) {
 	var imagesOfTheGalleryDiv = document.getElementById('imagesOfTheGallery');
 	imagesOfTheGalleryDiv.innerHTML = "";
