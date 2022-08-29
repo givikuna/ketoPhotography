@@ -134,6 +134,7 @@ function bodyOnloadFunc(contactedSiteInfo) {
 				var fullArray = [JSON.parse(this.responseText)];
 				var mainArray = fullArray[0][0];
 				var headerTextArray = fullArray[0][1];
+				var ketoSocialMediaArray = fullArray[0][2];
 				fillGalleries(headerTextArray, mainArray);
 				if (contactedSiteInfo == 'index') {
 					fillPortfolioSection(mainArray);
@@ -202,6 +203,10 @@ function fillBlanks(language, headerTextArray) { //ISN'T TESTED VIA test.js
 			document.getElementById(headerTextArray[i].id).innerHTML = ketoTranslator(language, "translation_for_the_main_text", i, headerTextArray);
 		}
 	}
+}
+
+function makeFooter() {
+	//
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - EXPORTING OF FUNCTIONS:

@@ -63,7 +63,7 @@ http.createServer(function (req, res) {
         } else if (infoFromURL.type == "cover") {
             imageLocation = globalPathFinder(["www", "img", "onPage", "cover"], "cover.jpg");
         } else if (infoFromURL.type == "albumCover") {
-            imageLocation = globalPathFinder(["www", "img", "onPage", "AlbumCovers"], infoFromURL.coverImg);
+            imageLocation = globalPathFinder(["www", "img", "onPage", "albumCovers"], infoFromURL.coverImg);
         } else if (infoFromURL.type == "img") {
             imageLocation = globalPathFinder(["img", "albums", infoFromURL.albumName], infoFromURL.requestedImage);
         }

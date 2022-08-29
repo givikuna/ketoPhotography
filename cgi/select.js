@@ -56,7 +56,6 @@ function selectReqRes() {
             } else {
                 mainArr = JSON.stringify(mainArr) + "," + JSON.stringify(tempArr);
             }
-
         }
         mainArr = "[" + mainArr + "]";
 
