@@ -329,6 +329,73 @@ describe('main.js', () => {
             }
         });
     });
+
+    context('checkLang()', () => {
+        var lStub;
+
+        beforeEach(() => {
+            lStub = sinon.stub(mainJS, 'languageChooser').returns("rus");
+
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        afterEach(() => {
+            lStub.restore();
+
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        it('sends \'(\"eng\")\', \'(\"rus\")\', and \'(\"geo\")\', while expecting lStub() to return "rus" and expects to return true for all', () => {
+            mainJS.__set__('languageChooser', lStub);
+
+            expect(mainJS.checkLang("eng")).to.equal(true);
+            expect(lStub).to.have.returned("rus");
+            expect(mainJS.checkLang("rus")).to.equal(true);
+            expect(lStub).to.have.returned("rus");
+            expect(mainJS.checkLang("geo")).to.equal(true);
+            expect(lStub).to.have.returned("rus");
+            expect(lStub.called).to.be.true;
+        });
+
+        it('sends \'(\"eng\")\', \'(\"rus\")\', and \'(\"geo\")\', while expecting lStub() to return "eng" and expects to return true for all', () => {
+            lStub = sinon.stub(mainJS, 'languageChooser').returns("eng");
+
+            mainJS.__set__('languageChooser', lStub);
+
+            expect(mainJS.checkLang("eng")).to.equal(true);
+            expect(lStub).to.have.returned("eng");
+            expect(mainJS.checkLang("rus")).to.equal(true);
+            expect(lStub).to.have.returned("eng");
+            expect(mainJS.checkLang("geo")).to.equal(true);
+            expect(lStub).to.have.returned("eng");
+            expect(lStub.called).to.be.true;
+        });
+
+        it('sends \'(\"eng\")\', \'(\"rus\")\', and \'(\"geo\")\', while expecting lStub() to return "geo", and expects to return true for all', () => {
+            lStub = sinon.stub(mainJS, 'languageChooser').returns("geo");
+
+            mainJS.__set__('languageChooser', lStub);
+
+            expect(mainJS.checkLang("eng")).to.equal(true);
+            expect(lStub).to.have.returned("geo");
+            expect(mainJS.checkLang("rus")).to.equal(true);
+            expect(lStub).to.have.returned("geo");
+            expect(mainJS.checkLang("geo")).to.equal(true);
+            expect(lStub).to.have.returned("geo");
+            expect(lStub.called).to.be.true;
+        });
+
+        it('should make lStub() return something but \"rus\", \"eng\" or \"geo\" and expects checkLang to return false', () => {
+            lStub = sinon.stub(mainJS, 'languageChooser').returns(false);
+
+            mainJS.__set__('languageChooser', lStub);
+
+            expect(mainJS.checkLang("eng")).to.equal(false);
+            expect(lStub.called).to.be.true;
+            expect(lStub).to.have.returned(false);
+            expect(lStub.callCount).be.be.at.least(3);
+        });
+    });
 });
 
 /*
