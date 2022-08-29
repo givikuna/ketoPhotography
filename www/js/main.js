@@ -28,6 +28,31 @@ function checkLang(lang) {
 	return false;
 }
 
+function bodyOnloadFunc(contactedSiteInfo) {
+	var xhttp = new XMLHttpRequest(); //use to connect to the servers
+	var url = "@dynamicLink:8093/?type=mainPage";
+	xhttp.open("GET", url, true);
+
+	xhttp.onreadystatechange = function () {
+		if (this.readyState == 4) {
+			if (this.status == 200) {
+				var fullArray = [JSON.parse(this.responseText)];
+				var mainArray = fullArray[0][0];
+				var headerTextArray = fullArray[0][1];
+				fillGalleries(headerTextArray, mainArray);
+				if (contactedSiteInfo == 'index') {
+					fillPortfolioSection(mainArray);
+				} else if (contactedSiteInfo == 'in_gallery') {
+					fillImagesInGalleries("@infoForTheIDOfTheArrayOfTheGallery", mainArray);
+				}
+			} else {
+				serverDisconnectErr();
+			}
+		}
+	};
+	xhttp.send();
+}
+
 function fillGalleries(headerTextArray, mainArray) {
 	var galleriesContent_DIV = document.getElementById('galleriesContent');
 	galleriesContent_DIV.innerHTML = "";
