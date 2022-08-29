@@ -257,3 +257,9 @@
 	margin: 3%;
 	text-align: center;
 }
+
+#imagesOfTheGallery {
+	position: static;
+	margin: 3%;
+	text-align: center;
+}
