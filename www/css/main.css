@@ -171,3 +171,8 @@
 	display: table-cell;
 	vertical-align: middle;
 }
+
+.headerNavigationNav {
+	float: right;
+	height: 100%;
+}
