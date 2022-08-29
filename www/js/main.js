@@ -20,3 +20,10 @@ function languageChooser(langInfo) {
 		}
 	}
 }
+
+function checkLang(lang) {
+	if (languageChooser(lang) == "rus" || languageChooser(lang) == "eng" || languageChooser(lang) == "geo") {
+		return true;
+	}
+	return false;
+}
