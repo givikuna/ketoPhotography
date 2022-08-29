@@ -1,0 +1,45 @@
+{
+  "name": "ketophotography",
+  "version": "1.0.0",
+  "description": "Keto's photography portfolio website",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=development mocha './cgi/tests/**/*.test.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/givikuna/ketoPhotography.git"
+  },
+  "keywords": [
+    "photography",
+    "keto",
+    "jibladze",
+    "givi",
+    "tsvariani",
+    "cameras",
+    "camera",
+    "new jersey",
+    "photos",
+    "potografia"
+  ],
+  "author": "Givi Tsvariani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/givikuna/ketoPhotography/issues"
+  },
+  "homepage": "https://github.com/givikuna/ketoPhotography#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "path": "^0.12.7",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "rewire": "^6.0.0",
+    "sinon": "^14.0.0",
+    "sinon-chai": "^3.7.0"
+  }
+}
