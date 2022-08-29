@@ -13,10 +13,6 @@
 	transform: scale(1.02);
 }
 
-.footerImgA {
-	text-decoration: none;
-}
-
 .footer {
 	text-align: center;
 }
@@ -61,12 +57,6 @@
 	transition: all 500ms ease;
 }
 
-.viewMyWorkImg:hover {
-	filter: saturate(100%) opacity(100%);
-	border-radius: 7px;
-	transform: scale(1.005);
-}
-
 .imgForIn_Gallery {
 	border-radius: 6px;
 	margin-left:10px;
@@ -86,6 +76,12 @@
 
 .centeredDivForImages {
 	text-align: center;
+}
+
+.viewMyWorkImg:hover {
+	filter: saturate(100%) opacity(100%);
+	border-radius: 7px;
+	transform: scale(1.005);
 }
 
 .viewMyWorkA {
@@ -213,6 +209,11 @@
 	opacity: 0.9;
 }
 
+.colorStart {
+	background-color: #1b1b1b;
+	filter: brightness(1);
+}
+
 .dropdown-content a {
 	padding: 12px 12px;
 	display: block;
@@ -221,11 +222,6 @@
 
 .dropdown:hover .dropdown-content {
 	display: block;
-}
-
-.colorStart {
-	background-color: #1b1b1b;
-	filter: brightness(1);
 }
 
 .a2 {
@@ -261,5 +257,9 @@
 #imagesOfTheGallery {
 	position: static;
 	margin: 3%;
+	text-align: center;
+}
+
+.facebookFeedDiv {
 	text-align: center;
 }
