@@ -28,6 +28,11 @@ function checkLang(lang) {
 	return false;
 }
 
+// let's the user know if the server couldn't connect or disconnected and let's them know to contact us
+function serverDisconnectErr() {
+	alert("Server couldn\'t connect, try again later or contact us at " + ketoContactGmail_G);
+}
+
 function bodyOnloadFunc(contactedSiteInfo) {
 	var xhttp = new XMLHttpRequest(); //use to connect to the servers
 	var url = "@dynamicLink:8093/?type=mainPage";
