@@ -28,6 +28,21 @@ function checkLang(lang) {
 	return false;
 }
 
+function ketoTranslator(neededLang, job, otherInfo, givenArr) {
+	securityKey = ketoTranslator_SecurityManager(neededLang, job, otherInfo, givenArr);
+	if (securityKey == true) { } else if (securityKey == "eng") {
+		neededLang = "eng";
+	} else {
+		return "error";
+	}
+
+	if (job == "translation_for_lang_names" || job == "translation_for_the_main_text") {
+		return ketoTranslatorHelper(neededLang, givenArr, otherInfo);
+	} else {
+		return "error";
+	}
+}
+
 // let's the user know if the server couldn't connect or disconnected and let's them know to contact us
 function serverDisconnectErr() {
 	alert("Server couldn\'t connect, try again later or contact us at " + ketoContactGmail_G);
