@@ -244,3 +244,10 @@
 	-webkit-transform: scale(1.8);
 	transform: scale(1.02);
 }
+
+.headerBackground {
+	background-image: url("@dynamicLink:8092/?type=cover");
+	background-repeat: no-repeat;
+	background-size:cover;
+	height: 1000px;
+}
