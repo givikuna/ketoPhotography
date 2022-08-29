@@ -58,3 +58,14 @@ function fillImagesInGalleries(galleryID, mainArray) {
 		}
 	}
 }
+
+function fillPortfolioSection(mainArray) { //ISN'T TESTED VIA test.js
+	var viewMyWorkHomePageId_DIV = document.getElementById('viewMyWorkHomePageId');
+	viewMyWorkHomePageId_DIV.innerHTML = "";
+
+	for (var i = 0; i < mainArray.length; i++) {
+		var coverImg = mainArray[i].cover;
+		// var coverAlbumName = mainArray[i].folderName;
+		viewMyWorkHomePageId_DIV.innerHTML = viewMyWorkHomePageId_DIV.innerHTML + "<a class=\"viewMyWorkA\" href=\"@dynamicLink:8091/?page=in_gallery&galleryID=" + mainArray[i].id + "&galleryfolderName=" + mainArray[i].folderName + "&lang=" + maingLang_G + "\"> <img class=\"viewMyWorkImg\" width=550px height=400px src=\"@dynamicLink:8092/?type=albumCover&coverImg=" + coverImg + "\"> </a>";
+	}
+}
