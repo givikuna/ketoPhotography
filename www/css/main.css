@@ -104,3 +104,13 @@
 	opacity: 1;
 	color: rgb(0, 0, 0);
 }
+
+.footerContactAPopOutDiv {
+	padding: 10px;
+	transition: transform .15s;
+	margin: 0 auto;
+}
+
+.footerContactAPopOutDiv:hover {
+	transform: scale(1.004);
+}
