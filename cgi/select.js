@@ -47,19 +47,15 @@ function getArr(theArr, theName) {
 function selectReqRes() {
     try {
         var locArr = getArr(["data", "array_information"], "data.json");
+        var fullArr = [];
         var mainArr = null;
 
         for (let i = 0; i < locArr.length; i++) {
             var tempArr = getArr(locArr[i].location, locArr[i].name);
-            if (mainArr == null) {
-                mainArr = tempArr;
-            } else {
-                mainArr = JSON.stringify(mainArr) + "," + JSON.stringify(tempArr);
-            }
+            fullArr.push(tempArr);
         }
-        mainArr = "[" + mainArr + "]";
-
-        return mainArr;
+        fullArr = JSON.stringify(fullArr);
+        return fullArr;
     } catch (error) {
         console.log("select.js selectReqRes() function ERROR: " + error);
         return "select.js selectReqRes() function ERROR: " + error;
