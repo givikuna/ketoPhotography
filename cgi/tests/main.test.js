@@ -92,6 +92,80 @@ describe('main.js', () => {
         });
     });
 
+    context('ketoTranslator_SecurityManager()', () => {
+        var lStub, jStub, oStub, aStub;
+
+        beforeEach(() => {
+            lStub = sinon.stub(mainJS, 'checkLang').returns(true);
+            jStub = sinon.stub(mainJS, 'checkJob').returns(true);
+            oStub = sinon.stub(mainJS, 'checkOtherInfo').returns(true);
+            aStub = sinon.stub(mainJS, 'askForHelp').returns(true);
+
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        afterEach(() => {
+            lStub.restore();
+            jStub.restore();
+            oStub.restore();
+            aStub.restore();
+
+            mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
+        });
+
+        it('sends \'(null, null, null, null)\' and expects to return false', () => {
+            mainJS.__set__('checkLang', lStub);
+            mainJS.__set__('checkJob', jStub);
+            mainJS.__set__('checkOtherInfo', oStub);
+            mainJS.__set__('askForHelp', aStub);
+
+            expect(mainJS.ketoTranslator_SecurityManager(null, null, null, null)).to.be.false;
+            expect(jStub.calledOnce).to.be.true;
+            expect(oStub.calledOnce).to.be.true;
+            expect(aStub.calledOnce).to.be.true;
+            expect(lStub.called).to.be.false;
+            expect(jStub).to.have.returned(true);
+            expect(oStub).to.have.returned(true);
+            expect(aStub).to.have.returned(true);
+            expect(lStub()).to.be.true;
+        });
+
+        it('sends \'(null, null, null, 1)\', and expects to return false', () => {
+            mainJS.__set__('checkLang', lStub);
+            mainJS.__set__('checkJob', jStub);
+            mainJS.__set__('askForHelp', aStub);
+            mainJS.__set__('checkOtherInfo', oStub);
+
+            expect(mainJS.ketoTranslator_SecurityManager(null, null, null, 1)).to.be.false;
+            expect(jStub).to.have.been.calledOnce;
+            expect(oStub).to.have.been.calledOnce;
+            expect(aStub).to.have.been.calledOnce;
+            expect(lStub).to.not.have.been.called;
+            expect(jStub).to.have.returned(true);
+            expect(oStub).to.have.returned(true);
+            expect(aStub).to.have.returned(true);
+            expect(lStub()).to.be.true;
+        });
+
+        it('sends \'(null, null, null, [\"angliski\"])\', but changed lStub to return false. The it test expects to return \"eng\"', () => {
+            lStub = sinon.stub(mainJS, 'checkLang').returns(false);
+
+            mainJS.__set__('checkLang', lStub);
+            mainJS.__set__('askForHelp', aStub);
+            mainJS.__set__('checkJob', jStub);
+            mainJS.__set__('checkOtherInfo', oStub);
+
+            expect(mainJS.ketoTranslator_SecurityManager(null, null, null, ["angliski"])).to.equal("eng");
+            expect(lStub.calledOnce).to.be.true;
+            expect(jStub.calledOnce).to.be.true;
+            expect(oStub.calledOnce).to.be.true;
+            expect(aStub.called).to.be.false;
+            expect(lStub).to.have.returned(false);
+            expect(jStub).to.have.returned(true);
+            expect(aStub()).to.be.true;
+            expect(oStub).to.have.returned(true);
+        })
+    });
 });
 
 /*
