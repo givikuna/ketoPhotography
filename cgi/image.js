@@ -58,10 +58,15 @@ http.createServer(function (req, res) {
             }
         }
 
-        if (infoFromURL.type == "icon") { imageLocation = globalPathFinder(["www", "img", "icons"], infoFromURL.img); }
-        else if (infoFromURL.type == "cover") { imageLocation = globalPathFinder(["www", "img", "onPage", "cover"], "cover.jpg"); }
-        else if (infoFromURL.type == "albumCover") { imageLocation = globalPathFinder(["www", "img", "onPage", "AlbumCovers"], infoFromURL.coverImg); }
-        else if (infoFromURL.type == "img") { imageLocation = globalPathFinder(["img", "albums", infoFromURL.albumName], infoFromURL.requestedImage); }
+        if (infoFromURL.type == "icon") {
+            imageLocation = globalPathFinder(["www", "img", "icons"], infoFromURL.img);
+        } else if (infoFromURL.type == "cover") {
+            imageLocation = globalPathFinder(["www", "img", "onPage", "cover"], "cover.jpg");
+        } else if (infoFromURL.type == "albumCover") {
+            imageLocation = globalPathFinder(["www", "img", "onPage", "albumCovers"], infoFromURL.coverImg);
+        } else if (infoFromURL.type == "img") {
+            imageLocation = globalPathFinder(["img", "albums", infoFromURL.albumName], infoFromURL.requestedImage);
+        }
         sendImage(imageLocation);
     } catch (error) {
         console.log("image.js ERROR: " + error);

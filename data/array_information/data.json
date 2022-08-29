@@ -12,5 +12,12 @@
             "data",
             "pageTxtInfo"
         ]
+    },
+    {
+        "name": "data.json",
+        "location": [
+            "data",
+            "keto_social_media"
+        ]
     }
 ]

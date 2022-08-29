@@ -1,12 +1,38 @@
 const http = require('http');
 const fs = require('fs');
 const url = require('url');
+const path = require('path');
+
+function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
+    try {
+        var currentPath = "";
+        for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
+            var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
+            var pathToSearchTheExistanceOf = null;
+            if (currentPath == "") {
+                pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
+            } else {
+                pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
+            }
+            if (fs.existsSync(pathToSearchTheExistanceOf)) {
+                currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
+            } else {
+                i = i - 1;
+                currentPath = currentPath + "../";
+            }
+        }
+        return path.join(currentPath, nameOfFile);
+    } catch (error) {
+        console.log("index.js globalPathFinder() ERROR: " + error);
+        return "index.js globalPathFinder() ERROR: " + error;
+    }
+}
 
 if (!module.parent) {
     http.createServer(function (req, res) {
         try {
             var infoFromURL = url.parse(req.url, true).query;
-            const pathToGmailInfo = "../data/contactGmail.txt";
+            const pathToGmailInfo = globalPathFinder(["data", "contactGmail"], "data.txt");
             var ketoContactGmail1 = fs.readFileSync(pathToGmailInfo).toString();
             var ketoContactGmail = ketoContactGmail1.trim('\n');
             var fileName = infoFromURL.file;

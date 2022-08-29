@@ -11,7 +11,11 @@ const path = require('path');
 const fs = require('fs');
 const url = require('url');
 
-const pathToGmailInfo = "../data/contactGmail.txt";
+const pathToGmailInfo = {
+    arr: ["data", "contactGmail"],
+    name: "data.txt"
+};
+// "../data/contactGmail.txt";
 
 
 
@@ -174,19 +178,24 @@ function replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail) {
 
 app.get('/', function (req, res) {
     try {
+        var ketoGmail;
+        var ketoAddr = globalPathFinder(pathToGmailInfo.arr, pathToGmailInfo.name);
+        if (fileExistanceChecker(ketoAddr) == true) {
+            ketoGmail = fs.readFileSync(ketoAddr).toString();
+        }
         const currentDynLink = "http://127.0.0.1";
         var infoFromURL = url.parse(req.url, true).query;
 
         function wrongPageErrorHTML() {
             console.log("The user is trying to enter a non-existant page.");
-            res.send(errorTextFunc(languageChooser(infoFromURL.lang), fs.readFileSync(pathToGmailInfo).toString()));
+            res.send(errorTextFunc(languageChooser(infoFromURL.lang), ketoGmail));
             return res.end(); // if just using "return;" it'll keep going, with "res.end()" it won't. Just a little note
         }
 
         var htmFilePath = null;
 
         if (pageNullChecker(infoFromURL.page) == "n") {
-            htmFilePath = globalPathFinder(["www", "main", "page"], "index.htm");
+            htmFilePath = globalPathFinder(["www", "main", "page"], "index.html");
         } else if (giveInformationAboutPage(infoFromURL.page) == "model") {
             htmFilePath = globalPathFinder(["www", "main", "page", "model"], giveInformationAboutPage(infoFromURL.page) + ".html");
         } else {
