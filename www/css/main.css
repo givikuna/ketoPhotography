@@ -227,3 +227,20 @@
 	background-color: #1b1b1b;
 	filter: brightness(1);
 }
+
+.a2 {
+	font: initial;
+	font-size: 20px;
+	filter: brightness(1.8);
+	color: rgb(255, 255, 255);
+	text-decoration: inherit;
+	border: 1px thin rgb(34, 26, 26);
+}
+
+.a2:hover {
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.2);
+	opacity: 1;
+	-ms-transform: scale(1.8);
+	-webkit-transform: scale(1.8);
+	transform: scale(1.02);
+}
