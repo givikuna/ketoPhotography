@@ -20,3 +20,9 @@
 .footer {
 	text-align: center;
 }
+
+.contact-form-input {
+	height: 30px;
+	width: 400px;
+	text-align: center;
+}
