@@ -44,6 +44,20 @@ function actualTranslator(neededLang, givenArr, otherInfo) {
 	}
 }
 
+function checkJob(job) {
+	if (job == "translation_for_lang_names" || job == "translation_for_the_main_text") {
+		return true;
+	}
+	return false;
+}
+
+function checkOtherInfo(otherInfo) {
+	if (otherInfo == null || otherInfo == undefined || typeof otherInfo !== 'number' || otherInfo < 0 || otherInfo % 1 !== 0) {
+		return false;
+	}
+	return true;
+}
+
 function ketoTranslatorHelper_SecurityManager(b, c) {
 	if (Array.isArray(b) && b[0] !== undefined && b[0] !== null && typeof c == 'number' && c % 1 == 0 && c >= 0) {
 		for (var i = 0; i < b.length; i++) {
