@@ -251,3 +251,9 @@
 	background-size:cover;
 	height: 1000px;
 }
+
+.viewMyWork {
+	position: static;
+	margin: 3%;
+	text-align: center;
+}
