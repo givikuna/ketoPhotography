@@ -83,3 +83,7 @@
 	border-radius: 7px;
 	transform: scale(1.005);
 }
+
+.centeredDivForImages {
+	text-align: center;
+}
