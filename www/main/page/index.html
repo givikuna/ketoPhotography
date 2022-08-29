@@ -10,7 +10,10 @@
 		src="@dynamicLink:8095/?file=main.js&lang=@lang&page=contact&fileExtension=js"> </script>
 </head>
 
-<body>
+<body onload="bodyOnloadFunc('@infoForTheNameOfThisPage')">
+	<div id="fb-root"></div>
+	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v11.0"
+		nonce="NxQ1NQuK"></script>
 	<div class="headerBackground">
 		<header class="header">
 			<div class="inner">
@@ -90,18 +93,28 @@
 		</header>
 	</div>
 
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<div id="viewMyWorkHomePageId" class="viewMyWork">
-		<!-- // / //-->
+	<br><br><br><br><br><br>
+	<div id="viewMyWorkHomePageId" class="viewMyWork"> </div>
+	<br><br><br>
+
+	<!-- // -->
+
+	<!-- -- short picture slideshow -- -->
+
+	<!-- // -->
+
+	<!-- -- short about me -- -->
+
+	<!-- // -->
+
+	<div class="facebookFeedDiv">
+		<div class="fb-page" data-href="https://www.facebook.com/KetoJibladze/" data-tabs="timeline" data-width=""
+			data-height="" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false"
+			data-show-facepile="true">
+			<blockquote cite="https://www.facebook.com/KetoJibladze/" class="fb-xfbml-parse-ignore"><a
+					href="https://www.facebook.com/KetoJibladze/">Keto Photography</a></blockquote>
+		</div>
 	</div>
-	<br>
-	<br>
-	<br>
 </body>
 
 </html>
