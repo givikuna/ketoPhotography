@@ -203,3 +203,22 @@
 	padding: 0;
 	line-height: 30px;
 }
+
+.dropdown-content {
+	margin:0px -26px;
+	display: none;
+	position: fixed;
+	min-width: 125px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	opacity: 0.9;
+}
+
+.dropdown-content a {
+	padding: 12px 12px;
+	display: block;
+	text-align: center;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
