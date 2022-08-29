@@ -176,3 +176,11 @@
 	float: right;
 	height: 100%;
 }
+
+.headerNavigationLi {
+	display: table;
+	height: 100%;
+	float: left;
+	margin-right: 30px;
+	font-size: 24px;
+}
