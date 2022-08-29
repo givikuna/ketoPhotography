@@ -44,6 +44,18 @@ function actualTranslator(neededLang, givenArr, otherInfo) {
 	}
 }
 
+function ketoTranslatorHelper_SecurityManager(b, c) {
+	if (Array.isArray(b) && b[0] !== undefined && b[0] !== null && typeof c == 'number' && c % 1 == 0 && c >= 0) {
+		for (var i = 0; i < b.length; i++) {
+			if (b[i] == null || b[i] == undefined || Array.isArray(b[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
 function ketoTranslatorHelper(neededLang, givenArr, otherInfo) {
 	if (ketoTranslatorHelper_SecurityManager(givenArr, otherInfo) == true) {
 		return actualTranslator(neededLang, givenArr, otherInfo);
