@@ -28,6 +28,14 @@ function checkLang(lang) {
 	return false;
 }
 
+function ketoTranslatorHelper(neededLang, givenArr, otherInfo) {
+	if (ketoTranslatorHelper_SecurityManager(givenArr, otherInfo) == true) {
+		return actualTranslator(neededLang, givenArr, otherInfo);
+	} else {
+		return "error";
+	}
+}
+
 function ketoTranslator_SecurityManager(a, b, c, d) {
 	if (checkJob(b) == true && checkOtherInfo(c) == true && d !== null && d[0] !== undefined && typeof d !== 'underfined' && Array.isArray(d)) {
 		if (checkLang(a) == true) {
