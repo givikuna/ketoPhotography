@@ -28,6 +28,22 @@ function checkLang(lang) {
 	return false;
 }
 
+function actualTranslator(neededLang, givenArr, otherInfo) {
+	if (neededLang == "rus") {
+		if (!givenArr[otherInfo].textRus) { } else {
+			return givenArr[otherInfo].textRus;
+		}
+	} else if (neededLang == "geo") {
+		if (!givenArr[otherInfo].textGeo) { } else {
+			return givenArr[otherInfo].textGeo;
+		}
+	} else {
+		if (!givenArr[otherInfo].textEng) { } else {
+			return givenArr[otherInfo].textEng;
+		}
+	}
+}
+
 function ketoTranslatorHelper(neededLang, givenArr, otherInfo) {
 	if (ketoTranslatorHelper_SecurityManager(givenArr, otherInfo) == true) {
 		return actualTranslator(neededLang, givenArr, otherInfo);
