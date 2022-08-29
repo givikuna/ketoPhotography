@@ -1,1 +1,18 @@
-/* CSS file */
+.footerImg {
+	border-radius: 50%;
+	opacity: 0.79.5;
+	cursor: pointer;
+	padding: 10px;
+	transition: transform .2s;
+	margin: 0 auto;
+}
+
+.footerImg:hover {
+	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+	opacity: 1;
+	transform: scale(1.02);
+}
+
+.footerImgA {
+	text-decoration: none;
+}
