@@ -27,3 +27,24 @@ function checkLang(lang) {
 	}
 	return false;
 }
+
+function fillImagesInGalleries(galleryID, mainArray) {
+	var imagesOfTheGalleryDiv = document.getElementById('imagesOfTheGallery');
+	imagesOfTheGalleryDiv.innerHTML = "";
+	var folderLock = null;
+	for (var i = 0; i < mainArray.length; i++) {
+		if (mainArray[i].id == parseInt(galleryID)) {
+			folderLock = i;
+		}
+	}
+
+	for (var i = 0; i < mainArray[folderLock].images.length; i++) {
+		if (i % 4 == 0) {
+			imagesOfTheGalleryDiv.innerHTML = imagesOfTheGalleryDiv.innerHTML + "<div class=\"centeredDivForImages\">"
+		}
+		imagesOfTheGalleryDiv.innerHTML = imagesOfTheGalleryDiv.innerHTML + "<img class=\"imgForIn_Gallery\" src=\"@dynamicLink:8092/?type=img&albumName=" + mainArray[folderLock].folderName + "&requestedImage=" + mainArray[folderLock].images[i] + "\">";
+		if (i % 4 == 0) {
+			imagesOfTheGalleryDiv.innerHTML = imagesOfTheGalleryDiv.innerHTML + "</div>"
+		}
+	}
+}
