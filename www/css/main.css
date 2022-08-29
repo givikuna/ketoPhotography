@@ -135,3 +135,20 @@
 	opacity: 0.9;
 	font-family: "Times New Roman", Times, serif;
 }
+
+.formSubmitButtonClass {
+	background-color: white;
+	color: black;
+	border: 2px solid black;
+	padding: 18px 30px;
+	text-align: center;
+	border-radius: 25px;
+	font-size: 16px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+}
+
+.formSubmitButtonClass:hover {
+  background-color: #404040;
+  color: white;
+}
