@@ -44,6 +44,10 @@ function getArr(theArr, theName) {
     return JSON.parse(readArrayFile(globalPathFinder(theArr, theName)).toString());
 }
 
+function getLang() {
+    //
+}
+
 function selectReqRes() {
     try {
         var locArr = getArr(["data", "array_information"], "data.json");
@@ -65,10 +69,22 @@ function selectReqRes() {
 if (!module.parent) {
     http.createServer(function (req, res) {
         try {
+            var infoFromURL = url.parse(req.url, true).query;
+
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
 
-            res.write(selectReqRes().toString());
+            var selectReqResVar = selectReqRes().toString();
+
+            if (infoFromURL !== null && infoFromURL !== [] && infoFromURL !== {} && infoFromURL !== undefined && typeof infoFromURL !== 'undefined' && typeof infoFromURL == 'object') {
+                if ("page" in infoFromURL) {
+                    if (infoFromURL.page == "aboutme") {
+                        selectReqRes = fs.readFileSync(globalPathFinder([], ""));
+                    }
+                }
+            }
+
+            res.write(selectReqResVar);
             return res.end();
         } catch (error) {
             console.log("select.js ERROR: " + error);

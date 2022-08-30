@@ -205,8 +205,22 @@ function addSocialMediasToFooter(ketoSocialMediaArray) {
 }
 
 function loadAboutKeto(lang) {
-	var aboutKetoPElement = document.getElementById("aboutKetoP");
-	aboutKetoPElement.innerHTML = "test's text for test";
+	var xhttp = new XMLHttpRequest(); //use to connect to the servers
+	var url = "@dynamicLink:8093/?type=mainPage";
+	xhttp.open("GET", url, true);
+
+	xhttp.onreadystatechange = function () {
+		if (this.readyState == 4) {
+			if (this.status == 200) {
+				var fullArray = [JSON.parse(this.responseText)];
+				var aboutKetoPElement = document.getElementById("aboutKetoP");
+				aboutKetoPElement.innerHTML = "test's text for test";
+			} else {
+				serverDisconnectErr();
+			}
+		}
+	};
+	xhttp.send();
 }
 
 // If we're running under Node
