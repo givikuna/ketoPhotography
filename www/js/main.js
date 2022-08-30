@@ -1,19 +1,10 @@
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - GLOBAL VARIABLES:
-
-
 const ketoContactGmail_G = "@ketoGmailINFORMATION"; //the gmail of Keto, used for alerts and so on
 const maingLang_G = "@lang"; //the language chosen by the user
 var chosenAlbumID_G = null; //the ID of the album chosen by the user
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - ERROR HANDLER FUNCTIONS:
-
 function askForHelp(info) {
 	//
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - ASSISTANT FUNCTIONS:
 
 function languageChooser(langInfo) {
 	if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo == "number") {
@@ -120,8 +111,6 @@ function serverDisconnectErr() {
 	alert("Server couldn\'t connect, try again later or contact us at " + ketoContactGmail_G);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - MANAGEMENT FUNCTIONS:
-
 // loads the whole page
 function bodyOnloadFunc(contactedSiteInfo) {
 	var xhttp = new XMLHttpRequest(); //use to connect to the servers
@@ -141,6 +130,8 @@ function bodyOnloadFunc(contactedSiteInfo) {
 					fillPortfolioSection(mainArray);
 				} else if (contactedSiteInfo == 'in_gallery') {
 					fillImagesInGalleries("@infoForTheIDOfTheArrayOfTheGallery", mainArray);
+				} else if (contactedSiteInfo == 'aboutme') {
+					loadAboutKeto(maingLang_G);
 				}
 			} else {
 				serverDisconnectErr();
@@ -149,8 +140,6 @@ function bodyOnloadFunc(contactedSiteInfo) {
 	};
 	xhttp.send();
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - BUILDER FUNCTIONS:
 
 // fills the images in the galleries in
 function fillImagesInGalleries(galleryID, mainArray) {
@@ -215,7 +204,10 @@ function addSocialMediasToFooter(ketoSocialMediaArray) {
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// - EXPORTING OF FUNCTIONS:
+function loadAboutKeto(lang) {
+	var aboutKetoPElement = document.getElementById("aboutKetoP");
+	aboutKetoPElement.innerHTML = "test's text for test";
+}
 
 // If we're running under Node
 /*
