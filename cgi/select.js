@@ -97,7 +97,8 @@ function ifAboutMePageChanger(infoFromURL) {
             if ("page" in infoFromURL) {
                 if (infoFromURL.page == "aboutme") {
                     if ("lang" in infoFromURL) {
-                        return getArr(["data", "about_keto", getLang(infoFromURL.lang)], "data.txt");
+                        const gottenLang = getLang(infoFromURL.lang);
+                        return getArr(["data", "about_keto", gottenLang, "data.txt"]);
                     }
                 }
             }
@@ -140,4 +141,5 @@ if (typeof exports !== 'undefined') {
     exports.globalPathFinder = globalPathFinder;
     exports.getArr = getArr;
     exports.ifAboutMePageChanger = ifAboutMePageChanger;
+    exports.getLang = getLang;
 }

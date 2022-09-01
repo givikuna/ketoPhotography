@@ -78,54 +78,144 @@ describe('select.js', () => {
     });
 
     context('ifAboutMePageChanger()', () => {
-        var gStub;
+        var gStub, g2Stub;
 
         beforeEach(() => {
             gStub = sinon.stub(selectJS, "getArr").returns(true);
+            g2Stub = sinon.stub(selectJS, "getLang").returns("en");
 
             selectJS = rewire("../select.js");
         });
 
         afterEach(() => {
             gStub.restore();
+            g2Stub.restore();
 
             selectJS = rewire("../select.js");
         });
 
         it('sends \'(false)\', expects false', () => {
             selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
+            expect(selectJS.ifAboutMePageChanger(false)).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
         });
 
         it('sends \'(null)\', expects false', () => {
             selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger(null)).to.equal(false);
+            expect(selectJS.ifAboutMePageChanger(null)).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
         });
 
-        it('sends \'(false)\', expects false', () => {
+        it('sends \'([]])\', expects false', () => {
             selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
+            expect(selectJS.ifAboutMePageChanger([])).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
         });
 
-        it('sends \'(false)\', expects false', () => {
+        it('sends \'({}})\', expects false', () => {
             selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
+            expect(selectJS.ifAboutMePageChanger({})).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
         });
 
-        it('sends \'(false)\', expects false', () => {
+        it('sends \'(undefined)\', expects false', () => {
             selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
+            expect(selectJS.ifAboutMePageChanger(undefined)).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
         });
 
-        it('sends \'(false)\', expects false', () => {
+        it('sends \'("string")\', expects false', () => {
             selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
+            expect(selectJS.ifAboutMePageChanger("string")).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
+        });
+
+        
+        it('sends \'()\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
+
+            expect(selectJS.ifAboutMePageChanger()).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
+        });
+
+        it('sends \'({\"page\": \"randomPage\"})\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
+
+            expect(selectJS.ifAboutMePageChanger({"page": "randomPage"})).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
+        });
+
+        it('sends \'({\"page\": \"randomPage\", \"lang\": \"en\"})\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
+
+            expect(selectJS.ifAboutMePageChanger({"page": "randomPage", "lang": "en"})).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
+        });
+
+        it('sends \'({\"page\": \"aboutme\", \"lang\": \"en\"})\', expects true', () => {
+            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
+
+            expect(selectJS.ifAboutMePageChanger({"page": "aboutme", "lang": "en"})).to.be.true;
+            expect(gStub).to.have.been.calledOnce;
+            expect(g2Stub).to.have.been.calledOnce;
+            expect(gStub).to.have.returned(true);
+            expect(g2Stub).to.have.returned("en");
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
+        });
+
+        it('sends \'({\"lang\": \"randomLang\"})\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getLang", g2Stub);
+
+            expect(selectJS.ifAboutMePageChanger({"lang": "randomLang"})).to.be.false;
+            expect(gStub).to.not.have.been.called;
+            expect(g2Stub).to.not.have.been.called;
+            expect(gStub()).to.be.true;
+            expect(g2Stub()).to.equal("en");
         });
     });
 });
