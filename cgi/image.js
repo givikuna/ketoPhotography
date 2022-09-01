@@ -58,14 +58,28 @@ http.createServer(function (req, res) {
             }
         }
 
-        if (infoFromURL.type == "icon") {
-            imageLocation = globalPathFinder(["www", "img", "icons"], infoFromURL.img);
-        } else if (infoFromURL.type == "cover") {
-            imageLocation = globalPathFinder(["www", "img", "onPage", "cover"], "cover.jpg");
-        } else if (infoFromURL.type == "albumCover") {
-            imageLocation = globalPathFinder(["www", "img", "onPage", "albumCovers"], infoFromURL.coverImg);
-        } else if (infoFromURL.type == "img") {
-            imageLocation = globalPathFinder(["img", "albums", infoFromURL.albumName], infoFromURL.requestedImage);
+        if ("type" in infoFromURL) {
+            if (infoFromURL.type == "icon") {
+                if ("img" in infoFromURL) {
+                    imageLocation = globalPathFinder(["www", "img", "icons"], infoFromURL.img);
+                }
+            } else if (infoFromURL.type == "cover") {
+                imageLocation = globalPathFinder(["www", "img", "onPage", "cover"], "cover.jpg");
+            } else if (infoFromURL.type == "albumCover") {
+                if ("coverImg" in infoFromURL) {
+                    imageLocation = globalPathFinder(["www", "img", "onPage", "albumCovers"], infoFromURL.coverImg);
+                }
+            } else if (infoFromURL.type == "img") {
+                if ("requestedImage" in infoFromURL) {
+                    if ("albumName" in infoFromURL) {
+                        imageLocation = globalPathFinder(["img", "albums", infoFromURL.albumName], infoFromURL.requestedImage);
+                    }
+                }
+            } else if (infoFromURL.type == "ketoPics") {
+                if ("img" in infoFromURL) {
+                    imageLocation = globalPathFinder(["www", "img", "onPage", "ketoPics"], infoFromURL.img);
+                }
+            }
         }
         sendImage(imageLocation);
     } catch (error) {

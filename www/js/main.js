@@ -206,15 +206,14 @@ function addSocialMediasToFooter(ketoSocialMediaArray) {
 
 function loadAboutKeto(lang) {
 	var xhttp = new XMLHttpRequest(); //use to connect to the servers
-	var url = "@dynamicLink:8093/?type=mainPage";
+	var url = "@dynamicLink:8093/?page=aboutme&lang=" + lang
 	xhttp.open("GET", url, true);
 
 	xhttp.onreadystatechange = function () {
 		if (this.readyState == 4) {
 			if (this.status == 200) {
-				var fullArray = [JSON.parse(this.responseText)];
 				var aboutKetoPElement = document.getElementById("aboutKetoP");
-				aboutKetoPElement.innerHTML = "test's text for test";
+				aboutKetoPElement.innerHTML = this.responseText;
 			} else {
 				serverDisconnectErr();
 			}

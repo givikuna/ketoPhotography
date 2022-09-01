@@ -65,12 +65,12 @@ if (!module.parent) {
                     });
                 }
             } else {
-                console.log('src.js ERROR: an error was detected in src.js. The file wasn\'t found');
+                console.log('src.js ERROR: an error was detected in src.js. The file \'' + srcLocation + '\' wasn\'t found');
                 res.write("");
                 return res.end();
             }
         } catch (error) {
-            console.log("src.js ERROR" + error);
+            console.log("src.js ERROR " + error);
         }
     }).listen(8095);
     console.log('Server running at http://127.0.0.1:8095/');

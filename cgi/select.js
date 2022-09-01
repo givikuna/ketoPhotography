@@ -44,8 +44,24 @@ function getArr(theArr, theName) {
     return JSON.parse(readArrayFile(globalPathFinder(theArr, theName)).toString());
 }
 
-function getLang() {
-    //
+function getLang(langInfo) {
+    try {
+        if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo == "number") {
+            return "en";
+        } else {
+            langInfo = langInfo.toLowerCase();
+            if (langInfo == "rus" || langInfo == "russian" || langInfo == "ruso" || langInfo == "rusia" || langInfo == "ruski" || langInfo == "rusian" || langInfo == "ru" || langInfo == "rusuli" || langInfo == "russ" || langInfo == "russian language") {
+                return "ru";
+            } else if (langInfo == "geo" || langInfo == "qartuli nana" || langInfo == "cartuli nana" || langInfo == "kartuli nana" || langInfo == "kartluli" || langInfo == "kartvelian language" || langInfo == "kartuli ena" || langInfo == "deda ena" || langInfo == "qartuli ena" || langInfo == "cartuli ena" || langInfo == "geouri" || langInfo == "gurjistani" || langInfo == "georgiani" || langInfo == "qartveli" || langInfo == "georgianuri" || langInfo == "gurjistan" || langInfo == "georgian" || langInfo == "kartveli" || langInfo == "kutaisuri" || langInfo == "kartuli" || langInfo == "ქართული" || langInfo == "ka" || langInfo == "kar" || langInfo == "cartuli" || langInfo == "cartveluri" || langInfo == "cartvelian" || langInfo == "qartveluri" || langInfo == "qartvelian" || langInfo == "kartvellian" || langInfo == "kartvelian" || langInfo == "qartuli" || langInfo == "gorgian" || langInfo == "ge") {
+                return "ge";
+            } else {
+                return "en";
+            }
+        }
+    } catch (error) {
+        console.log("index.js languageChooser() ERROR: " + error);
+        return "en";
+    }
 }
 
 function selectReqRes() {
@@ -77,9 +93,12 @@ if (!module.parent) {
             var selectReqResVar = selectReqRes().toString();
 
             if (infoFromURL !== null && infoFromURL !== [] && infoFromURL !== {} && infoFromURL !== undefined && typeof infoFromURL !== 'undefined' && typeof infoFromURL == 'object') {
+                console.log("------------");
                 if ("page" in infoFromURL) {
                     if (infoFromURL.page == "aboutme") {
-                        selectReqRes = fs.readFileSync(globalPathFinder([], ""));
+                        if ("lang" in infoFromURL) {
+                            selectReqResVar = fs.readFileSync(globalPathFinder(["data", "about_keto", getLang(infoFromURL.lang)], "data.txt"));
+                        }
                     }
                 }
             }
