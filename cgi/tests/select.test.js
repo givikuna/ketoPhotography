@@ -52,7 +52,7 @@ describe('select.js', () => {
         var gStub;
 
         beforeEach(() => {
-            gStub = sinon.stub(selectJS, "getArr").returns([{"location": "randomLocation", "name": "randomName"}]);
+            gStub = sinon.stub(selectJS, "getArr").returns([{ "location": "randomLocation", "name": "randomName" }]);
 
             selectJS = rewire("../select.js");
         });
@@ -63,17 +63,69 @@ describe('select.js', () => {
             selectJS = rewire("../select.js");
         });
 
-        it('sends (), expects \"[[{\"location\":\"randomLocation\",\"name\":\"randomName\"}]]\"', () => {
+        it('sends \'()\', expects \"[[{\"location\":\"randomLocation\",\"name\":\"randomName\"}]]\"', () => {
             selectJS.__set__("getArr", gStub);
 
             expect(selectJS.selectReqRes()).to.equal("[[{\"location\":\"randomLocation\",\"name\":\"randomName\"}]]");
         });
 
-        it('sends (), expects []', () => {
+        it('sends \'()\', expects []', () => {
             gStub = sinon.stub(selectJS, "getArr").returns("blank");
             selectJS.__set__("getArr", gStub);
 
             expect(selectJS.selectReqRes()).to.deep.equal([]);
+        });
+    });
+
+    context('ifAboutMePageChanger()', () => {
+        var gStub;
+
+        beforeEach(() => {
+            gStub = sinon.stub(selectJS, "getArr").returns(true);
+
+            selectJS = rewire("../select.js");
+        });
+
+        afterEach(() => {
+            gStub.restore();
+
+            selectJS = rewire("../select.js");
+        });
+
+        it('sends \'(false)\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+
+            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
+        });
+
+        it('sends \'(null)\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+
+            expect(selectJS.ifAboutMePageChanger(null)).to.equal(false);
+        });
+
+        it('sends \'(false)\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+
+            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
+        });
+
+        it('sends \'(false)\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+
+            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
+        });
+
+        it('sends \'(false)\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+
+            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
+        });
+
+        it('sends \'(false)\', expects false', () => {
+            selectJS.__set__("getArr", gStub);
+
+            expect(selectJS.ifAboutMePageChanger(false)).to.equal(false);
         });
     });
 });

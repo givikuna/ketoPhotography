@@ -35,7 +35,7 @@ function readArrayFile(givenLoc) {
         var theArr = fs.readFileSync(givenLoc);
         return theArr;
     } catch (error) {
-        console.log("select.js getArrayFile() function ERROR: " + error);
+        console.log("select.js readArrayFile() function ERROR: " + error);
         return [];
     }
 }
@@ -44,7 +44,7 @@ function getArr(theArr, theName) {
     try {
         return JSON.parse(readArrayFile(globalPathFinder(theArr, theName)).toString());
     } catch (error) {
-        console.log("select.js getArrayFile() function ERROR: " + error);
+        console.log("select.js getArr() function ERROR: " + error);
         return [];
     }
 }
@@ -64,7 +64,7 @@ function getLang(langInfo) {
             }
         }
     } catch (error) {
-        console.log("index.js languageChooser() ERROR: " + error);
+        console.log("select.js getLang() function ERROR: " + error);
         return "en";
     }
 }
@@ -91,6 +91,24 @@ function selectReqRes() {
     }
 }
 
+function ifAboutMePageChanger(infoFromURL) {
+    try {
+        if (infoFromURL !== null && infoFromURL !== [] && infoFromURL !== {} && infoFromURL !== undefined && typeof infoFromURL !== 'undefined' && typeof infoFromURL == 'object') {
+            if ("page" in infoFromURL) {
+                if (infoFromURL.page == "aboutme") {
+                    if ("lang" in infoFromURL) {
+                        return getArr(["data", "about_keto", getLang(infoFromURL.lang)], "data.txt");
+                    }
+                }
+            }
+        }
+        return false;
+    } catch {
+        console.log("select.js ifAboutMePageChanger() function ERROR: " + error);
+        return [];
+    }
+}
+
 if (!module.parent) {
     http.createServer(function (req, res) {
         try {
@@ -101,15 +119,9 @@ if (!module.parent) {
 
             var selectReqResVar = selectReqRes().toString();
 
-            if (infoFromURL !== null && infoFromURL !== [] && infoFromURL !== {} && infoFromURL !== undefined && typeof infoFromURL !== 'undefined' && typeof infoFromURL == 'object') {
-                console.log("------------");
-                if ("page" in infoFromURL) {
-                    if (infoFromURL.page == "aboutme") {
-                        if ("lang" in infoFromURL) {
-                            selectReqResVar = fs.readFileSync(globalPathFinder(["data", "about_keto", getLang(infoFromURL.lang)], "data.txt"));
-                        }
-                    }
-                }
+            const ifAboutMePageChangerVar = ifAboutMePageChanger(infoFromURL);
+            if (ifAboutMePageChangerVar !== false) {
+                selectReqRes = ifAboutMePageChanger;
             }
 
             res.write(selectReqResVar);
@@ -127,4 +139,5 @@ if (typeof exports !== 'undefined') {
     exports.readArrayFile = readArrayFile;
     exports.globalPathFinder = globalPathFinder;
     exports.getArr = getArr;
+    exports.ifAboutMePageChanger = ifAboutMePageChanger;
 }
