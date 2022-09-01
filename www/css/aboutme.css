@@ -1,0 +1,36 @@
+#aboutKetoP {
+    text-align: justify;
+    position: relative;
+}
+
+.aboutKetoDivImg {
+    position: relative;
+    width: 500px;
+    height: 500px;
+}
+
+#aboutKetoDiv {
+    /*
+    position:relative;
+    */
+    float: left;
+    width: 60%;
+    position: relative;
+    /*
+        left:2%;
+        width: 60%;
+    */
+}
+
+#ketoImgDiv {
+    /*
+        position: relative;
+        left: 65%;
+    */
+    float: right;
+}
+
+.wrapper {
+  width: 100%;
+  position: relative;
+}
