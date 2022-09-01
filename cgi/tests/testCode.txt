@@ -1,0 +1,2 @@
+mocha index.test.js
+mocha main.test.js

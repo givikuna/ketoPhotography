@@ -24,7 +24,7 @@
 }
 
 .contact-form-large-input {
-	height:100px;
+	height: 100px;
 	width: 400px;
 	text-align: center;
 }
@@ -59,13 +59,13 @@
 
 .imgForIn_Gallery {
 	border-radius: 6px;
-	margin-left:10px;
-	margin-right:10px;
-	max-height:505px;
-	max-width:600px;
-	height:auto;
-	width:auto;
-	
+	margin-left: 10px;
+	margin-right: 10px;
+	max-height: 505px;
+	max-width: 600px;
+	height: auto;
+	width: auto;
+
 	transition: transform .15s;
 }
 
@@ -145,8 +145,8 @@
 }
 
 .formSubmitButtonClass:hover {
-  background-color: #404040;
-  color: white;
+	background-color: #404040;
+	color: white;
 }
 
 .inner {
@@ -201,7 +201,7 @@
 }
 
 .dropdown-content {
-	margin:0px -26px;
+	margin: 0px -26px;
 	display: none;
 	position: fixed;
 	min-width: 125px;
@@ -244,7 +244,7 @@
 .headerBackground {
 	background-image: url("@dynamicLink:8092/?type=cover");
 	background-repeat: no-repeat;
-	background-size:cover;
+	background-size: cover;
 	height: 1000px;
 }
 
