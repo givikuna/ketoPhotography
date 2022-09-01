@@ -203,6 +203,8 @@ describe('select.js', () => {
             expect(g2Stub).to.have.been.calledOnce;
             expect(gStub).to.have.returned(true);
             expect(g2Stub).to.have.returned("en");
+            expect(g2Stub).to.have.been.calledBefore(gStub);
+            expect(gStub).to.have.been.calledAfter(g2Stub);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -338,6 +340,11 @@ describe('select.js', () => {
             expect(rStub).to.have.been.calledOnce;
             expect(gStub).to.have.been.calledOnce;
             expect(rStub).to.have.been.calledAfter(gStub);
+            expect(gStub).to.have.been.calledBefore(rStub);
+            expect(rStub).to.have.returned({"foo": "bar"});
+            expect(gStub).to.have.returned("randomPath");
+            expect(rStub()).to.deep.equal({"foo": "bar"});
+            expect(gStub()).to.equal("randomPath");
         });
     });
 });
