@@ -42,7 +42,8 @@ function readArrayFile(givenLoc) {
 
 function getArr(theArr, theName) {
     try {
-        return JSON.parse(readArrayFile(globalPathFinder(theArr, theName)).toString());
+        const chosenPath = globalPathFinder(theArr, theName);
+        return readArrayFile(chosenPath);
     } catch (error) {
         console.log("select.js getArr() function ERROR: " + error);
         return [];
@@ -91,6 +92,15 @@ function selectReqRes() {
     }
 }
 
+function getData(givenArr, givenString) {
+    try {
+        return fs.fs.readFileSync(globalPathFinder(givenArr, givenString));
+    } catch (error) {
+        console.log("select.js getData() function ERROR: " + error);
+        return "";
+    }
+}
+
 function ifAboutMePageChanger(infoFromURL) {
     try {
         if (infoFromURL !== null && infoFromURL !== [] && infoFromURL !== {} && infoFromURL !== undefined && typeof infoFromURL !== 'undefined' && typeof infoFromURL == 'object') {
@@ -98,7 +108,7 @@ function ifAboutMePageChanger(infoFromURL) {
                 if (infoFromURL.page == "aboutme") {
                     if ("lang" in infoFromURL) {
                         const gottenLang = getLang(infoFromURL.lang);
-                        return getArr(["data", "about_keto", gottenLang, "data.txt"]);
+                        return getData(["data", "about_keto", gottenLang], "data.txt");
                     }
                 }
             }

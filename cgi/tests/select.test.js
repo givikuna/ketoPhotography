@@ -312,6 +312,33 @@ describe('select.js', () => {
             }
         });
     });
+
+    context('getArr()', () => {
+        var rStub, gStub;
+
+        beforeEach(() => {
+            rStub = sinon.stub(selectJS, "readArrayFile").returns({"foo": "bar"});
+            gStub = sinon.stub(selectJS, "globalPathFinder").returns("randomPath");
+
+            selectJS = rewire("../select.js");
+        });
+
+        afterEach(() => {
+            rStub.restore();
+            gStub.restore();
+
+            selectJS = rewire("../select.js");
+        });
+
+        it('sends \'()\', expects {\"foo\": \"bar\"}', () => {
+            selectJS.__set__("readArrayFile", rStub);
+            selectJS.__set__("globalPathFinder", gStub);
+
+            console.log(rStub());
+
+            expect(selectJS.getArr()).to.deep.equal({"foo": "bar"});
+        });
+    });
 });
 
 /*
