@@ -41,11 +41,40 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
 
 describe('select.js', () => {
     beforeEach(() => {
-        var selectJS = rewire("../select.js");
+        selectJS = rewire("../select.js");
     });
 
     afterEach(() => {
-        var selectJS = rewire("../select.js");
+        selectJS = rewire("../select.js");
+    });
+
+    context('selectReqRes()', () => {
+        var gStub;
+
+        beforeEach(() => {
+            gStub = sinon.stub(selectJS, "getArr").returns([{"location": "randomLocation", "name": "randomName"}]);
+
+            selectJS = rewire("../select.js");
+        });
+
+        afterEach(() => {
+            gStub.restore();
+
+            selectJS = rewire("../select.js");
+        });
+
+        it('sends (), expects \"[[{\"location\":\"randomLocation\",\"name\":\"randomName\"}]]\"', () => {
+            selectJS.__set__("getArr", gStub);
+
+            expect(selectJS.selectReqRes()).to.equal("[[{\"location\":\"randomLocation\",\"name\":\"randomName\"}]]");
+        });
+
+        it('sends (), expects []', () => {
+            gStub = sinon.stub(selectJS, "getArr").returns("blank");
+            selectJS.__set__("getArr", gStub);
+
+            expect(selectJS.selectReqRes()).to.deep.equal([]);
+        });
     });
 });
 
@@ -53,11 +82,11 @@ describe('select.js', () => {
 
     context('theFunc()', () => {
         beforeEach(() => {
-            var selectJS = rewire("../select.js");
+            selectJS = rewire("../select.js");
         });
 
         afterEach(() => {
-            var selectJS = rewire("../select.js");
+            selectJS = rewire("../select.js");
         });
 
         it('sends __, but __, expects __', () => {

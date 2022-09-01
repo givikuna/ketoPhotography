@@ -26,7 +26,7 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
         return path.join(currentPath, nameOfFile);
     } catch (error) {
         console.log("select.js globalPathFinder() function ERROR: " + error);
-        return "select.js globalPathFinder() function ERROR: " + error;
+        return [];
     }
 }
 
@@ -36,12 +36,17 @@ function readArrayFile(givenLoc) {
         return theArr;
     } catch (error) {
         console.log("select.js getArrayFile() function ERROR: " + error);
-        return "select.js getArrayFile() function ERROR: " + error;
+        return [];
     }
 }
 
 function getArr(theArr, theName) {
-    return JSON.parse(readArrayFile(globalPathFinder(theArr, theName)).toString());
+    try {
+        return JSON.parse(readArrayFile(globalPathFinder(theArr, theName)).toString());
+    } catch (error) {
+        console.log("select.js getArrayFile() function ERROR: " + error);
+        return [];
+    }
 }
 
 function getLang(langInfo) {
@@ -70,15 +75,19 @@ function selectReqRes() {
         var fullArr = [];
         var mainArr = null;
 
-        for (let i = 0; i < locArr.length; i++) {
-            var tempArr = getArr(locArr[i].location, locArr[i].name);
-            fullArr.push(tempArr);
+        if (locArr !== undefined && locArr !== null && typeof locArr !== 'string' && typeof locArr !== 'number') {
+            if ("location" in locArr[0] && "name" in locArr[0]) {
+                for (let i = 0; i < locArr.length; i++) {
+                    var tempArr = getArr(locArr[i].location, locArr[i].name);
+                    fullArr.push(tempArr);
+                }
+                fullArr = JSON.stringify(fullArr);
+            }
         }
-        fullArr = JSON.stringify(fullArr);
         return fullArr;
     } catch (error) {
         console.log("select.js selectReqRes() function ERROR: " + error);
-        return "select.js selectReqRes() function ERROR: " + error;
+        return [];
     }
 }
 
