@@ -94,7 +94,7 @@ function selectReqRes() {
 
 function getData(givenArr, givenString) {
     try {
-        return fs.fs.readFileSync(globalPathFinder(givenArr, givenString));
+        return fs.readFileSync(globalPathFinder(givenArr, givenString));
     } catch (error) {
         console.log("select.js getData() function ERROR: " + error);
         return "";
@@ -152,4 +152,5 @@ if (typeof exports !== 'undefined') {
     exports.getArr = getArr;
     exports.ifAboutMePageChanger = ifAboutMePageChanger;
     exports.getLang = getLang;
+    exports.getData = getData;
 }

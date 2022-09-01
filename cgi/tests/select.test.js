@@ -81,7 +81,7 @@ describe('select.js', () => {
         var gStub, g2Stub;
 
         beforeEach(() => {
-            gStub = sinon.stub(selectJS, "getArr").returns(true);
+            gStub = sinon.stub(selectJS, "getData").returns(true);
             g2Stub = sinon.stub(selectJS, "getLang").returns("en");
 
             selectJS = rewire("../select.js");
@@ -95,7 +95,7 @@ describe('select.js', () => {
         });
 
         it('sends \'(false)\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger(false)).to.be.false;
@@ -106,7 +106,7 @@ describe('select.js', () => {
         });
 
         it('sends \'(null)\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger(null)).to.be.false;
@@ -117,7 +117,7 @@ describe('select.js', () => {
         });
 
         it('sends \'([]])\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger([])).to.be.false;
@@ -128,7 +128,7 @@ describe('select.js', () => {
         });
 
         it('sends \'({}})\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger({})).to.be.false;
@@ -139,7 +139,7 @@ describe('select.js', () => {
         });
 
         it('sends \'(undefined)\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger(undefined)).to.be.false;
@@ -150,7 +150,7 @@ describe('select.js', () => {
         });
 
         it('sends \'("string")\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger("string")).to.be.false;
@@ -162,7 +162,7 @@ describe('select.js', () => {
 
 
         it('sends \'()\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger()).to.be.false;
@@ -173,7 +173,7 @@ describe('select.js', () => {
         });
 
         it('sends \'({\"page\": \"randomPage\"})\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger({ "page": "randomPage" })).to.be.false;
@@ -184,7 +184,7 @@ describe('select.js', () => {
         });
 
         it('sends \'({\"page\": \"randomPage\", \"lang\": \"en\"})\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger({ "page": "randomPage", "lang": "en" })).to.be.false;
@@ -195,7 +195,7 @@ describe('select.js', () => {
         });
 
         it('sends \'({\"page\": \"aboutme\", \"lang\": \"en\"})\', expects true', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger({ "page": "aboutme", "lang": "en" })).to.be.true;
@@ -208,7 +208,7 @@ describe('select.js', () => {
         });
 
         it('sends \'({\"lang\": \"randomLang\"})\', expects false', () => {
-            selectJS.__set__("getArr", gStub);
+            selectJS.__set__("getData", gStub);
             selectJS.__set__("getLang", g2Stub);
 
             expect(selectJS.ifAboutMePageChanger({ "lang": "randomLang" })).to.be.false;
@@ -334,9 +334,10 @@ describe('select.js', () => {
             selectJS.__set__("readArrayFile", rStub);
             selectJS.__set__("globalPathFinder", gStub);
 
-            console.log(rStub());
-
             expect(selectJS.getArr()).to.deep.equal({"foo": "bar"});
+            expect(rStub).to.have.been.calledOnce;
+            expect(gStub).to.have.been.calledOnce;
+            expect(rStub).to.have.been.calledAfter(gStub);
         });
     });
 });
