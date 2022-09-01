@@ -160,7 +160,7 @@ describe('select.js', () => {
             expect(g2Stub()).to.equal("en");
         });
 
-        
+
         it('sends \'()\', expects false', () => {
             selectJS.__set__("getArr", gStub);
             selectJS.__set__("getLang", g2Stub);
@@ -176,7 +176,7 @@ describe('select.js', () => {
             selectJS.__set__("getArr", gStub);
             selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger({"page": "randomPage"})).to.be.false;
+            expect(selectJS.ifAboutMePageChanger({ "page": "randomPage" })).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
             expect(gStub()).to.be.true;
@@ -187,7 +187,7 @@ describe('select.js', () => {
             selectJS.__set__("getArr", gStub);
             selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger({"page": "randomPage", "lang": "en"})).to.be.false;
+            expect(selectJS.ifAboutMePageChanger({ "page": "randomPage", "lang": "en" })).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
             expect(gStub()).to.be.true;
@@ -198,7 +198,7 @@ describe('select.js', () => {
             selectJS.__set__("getArr", gStub);
             selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger({"page": "aboutme", "lang": "en"})).to.be.true;
+            expect(selectJS.ifAboutMePageChanger({ "page": "aboutme", "lang": "en" })).to.be.true;
             expect(gStub).to.have.been.calledOnce;
             expect(g2Stub).to.have.been.calledOnce;
             expect(gStub).to.have.returned(true);
@@ -211,11 +211,105 @@ describe('select.js', () => {
             selectJS.__set__("getArr", gStub);
             selectJS.__set__("getLang", g2Stub);
 
-            expect(selectJS.ifAboutMePageChanger({"lang": "randomLang"})).to.be.false;
+            expect(selectJS.ifAboutMePageChanger({ "lang": "randomLang" })).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
+        });
+    });
+
+    context('getLang()', () => {
+        beforeEach(() => {
+            selectJS = rewire('../select.js');
+        });
+
+        afterEach(() => {
+            selectJS = rewire('../select.js');
+        });
+
+        it('sends \"ru\" and other types of Russian names shouldn\'t return \"en\", instead should return \"ru\"', () => {
+            const sendArr = [
+                "rus",
+                "russian",
+                "ruso",
+                "rusia",
+                "ruski",
+                "rusian",
+                "ru",
+                "rusuli",
+                "russ",
+                "russian language"
+            ];
+
+            for (var i = 0; i < sendArr.length; i++) {
+                expect(selectJS.getLang(sendArr[i])).to.not.equal("en");
+                expect(selectJS.getLang(sendArr[i])).to.equal("ru");
+            }
+        });
+
+        it('sends \'(\"anglish\")\' and shouldn\'t return \"ru\" but instead should return \"en\"', () => {
+            expect(selectJS.getLang("anglish")).to.not.equal("ru");
+            expect(selectJS.getLang("anglish")).to.equal("en");
+        });
+
+        it('sends different nulls and errors and should return \"en\"', () => {
+            const sendArr = [
+                null,
+                undefined,
+                0,
+                "ara qartuli",
+                12408702,
+                "@n6113h",
+                "3ng1i3h",
+                "en"
+            ];
+
+            for (var i = 0; i < sendArr.length; i++) {
+                expect(selectJS.getLang(sendArr[i])).to.equal("en");
+            }
+        });
+
+        it('sends \"ქართული\" and other Georgian names and expects to return \"ge\"', () => {
+            const sendArr = [
+                "ქართული",
+                "geo",
+                "qartuli nana",
+                "cartuli nana",
+                "kartuli nana",
+                "kartluli",
+                "kartvelian language",
+                "kartuli ena",
+                "deda ena",
+                "qartuli ena",
+                "cartuli ena",
+                "geouri",
+                "gurjistani",
+                "georgiani",
+                "qartveli",
+                "georgianuri",
+                "gurjistan",
+                "georgian",
+                "kartveli",
+                "kutaisuri",
+                "kartuli",
+                "ka",
+                "kar",
+                "cartuli",
+                "cartveluri",
+                "cartvelian",
+                "qartveluri",
+                "qartvelian",
+                "kartvellian",
+                "kartvelian",
+                "qartuli",
+                "gorgian",
+                "ge"
+            ];
+
+            for (var i = 0; i < sendArr.length; i++) {
+                expect(selectJS.getLang(sendArr[i])).to.equal("ge");
+            }
         });
     });
 });
