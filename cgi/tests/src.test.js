@@ -162,7 +162,7 @@ describe('select.js', () => {
 
     context('languageChooser()', () => {
         beforeEach(() => {
-            // srcJS = rewire("../src.js");
+            srcJS = rewire("../src.js");
         });
 
         afterEach(() => {
