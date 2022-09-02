@@ -28,60 +28,85 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     }
 }
 
+function languageChooser(langInfo) {
+    try {
+        if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo == "number") {
+            return "eng";
+        } else {
+            langInfo = langInfo.toLowerCase();
+            if (langInfo == "rus" || langInfo == "russian" || langInfo == "ruso" || langInfo == "rusia" || langInfo == "ruski" || langInfo == "rusian" || langInfo == "ru" || langInfo == "rusuli" || langInfo == "russ" || langInfo == "russian language") {
+                return "rus";
+            } else if (langInfo == "geo" || langInfo == "qartuli nana" || langInfo == "cartuli nana" || langInfo == "kartuli nana" || langInfo == "kartluli" || langInfo == "kartvelian language" || langInfo == "kartuli ena" || langInfo == "deda ena" || langInfo == "qartuli ena" || langInfo == "cartuli ena" || langInfo == "geouri" || langInfo == "gurjistani" || langInfo == "georgiani" || langInfo == "qartveli" || langInfo == "georgianuri" || langInfo == "gurjistan" || langInfo == "georgian" || langInfo == "kartveli" || langInfo == "kutaisuri" || langInfo == "kartuli" || langInfo == "ქართული" || langInfo == "ka" || langInfo == "kar" || langInfo == "cartuli" || langInfo == "cartveluri" || langInfo == "cartvelian" || langInfo == "qartveluri" || langInfo == "qartvelian" || langInfo == "kartvellian" || langInfo == "kartvelian" || langInfo == "qartuli" || langInfo == "gorgian" || langInfo == "ge") {
+                return "geo";
+            } else {
+                return "eng";
+            }
+        }
+    } catch (error) {
+        console.log("index.js languageChooser() ERROR: " + error);
+        return "eng";
+    }
+}
+
 function textReplacer(dataToString, infoFromURL, ketoContactGmail, currentDynLink, fileName, theFileExtension) {
-    if (fileName == "main.js") {
-        if (typeof dataToString == 'string') {
-            if (infoFromURL !== null && infoFromURL !== undefined && infoFromURL !== {} && infoFromURL !== [] && typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number') {
-                if (dataToString.includes("@lang")) {
-                    if ("lang" in infoFromURL) {
-                        dataToString = dataToString.replace(/@lang/g, infoFromURL.lang);
+    if (theFileExtension == "js") {
+        if (fileName == "main.js") {
+            if (typeof dataToString == 'string') {
+                if (infoFromURL !== null && infoFromURL !== undefined && infoFromURL !== {} && infoFromURL !== [] && typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number') {
+                    if (dataToString.includes("@lang")) {
+                        if ("lang" in infoFromURL) {
+                            dataToString = dataToString.replace(/@lang/g, languageChooser(infoFromURL.lang));
+                        }
+                    }
+
+                    if ("page" in infoFromURL) {
+                        if (infoFromURL.page == "in_gallery") {
+                            if ("nameOfAlbum" in infoFromURL) {
+                                if (dataToString.includes("@nameOfTheAlbumForTheGallery")) {
+                                    dataToString = dataToString.replace(/@nameOfTheAlbumForTheGallery/g, infoFromURL.nameOfAlbum);
+                                }
+                            }
+                            if ("albumID" in infoFromURL) {
+                                if (dataToString.includes("@infoForTheIDOfTheArrayOfTheGallery")) {
+                                    dataToString = dataToString.replace(/@infoForTheIDOfTheArrayOfTheGallery/g, infoFromURL.albumID);
+                                }
+                            }
+                        }
                     }
                 }
 
-                if ("page" in infoFromURL) {
-                    if (infoFromURL.page == "in_gallery") {
-                        if ("nameOfAlbum" in infoFromURL) {
-                            if (dataToString.includes("@nameOfTheAlbumForTheGallery")) {
-                                dataToString = dataToString.replace(/@nameOfTheAlbumForTheGallery/g, infoFromURL.nameOfAlbum);
-                            }
-                        }
-                        if ("albumID" in infoFromURL) {
-                            if (dataToString.includes("@infoForTheIDOfTheArrayOfTheGallery")) {
-                                dataToString = dataToString.replace(/@infoForTheIDOfTheArrayOfTheGallery/g, infoFromURL.albumID);
-                            }
-                        }
+                if (dataToString.includes("@ketoGmailINFORMATION")) {
+                    if (ketoContactGmail !== null && ketoContactGmail !== undefined && typeof ketoContactGmail == 'string' && ketoContactGmail.includes(".") && ketoContactGmail.includes("@")) {
+                        dataToString = dataToString.replace(/@ketoGmailINFORMATION/g, ketoContactGmail);
+                    }
+                }
+
+                if (dataToString.includes("@dynamicLink")) {
+                    if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
+                        dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
                     }
                 }
             }
-
-            if (dataToString.includes("@ketoGmailINFORMATION")) {
-                if (ketoContactGmail !== null && ketoContactGmail !== undefined && typeof ketoContactGmail == 'string' && ketoContactGmail.includes(".") && ketoContactGmail.includes("@")) {
-                    dataToString = dataToString.replace(/@ketoGmailINFORMATION/g, ketoContactGmail);
+        }
+    } else if (theFileExtension == "css") {
+        if (fileName == "main.css") {
+            if (typeof dataToString == 'string') {
+                if (dataToString.includes("@dynamicLink")) {
+                    if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
+                        dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
+                    }
                 }
             }
-
-            if (dataToString.includes("@dynamicLink")) {
-                if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
-                    dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
+        } else if (fileName == "aboutme.css") {
+            if (typeof dataToString == 'string') {
+                if (dataToString.includes("@dynamicLink")) {
+                    if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
+                        dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
+                    }
                 }
             }
         }
-    } else if (fileName == "main.css") {
-        if (typeof dataToString == 'string') {
-            if (dataToString.includes("@dynamicLink")) {
-                if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
-                    dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
-                }
-            }
-        }
-    } else if (fileName == "aboutme.css") {
-        if (typeof dataToString == 'string') {
-            if (dataToString.includes("@dynamicLink")) {
-                if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
-                    dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
-                }
-            }
-        }
+    
     }
 
     return dataToString;

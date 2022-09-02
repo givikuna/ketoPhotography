@@ -47,6 +47,28 @@ describe('select.js', () => {
     afterEach(() => {
         srcJS = rewire("../src.js");
     });
+
+    context('textReplacer()', () => {
+        beforeEach(() => {
+            srcJS = rewire("../src.js");
+        });
+
+        afterEach(() => {
+            srcJS = rewire("../src.js");
+        });
+
+        it('sends \'()\', expects undefined', () => {
+            expect(srcJS.textReplacer()).to.be.undefined;
+        });
+
+        it('sends \'(\"\", {}, \"randomGmail@gmail.com\", \"currentDynamicLink.com\", \"main.js\", \"js\")\', expects \"\"', () => {
+            expect(srcJS.textReplacer("", {}, "randomGmail@gmail.com", "currentDynamicLink.com", "main.js", "js")).to.equal("");
+        });
+
+        it('sends \'(\"\", {}, \"randomGmail@gmail.com\", \"currentDynamicLink.com\", \"main.js\", \"js\")\', expects \"\"', () => {
+            expect(srcJS.textReplacer("@lang@nameOfTheAlbumForTheGallery@infoForTheIDOfTheArrayOfTheGallery@ketoGmailINFORMATION@dynamicLink@dynamicLink", {"page": "in_gallery", "lang": "eng", "nameOfAlbum": "randomAlbum", "albumID": "randomAlbumId"}, "randomGmail@gmail.com", "currentDynamicLink.com", "main.js", "js")).to.equal("");
+        });
+    });
 });
 
 /*
