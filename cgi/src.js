@@ -89,15 +89,7 @@ function textReplacer(dataToString, infoFromURL, ketoContactGmail, currentDynLin
             }
         }
     } else if (theFileExtension == "css") {
-        if (fileName == "main.css") {
-            if (typeof dataToString == 'string') {
-                if (dataToString.includes("@dynamicLink")) {
-                    if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
-                        dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
-                    }
-                }
-            }
-        } else if (fileName == "aboutme.css") {
+        if (fileName == "main.css" || fileName == "aboutme.css") {
             if (typeof dataToString == 'string') {
                 if (dataToString.includes("@dynamicLink")) {
                     if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
@@ -106,7 +98,6 @@ function textReplacer(dataToString, infoFromURL, ketoContactGmail, currentDynLin
                 }
             }
         }
-    
     }
 
     return dataToString;
@@ -187,4 +178,5 @@ if (!module.parent) {
 if (typeof exports !== 'undefined') {
     exports.infoFromURLChecker = infoFromURLChecker;
     exports.textReplacer = textReplacer;
+    exports.languageChooser = languageChooser;
 }
