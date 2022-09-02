@@ -32,7 +32,7 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
 
 function readArrayFile(givenLoc) {
     try {
-        var theArr = fs.readFileSync(givenLoc);
+        var theArr = fs.readFileSync(givenLoc, 'utf8');
         return theArr;
     } catch (error) {
         console.log("select.js readArrayFile() function ERROR: " + error);
@@ -43,7 +43,7 @@ function readArrayFile(givenLoc) {
 function getArr(theArr, theName) {
     try {
         const chosenPath = globalPathFinder(theArr, theName);
-        return readArrayFile(chosenPath);
+        return JSON.parse(readArrayFile(chosenPath));
     } catch (error) {
         console.log("select.js getArr() function ERROR: " + error);
         return [];

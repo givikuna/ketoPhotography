@@ -28,6 +28,47 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     }
 }
 
+function textRaplacerJS(dataToString, infoFromURL, ketoContactGmail, currentDynLink) {
+    if (typeof dataToString == 'string') {
+        if (infoFromURL !== null && infoFromURL !== undefined && infoFromURL !== {} && infoFromURL !== [] && typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number') {
+            if (dataToString.includes("@lang")) {
+                if ("lang" in infoFromURL) {
+                    dataToString = dataToString.replace(/@lang/g, infoFromURL.lang);
+                }
+            }
+
+            if ("page" in infoFromURL) {
+                if (infoFromURL.page == "in_gallery") {
+                    if ("nameOfAlbum" in infoFromURL) {
+                        if (dataToString.includes("@nameOfTheAlbumForTheGallery")) {
+                            dataToString = dataToString.replace(/@nameOfTheAlbumForTheGallery/g, infoFromURL.nameOfAlbum);
+                        }
+                    }
+                    if ("albumID" in infoFromURL) {
+                        if (dataToString.includes("@infoForTheIDOfTheArrayOfTheGallery")) {
+                            dataToString = dataToString.replace(/@infoForTheIDOfTheArrayOfTheGallery/g, infoFromURL.albumID);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (dataToString.includes("@ketoGmailINFORMATION")) {
+            if (typeof ketoContactGmail == 'string' && ketoContactGmail.includes(".") && ketoContactGmail.includes("@")) {
+                dataToString = dataToString.replace(/@ketoGmailINFORMATION/g, ketoContactGmail);
+            }
+        }
+
+        if (dataToString.includes("@dynamicLink")) {
+            if (typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
+                dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
+            }
+        }
+    }
+
+    return dataToString;
+}
+
 if (!module.parent) {
     http.createServer(function (req, res) {
         try {
@@ -45,15 +86,9 @@ if (!module.parent) {
             if (fs.existsSync(srcLocation)) {
                 if (infoFromURL.file == "main.js") {
                     fs.readFile(srcLocation, 'utf-8', function (err, data) {
-                        var dataToString = data.toString();
-                        var replaced1 = dataToString.replace('@lang', infoFromURL.lang);
-                        var replaced2 = replaced1.replace('@ketoGmailINFORMATION', ketoContactGmail);
-                        var replaced = replaced2.replace(/@dynamicLink/g, currentDynLink);
-                        if (infoFromURL.page == "in_gallery") {
-                            replaced = replaced.replace(/@nameOfTheAlbumForTheGallery/g, infoFromURL.nameOfAlbum);
-                            replaced = replaced.replace(/@infoForTheIDOfTheArrayOfTheGallery/g, infoFromURL.albumID);
-                        }
-                        res.write(replaced);
+                        const dataToString = data.toString();
+                        const replacedText = textRaplacerJS(dataToString, infoFromURL, ketoContactGmail, currentDynLink);
+                        res.write(replacedText);
                         return res.end();
                     });
                 } else {
@@ -74,4 +109,8 @@ if (!module.parent) {
         }
     }).listen(8095);
     console.log('Server running at http://127.0.0.1:8095/');
+}
+
+if (typeof exports !== 'undefined') {
+    // exports.functionName = functionName;
 }
