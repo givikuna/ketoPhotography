@@ -85,6 +85,7 @@ describe('index.js', () => {
                     "hi"
                 ], null)).to.equal("");
             expect(gStub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
             expect(lStub.callCount).to.equal(0);
             expect(gStub()).to.equal("in_gallery");
             expect(lStub()).to.equal("randomLang");
@@ -104,6 +105,8 @@ describe('index.js', () => {
             expect(lStub).to.have.been.calledOnce;
             expect(gStub).to.have.returned("in_gallery");
             expect(lStub).to.have.returned("randomLang");
+            expect(gStub.calledBefore(lStub)).to.be.true;
+            expect(lStub.calledAfter(gStub)).to.be.true;
             expect(gStub()).to.equal("in_gallery");
             expect(lStub()).to.equal("randomLang");
         });
@@ -121,6 +124,8 @@ describe('index.js', () => {
             expect(lStub).to.have.been.calledOnce;
             expect(gStub).to.have.returned("in_gallery");
             expect(lStub).to.have.returned("randomLang");
+            expect(gStub.calledBefore(lStub)).to.be.true;
+            expect(lStub.calledAfter(gStub)).to.be.true;
             expect(gStub()).to.equal("in_gallery");
             expect(lStub()).to.equal("randomLang");
         });
@@ -407,7 +412,7 @@ describe('index.js', () => {
         it('sends \'(0)\', expects \"\"', () => {
             expect(indexJS.pageNullChecker(0)).to.equal("n");
         });
-        
+
         it('sends \'(\"\")\', expects \"\"', () => {
             expect(indexJS.pageNullChecker("")).to.equal("n");
         });
