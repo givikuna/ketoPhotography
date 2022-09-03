@@ -77,6 +77,7 @@ describe('main.js', () => {
             expect(smStub).to.have.been.calledOnce;
             expect(hStub).to.not.have.been.called;
             expect(smStub).to.have.returned(true);
+            expect(smStub()).to.be.true;
             expect(hStub()).to.be.true;
         });
 
@@ -85,10 +86,14 @@ describe('main.js', () => {
             mainJS.__set__('ketoTranslatorHelper', hStub);
 
             expect(mainJS.ketoTranslator(null, "translation_for_lang_names", null, null)).to.equal(true);
-            expect(smStub.calledOnce).to.be.true;
-            expect(hStub.calledOnce).to.be.true;
+            expect(smStub).to.have.been.calledOnce;
+            expect(hStub).to.have.been.calledOnce;
+            expect(smStub).to.have.been.calledBefore(hStub);
+            expect(hStub).to.have.been.calledAfter(smStub);
             expect(smStub).to.have.returned(true);
             expect(hStub).to.have.returned(true);
+            expect(smStub()).to.be.true;
+            expect(hStub()).to.be.true;
         });
     });
 
@@ -120,13 +125,22 @@ describe('main.js', () => {
             mainJS.__set__('askForHelp', aStub);
 
             expect(mainJS.ketoTranslator_SecurityManager(null, null, null, null)).to.be.false;
-            expect(jStub.calledOnce).to.be.true;
-            expect(oStub.calledOnce).to.be.true;
-            expect(aStub.calledOnce).to.be.true;
+            expect(jStub).to.have.been.calledOnce;
+            expect(oStub).to.have.been.calledOnce;
+            expect(aStub).to.have.been.calledOnce;
             expect(lStub.called).to.be.false;
+            expect(jStub).to.have.been.calledBefore(oStub);
+            expect(jStub).to.have.been.calledBefore(aStub);
+            expect(oStub).to.have.been.calledAfter(jStub);
+            expect(oStub).to.have.been.calledBefore(aStub);
+            expect(aStub).to.have.been.calledAfter(jStub);
+            expect(aStub).to.have.been.calledAfter(oStub);
             expect(jStub).to.have.returned(true);
             expect(oStub).to.have.returned(true);
             expect(aStub).to.have.returned(true);
+            expect(jStub()).to.be.true;
+            expect(oStub()).to.be.true;
+            expect(aStub()).to.be.true;
             expect(lStub()).to.be.true;
         });
 
@@ -141,9 +155,18 @@ describe('main.js', () => {
             expect(oStub).to.have.been.calledOnce;
             expect(aStub).to.have.been.calledOnce;
             expect(lStub).to.not.have.been.called;
+            expect(jStub).to.have.been.calledBefore(oStub);
+            expect(jStub).to.have.been.calledBefore(aStub);
+            expect(oStub).to.have.been.calledAfter(jStub);
+            expect(oStub).to.have.been.calledBefore(aStub);
+            expect(aStub).to.have.been.calledAfter(jStub);
+            expect(aStub).to.have.been.calledAfter(oStub);
             expect(jStub).to.have.returned(true);
             expect(oStub).to.have.returned(true);
             expect(aStub).to.have.returned(true);
+            expect(jStub()).to.be.true;
+            expect(aStub()).to.be.true;
+            expect(oStub()).to.be.true;
             expect(lStub()).to.be.true;
         });
 
@@ -160,10 +183,19 @@ describe('main.js', () => {
             expect(jStub.calledOnce).to.be.true;
             expect(oStub.calledOnce).to.be.true;
             expect(aStub.called).to.be.false;
+            expect(jStub).to.have.been.calledBefore(lStub);
+            expect(jStub).to.have.been.calledBefore(oStub);
+            expect(oStub).to.have.been.calledBefore(lStub);
+            expect(oStub).to.have.been.calledAfter(jStub);
+            expect(lStub).to.have.been.calledAfter(jStub);
+            expect(lStub).to.have.been.calledAfter(oStub);
             expect(lStub).to.have.returned(false);
             expect(jStub).to.have.returned(true);
-            expect(aStub()).to.be.true;
             expect(oStub).to.have.returned(true);
+            expect(jStub()).to.be.true;
+            expect(oStub()).to.be.true;
+            expect(lStub()).to.be.false;
+            expect(aStub()).to.be.true;
         })
     });
 
@@ -193,6 +225,10 @@ describe('main.js', () => {
             expect(mainJS.ketoTranslatorHelper("rus", [{ textRus: "blin" }], 0)).to.equal("mother russia");
             expect(atStub.calledOnce).to.be.true;
             expect(smStub.calledOnce).to.be.true;
+            expect(atStub).to.have.been.calledAfter(smStub);
+            expect(smStub).to.have.been.calledBefore(atStub);
+            expect(atStub).to.have.returned("mother russia");
+            expect(smStub).to.have.returned(true);
             expect(smStub()).to.be.true;
             expect(atStub()).to.equal("mother russia");
         });
@@ -206,6 +242,7 @@ describe('main.js', () => {
             expect(mainJS.ketoTranslatorHelper(null, null, null)).to.equal("error");
             expect(atStub.called).to.be.false;
             expect(smStub.calledOnce).to.be.true;
+            expect(smStub).to.have.returned(false);
             expect(smStub()).to.be.false;
             expect(atStub()).to.equal(true);
         });
@@ -355,6 +392,8 @@ describe('main.js', () => {
             expect(mainJS.checkLang("geo")).to.equal(true);
             expect(lStub).to.have.returned("rus");
             expect(lStub.called).to.be.true;
+            expect(lStub.callCount).to.equal(3);
+            expect(lStub()).to.equal("rus");
         });
 
         it('sends \'(\"eng\")\', \'(\"rus\")\', and \'(\"geo\")\', while expecting lStub() to return "eng" and expects to return true for all', () => {
@@ -369,6 +408,8 @@ describe('main.js', () => {
             expect(mainJS.checkLang("geo")).to.equal(true);
             expect(lStub).to.have.returned("eng");
             expect(lStub.called).to.be.true;
+            expect(lStub.callCount).to.equal(6);
+            expect(lStub()).to.equal("eng");
         });
 
         it('sends \'(\"eng\")\', \'(\"rus\")\', and \'(\"geo\")\', while expecting lStub() to return "geo", and expects to return true for all', () => {
@@ -383,6 +424,8 @@ describe('main.js', () => {
             expect(mainJS.checkLang("geo")).to.equal(true);
             expect(lStub).to.have.returned("geo");
             expect(lStub.called).to.be.true;
+            expect(lStub.callCount).to.equal(9);
+            expect(lStub()).to.equal("geo");
         });
 
         it('should make lStub() return something but \"rus\", \"eng\" or \"geo\" and expects checkLang to return false', () => {
