@@ -16,7 +16,6 @@ function imgExistanceChecker(imgPath) { //TESTED VIA tests/image.test.js
 }
 
 function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
-    console.log("=----------------------------=");
     try {
         var currentPath = "";
         for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
@@ -42,32 +41,37 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
 }
 
 function checkTheType(infoFromURL, imageLocation) {
-    if (infoFromURL !== null && infoFromURL !== undefined && infoFromURL !== {} & infoFromURL !== [] && typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number') {
-        if ("type" in infoFromURL) {
-            if (infoFromURL.type == "icon") {
-                if ("img" in infoFromURL) {
-                    imageLocation = globalPathFinder(["www", "img", "icons"], infoFromURL.img);
-                }
-            } else if (infoFromURL.type == "cover") {
-                imageLocation = globalPathFinder(["www", "img", "onPage", infoFromURL.type], "cover.jpg");
-            } else if (infoFromURL.type == "albumCover") {
-                if ("coverImg" in infoFromURL) {
-                    imageLocation = globalPathFinder(["www", "img", "onPage", "albumCovers"], infoFromURL.coverImg);
-                }
-            } else if (infoFromURL.type == "img") {
-                if ("requestedImage" in infoFromURL) {
-                    if ("albumName" in infoFromURL) {
-                        imageLocation = globalPathFinder([infoFromURL.type, "albums", infoFromURL.albumName], infoFromURL.requestedImage);
+    try {
+        if (infoFromURL !== null && infoFromURL !== undefined && infoFromURL !== {} & infoFromURL !== [] && typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number') {
+            if ("type" in infoFromURL) {
+                if (infoFromURL.type == "icon") {
+                    if ("img" in infoFromURL) {
+                        imageLocation = globalPathFinder(["www", "img", "icons"], infoFromURL.img);
                     }
-                }
-            } else if (infoFromURL.type == "ketoPics") {
-                if ("img" in infoFromURL) {
-                    imageLocation = globalPathFinder(["www", "img", "onPage", infoFromURL.type], infoFromURL.img);
+                } else if (infoFromURL.type == "cover") {
+                    imageLocation = globalPathFinder(["www", "img", "onPage", infoFromURL.type], "cover.jpg");
+                } else if (infoFromURL.type == "albumCover") {
+                    if ("coverImg" in infoFromURL) {
+                        imageLocation = globalPathFinder(["www", "img", "onPage", "albumCovers"], infoFromURL.coverImg);
+                    }
+                } else if (infoFromURL.type == "img") {
+                    if ("requestedImage" in infoFromURL) {
+                        if ("albumName" in infoFromURL) {
+                            imageLocation = globalPathFinder([infoFromURL.type, "albums", infoFromURL.albumName], infoFromURL.requestedImage);
+                        }
+                    }
+                } else if (infoFromURL.type == "ketoPics") {
+                    if ("img" in infoFromURL) {
+                        imageLocation = globalPathFinder(["www", "img", "onPage", infoFromURL.type], infoFromURL.img);
+                    }
                 }
             }
         }
+        return imageLocation;
+    } catch (error) {
+        console.log("image.js checkTheType() ERROR: " + error);
+        return imageLocation;
     }
-    return imageLocation;
 }
 
 if (!module.parent) {

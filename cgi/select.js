@@ -128,11 +128,13 @@ if (!module.parent) {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
 
+            var randomString = selectReqRes().toString();
+            var randomString2 = selectReqRes().toString();
             var selectReqResVar = selectReqRes().toString();
 
             const ifAboutMePageChangerVar = ifAboutMePageChanger(infoFromURL);
             if (ifAboutMePageChangerVar !== false) {
-                selectReqRes = ifAboutMePageChanger;
+                selectReqResVar = ifAboutMePageChanger;
             }
 
             res.write(selectReqResVar);
