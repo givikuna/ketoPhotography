@@ -43,7 +43,8 @@ function readArrayFile(givenLoc) {
 function getArr(theArr, theName) {
     try {
         const chosenPath = globalPathFinder(theArr, theName);
-        return JSON.parse(readArrayFile(chosenPath));
+        const parsedFile = JSON.parse(readArrayFile(chosenPath));
+        return parsedFile;
     } catch (error) {
         console.log("select.js getArr() function ERROR: " + error);
         return [];

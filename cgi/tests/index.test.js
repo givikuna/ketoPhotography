@@ -72,8 +72,10 @@ describe('index.js', () => {
             expect(indexJS.replaceText(null, null, null)).to.equal(null).and.to.not.equal("");
             expect(gStub.called).to.be.false;
             expect(lStub.called).to.be.false;
+            expect(gStub.callCount).to.equal(0);
+            expect(lStub.callCount).to.equal(0);
             expect(gStub()).to.equal("in_gallery");
-            // expect(lStub()).to.equal("randomLang");
+            expect(lStub()).to.equal("randomLang");
         });
 
         it('sends \'(\"\", [\"hi\"], null)\', expects \"\"', () => {
@@ -85,6 +87,8 @@ describe('index.js', () => {
                     "hi"
                 ], null)).to.equal("");
             expect(gStub).to.not.have.been.called;
+            expect(gStub.called).to.be.false;
+            expect(lStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(lStub.callCount).to.equal(0);
             expect(gStub()).to.equal("in_gallery");
@@ -103,6 +107,8 @@ describe('index.js', () => {
                 }, null)).to.equal("randomLangtheGallery\'s IDERRORin_gallery");
             expect(gStub).to.have.been.calledOnce;
             expect(lStub).to.have.been.calledOnce;
+            expect(gStub.callCount).to.equal(1);
+            expect(lStub.callCount).to.equal(1);
             expect(gStub).to.have.returned("in_gallery");
             expect(lStub).to.have.returned("randomLang");
             expect(gStub.calledBefore(lStub)).to.be.true;
@@ -122,6 +128,8 @@ describe('index.js', () => {
                 }, null)).to.equal("randomLang@infoForTheIDOfTheArrayOfTheGalleryERRORin_gallery");
             expect(gStub).to.have.been.calledOnce;
             expect(lStub).to.have.been.calledOnce;
+            expect(gStub.callCount).to.equal(1);
+            expect(lStub.callCount).to.equal(1);
             expect(gStub).to.have.returned("in_gallery");
             expect(lStub).to.have.returned("randomLang");
             expect(gStub.calledBefore(lStub)).to.be.true;
@@ -140,6 +148,8 @@ describe('index.js', () => {
                 }, null)).to.equal("eng@infoForTheIDOfTheArrayOfTheGalleryERRORin_gallery");
             expect(gStub).to.have.been.calledOnce;
             expect(lStub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(1);
+            expect(lStub.callCount).to.equal(0);
             expect(gStub).to.have.returned("in_gallery");
             expect(lStub).to.not.have.returned("randomLang");
             expect(gStub()).to.equal("in_gallery");
@@ -368,23 +378,23 @@ describe('index.js', () => {
         });
 
         it('sends \'()\', expects \"ERROR: the website is currently down, try again later or contact us at: undefined\"', () => {
-            expect(indexJS.errorTextFunc()).to.equal("ERROR: the website is currently down, try again later or contact us at: " + undefined);
+            expect(indexJS.errorTextFunc()).to.equal("ERROR: the website is currently experiencing some issues, try again later or contact us at: " + undefined);
         });
 
         it('sends \'(\"randomLang", "randomGmail\")\' and expects \"ERROR: the website is currently down, try again later or contact us at: randomGmail\"', () => {
-            expect(indexJS.errorTextFunc("randomLang", "randomGmail")).to.equal("ERROR: the website is currently down, try again later or contact us at: randomGmail");
+            expect(indexJS.errorTextFunc("randomLang", "randomGmail")).to.equal("ERROR: the website is currently experiencing some issues, try again later or contact us at: randomGmail");
         });
 
         it('sends \'(\"randomLang", "randomGmail\")\' and expects \"ERROR: the website is currently down, try again later or contact us at: randomGmail\"', () => {
-            expect(indexJS.errorTextFunc("randomLang", "randomGmail")).to.equal("ERROR: the website is currently down, try again later or contact us at: randomGmail");
+            expect(indexJS.errorTextFunc("randomLang", "randomGmail")).to.equal("ERROR: the website is currently experiencing some issues, try again later or contact us at: randomGmail");
         });
 
         it('sends \'(\"rus", "randomGmail\")\' and expects \"ОШИБКА: веб-сайт в настоящее время не работает, повторите попытку позже или свяжитесь с нами по адресу: randomGmail\"', () => {
-            expect(indexJS.errorTextFunc("rus", "randomGmail")).to.equal("ОШИБКА: веб-сайт в настоящее время не работает, повторите попытку позже или свяжитесь с нами по адресу: randomGmail");
+            expect(indexJS.errorTextFunc("rus", "randomGmail")).to.equal("ОШИБКА: на веб-сайте в настоящее время возникают некоторые проблемы, повторите попытку позже или свяжитесь с нами по адресу: randomGmail");
         });
 
         it('sends \'(\"geo", "randomGmail\")\' and expects \"შეცდომა: ვებგვერდი ამჟამად გათიშულია, სცადეთ მოგვიანებით ან დაგვიკავშირდით მისამართზე: randomGmail\"', () => {
-            expect(indexJS.errorTextFunc("geo", "randomGmail")).to.equal("შეცდომა: ვებგვერდი ამჟამად გათიშულია, სცადეთ მოგვიანებით ან დაგვიკავშირდით მისამართზე: randomGmail");
+            expect(indexJS.errorTextFunc("geo", "randomGmail")).to.equal("შეცდომა: ვებსაიტს ამჟამად აქვს გარკვეული პრობლემები, სცადეთ მოგვიანებით ან დაგვიკავშირდით: randomGmail");
         });
     });
 
