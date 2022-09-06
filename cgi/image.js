@@ -11,7 +11,7 @@ function imgExistanceChecker(imgPath) { //TESTED VIA tests/image.test.js
         return false;
     } catch (error) {
         console.log("image.js imgExistanceChecker() ERROR: " + error);
-        return "image.js imgExistanceChecker() ERROR: " + error;
+        return false;
     }
 }
 
@@ -36,7 +36,7 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
         return path.join(currentPath, nameOfFile);
     } catch (error) {
         console.log("image.js globalPathFinder() ERROR: " + error);
-        return "image.js globalPathFinder() ERROR: " + error;
+        return "";
     }
 }
 

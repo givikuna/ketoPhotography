@@ -31,7 +31,7 @@ function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
         return path.join(currentPath, nameOfFile);
     } catch (error) {
         console.log("index.js globalPathFinder() ERROR: " + error);
-        return "index.js globalPathFinder() ERROR: " + error;
+        return "";
     }
 }
 
@@ -62,14 +62,14 @@ function pageNullChecker(nameOfPage) {
 function errorTextFunc(sentLang, ketoGmail) {
     try {
         if (sentLang == "rus") {
-            return "ОШИБКА: веб-сайт в настоящее время не работает, повторите попытку позже или свяжитесь с нами по адресу: " + ketoGmail;
+            return "ОШИБКА: на веб-сайте в настоящее время возникают некоторые проблемы, повторите попытку позже или свяжитесь с нами по адресу: " + ketoGmail;
         } else if (sentLang == "geo") {
-            return "შეცდომა: ვებგვერდი ამჟამად გათიშულია, სცადეთ მოგვიანებით ან დაგვიკავშირდით მისამართზე: " + ketoGmail;
+            return "შეცდომა: ვებსაიტს ამჟამად აქვს გარკვეული პრობლემები, სცადეთ მოგვიანებით ან დაგვიკავშირდით: " + ketoGmail;
         }
-        return "ERROR: the website is currently down, try again later or contact us at: " + ketoGmail;
+        return "ERROR: the website is currently experiencing some issues, try again later or contact us at: " + ketoGmail;
     } catch (error) {
         console.log("index.js errorTextFunc() ERROR: " + error);
-        return "ERROR: the website is currently down, try again later";
+        return "ERROR: the website is currently experiencing some issues, try again later";
     }
 }
 

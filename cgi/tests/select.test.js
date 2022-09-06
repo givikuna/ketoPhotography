@@ -67,6 +67,7 @@ describe('select.js', () => {
             selectJS.__set__("getArr", gStub);
 
             expect(selectJS.selectReqRes()).to.equal("[[{\"location\":\"randomLocation\",\"name\":\"randomName\"}]]");
+            expect()
         });
 
         it('sends \'()\', expects []', () => {
@@ -74,6 +75,11 @@ describe('select.js', () => {
             selectJS.__set__("getArr", gStub);
 
             expect(selectJS.selectReqRes()).to.deep.equal([]);
+            expect(gStub).to.have.been.called;
+            expect(gStub.calledOnce).to.be.true;
+            expect(gStub.callCount).to.equal(1);
+            expect(gStub.called).to.be.true;
+            expect(gStub()).to.equal("blank");
         });
     });
 
@@ -101,6 +107,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger(false)).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -112,6 +121,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger(null)).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -123,6 +135,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger([])).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -134,6 +149,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger({})).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -145,6 +163,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger(undefined)).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -156,6 +177,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger("string")).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -168,6 +192,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger()).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -179,6 +206,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger({ "page": "randomPage" })).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -190,6 +220,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger({ "page": "randomPage", "lang": "en" })).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -201,6 +234,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger({ "page": "aboutme", "lang": "en" })).to.be.true;
             expect(gStub).to.have.been.calledOnce;
             expect(g2Stub).to.have.been.calledOnce;
+            expect(gStub.callCount).to.equal(1);
+            expect(g2Stub.callCount).to.equal(1);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub).to.have.returned(true);
             expect(g2Stub).to.have.returned("en");
             expect(g2Stub).to.have.been.calledBefore(gStub);
@@ -216,6 +252,9 @@ describe('select.js', () => {
             expect(selectJS.ifAboutMePageChanger({ "lang": "randomLang" })).to.be.false;
             expect(gStub).to.not.have.been.called;
             expect(g2Stub).to.not.have.been.called;
+            expect(gStub.callCount).to.equal(0);
+            expect(g2Stub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(g2Stub.callCount);
             expect(gStub()).to.be.true;
             expect(g2Stub()).to.equal("en");
         });
@@ -333,17 +372,47 @@ describe('select.js', () => {
         });
 
         it('sends \'()\', expects {\"foo\": \"bar\"}', () => {
+            let consoleLogSpy = sinon.spy(console, 'log');
+
+            selectJS.__set__("readArrayFile", rStub);
+            selectJS.__set__("globalPathFinder", gStub);
+
+            expect(selectJS.getArr()).to.deep.equal([]);
+            expect(rStub).to.have.been.calledOnce;
+            expect(gStub).to.have.been.calledOnce;
+            expect(rStub.callCount).to.equal(1);
+            expect(gStub.callCount).to.equal(1);
+            expect(rStub.callCount).to.equal(gStub.callCount);
+            expect(rStub).to.have.been.calledAfter(gStub);
+            expect(gStub).to.have.been.calledBefore(rStub);
+            expect(rStub).to.have.returned({"foo": "bar"});
+            expect(gStub).to.have.returned("randomPath");
+            expect(consoleLogSpy).to.have.been.calledOnce;
+            expect(consoleLogSpy.calledOnce).to.be.true;
+            expect(consoleLogSpy.calledOnceWith('select.js getArr() function ERROR: SyntaxError: Unexpected token o in JSON at position 1')).to.be.true;
+            expect(rStub()).to.deep.equal({"foo": "bar"});
+            expect(gStub()).to.equal("randomPath");
+
+            consoleLogSpy.restore();
+        });
+
+        it('sends \'()\', expects {\"foo\": \"bar\"}', () => {
+            rStub = sinon.stub(selectJS, "readArrayFile").returns('{"foo": "bar"}');
+
             selectJS.__set__("readArrayFile", rStub);
             selectJS.__set__("globalPathFinder", gStub);
 
             expect(selectJS.getArr()).to.deep.equal({"foo": "bar"});
             expect(rStub).to.have.been.calledOnce;
             expect(gStub).to.have.been.calledOnce;
+            expect(rStub.callCount).to.equal(1);
+            expect(gStub.callCount).to.equal(1);
+            expect(rStub.callCount).to.equal(gStub.callCount);
             expect(rStub).to.have.been.calledAfter(gStub);
             expect(gStub).to.have.been.calledBefore(rStub);
-            expect(rStub).to.have.returned({"foo": "bar"});
+            expect(rStub).to.have.returned('{"foo": "bar"}');
             expect(gStub).to.have.returned("randomPath");
-            expect(rStub()).to.deep.equal({"foo": "bar"});
+            expect(rStub()).to.equal('{"foo": "bar"}');
             expect(gStub()).to.equal("randomPath");
         });
     });

@@ -43,7 +43,8 @@ function readArrayFile(givenLoc) {
 function getArr(theArr, theName) {
     try {
         const chosenPath = globalPathFinder(theArr, theName);
-        return JSON.parse(readArrayFile(chosenPath));
+        const parsedFile = JSON.parse(readArrayFile(chosenPath));
+        return parsedFile;
     } catch (error) {
         console.log("select.js getArr() function ERROR: " + error);
         return [];
@@ -128,13 +129,14 @@ if (!module.parent) {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
 
-            var randomString = selectReqRes().toString();
-            var randomString2 = selectReqRes().toString();
-            var selectReqResVar = selectReqRes().toString();
-
             const ifAboutMePageChangerVar = ifAboutMePageChanger(infoFromURL);
+
+            var selectReqResVar
+
             if (ifAboutMePageChangerVar !== false) {
-                selectReqResVar = ifAboutMePageChanger;
+                selectReqResVar = ifAboutMePageChangerVar;
+            } else {
+                selectReqResVar = selectReqRes().toString();
             }
 
             res.write(selectReqResVar);

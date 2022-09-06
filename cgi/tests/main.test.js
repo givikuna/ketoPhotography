@@ -74,9 +74,13 @@ describe('main.js', () => {
             mainJS.__set__('ketoTranslatorHelper', hStub);
 
             expect(mainJS.ketoTranslator(null, null, null, null)).to.equal("error");
-            expect(smStub).to.have.been.calledOnce;
+            expect(smStub.calledOnce).to.be.true;
             expect(hStub).to.not.have.been.called;
+            expect(smStub.callCount).to.equal(1);
+            expect(smStub.callCount).to.not.equal(hStub.callCount);
+            expect(hStub.callCount).to.equal(0);
             expect(smStub).to.have.returned(true);
+            expect(hStub).to.not.have.returned(true);
             expect(smStub()).to.be.true;
             expect(hStub()).to.be.true;
         });
@@ -88,6 +92,9 @@ describe('main.js', () => {
             expect(mainJS.ketoTranslator(null, "translation_for_lang_names", null, null)).to.equal(true);
             expect(smStub).to.have.been.calledOnce;
             expect(hStub).to.have.been.calledOnce;
+            expect(smStub.callCount).to.equal(1);
+            expect(hStub.callCount).to.equal(1);
+            expect(smStub.callCount).to.equal(hStub.callCount);
             expect(smStub).to.have.been.calledBefore(hStub);
             expect(hStub).to.have.been.calledAfter(smStub);
             expect(smStub).to.have.returned(true);
@@ -128,7 +135,7 @@ describe('main.js', () => {
             expect(jStub).to.have.been.calledOnce;
             expect(oStub).to.have.been.calledOnce;
             expect(aStub).to.have.been.calledOnce;
-            expect(lStub.called).to.be.false;
+            expect(lStub).to.have.not.been.called;
             expect(jStub).to.have.been.calledBefore(oStub);
             expect(jStub).to.have.been.calledBefore(aStub);
             expect(oStub).to.have.been.calledAfter(jStub);
