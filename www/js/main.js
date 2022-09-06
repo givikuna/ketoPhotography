@@ -249,4 +249,6 @@ if (typeof exports !== 'undefined') {
 	exports.fillGalleries = fillGalleries;
 	exports.fillImagesInGalleries = fillImagesInGalleries;
 	exports.bodyOnloadFunc = bodyOnloadFunc;
+	exports.loadAboutKeto = loadAboutKeto;
+	exports.addSocialMediasToFooter = addSocialMediasToFooter;
 }

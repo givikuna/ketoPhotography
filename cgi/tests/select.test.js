@@ -372,6 +372,8 @@ describe('select.js', () => {
         });
 
         it('sends \'()\', expects {\"foo\": \"bar\"}', () => {
+            let consoleLogSpy = sinon.spy(console, 'log');
+
             selectJS.__set__("readArrayFile", rStub);
             selectJS.__set__("globalPathFinder", gStub);
 
@@ -385,8 +387,13 @@ describe('select.js', () => {
             expect(gStub).to.have.been.calledBefore(rStub);
             expect(rStub).to.have.returned({"foo": "bar"});
             expect(gStub).to.have.returned("randomPath");
+            expect(consoleLogSpy).to.have.been.calledOnce;
+            expect(consoleLogSpy.calledOnce).to.be.true;
+            expect(consoleLogSpy.calledOnceWith('select.js getArr() function ERROR: SyntaxError: Unexpected token o in JSON at position 1')).to.be.true;
             expect(rStub()).to.deep.equal({"foo": "bar"});
             expect(gStub()).to.equal("randomPath");
+
+            consoleLogSpy.restore();
         });
 
         it('sends \'()\', expects {\"foo\": \"bar\"}', () => {
