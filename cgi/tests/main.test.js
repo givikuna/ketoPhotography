@@ -18,23 +18,36 @@ var mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
 // console.log(mainJS);
 
 function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
-    var currentPath = "";
-    for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-        var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-        var pathToSearchTheExistanceOf = null;
-        if (currentPath == "") {
-            pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
-        } else {
-            pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
+    try {
+        var trueCount = 0;
+        var currentPath = "";
+        for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
+            if (typeof listOfFoldersToGoThrough[i] == 'string' && listOfFoldersToGoThrough[i] !== '' && listOfFoldersToGoThrough[i] !== "") {
+                var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
+                var pathToSearchTheExistanceOf = null;
+                if (currentPath == "") {
+                    pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
+                } else {
+                    pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
+                }
+                if (fs.existsSync(pathToSearchTheExistanceOf)) {
+                    currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
+                } else {
+                    i = i - 1;
+                    currentPath = currentPath + "../";
+                }
+            }
+            trueCount = trueCount + 1;
+            if (trueCount == 100) {
+                const e = "the function of globalPathFinder() in the file has been running on repeat over 100 times, this is not supposed to do this. Hence the loop is ot be turned off";
+                return new Error('main.test.js globalPathFinder() ERROR: ' + e);
+            }
         }
-        if (fs.existsSync(pathToSearchTheExistanceOf)) {
-            currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
-        } else {
-            i = i - 1;
-            currentPath = currentPath + "../";
-        }
+        return path.join(currentPath, nameOfFile);
+    } catch (e) {
+        console.log("main.test.js globalPathFinder() ERROR: " + e);
+        return "";
     }
-    return path.join(currentPath, nameOfFile);
 }
 
 

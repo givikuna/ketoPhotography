@@ -17,23 +17,35 @@ function imgExistanceChecker(imgPath) { //TESTED VIA tests/image.test.js
 
 function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
     try {
+        var trueCount = 0;
         var currentPath = "";
-        for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-            var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-            var pathToSearchTheExistanceOf = null;
-            if (currentPath == "") {
-                pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
-            } else {
-                pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
-            }
-            if (fs.existsSync(pathToSearchTheExistanceOf)) {
-                currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
-            } else {
-                i = i - 1;
-                currentPath = currentPath + "../";
+        if (listOfFoldersToGoThrough !== [] || listOfFoldersToGoThrough !== {} || typeof listOfFoldersToGoThrough == 'object') {
+            for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
+                if (typeof listOfFoldersToGoThrough[i] == 'string') {
+                    var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
+                    var pathToSearchTheExistanceOf = null;
+                    if (currentPath == "") {
+                        pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
+                    } else {
+                        pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
+                    }
+                    if (fs.existsSync(pathToSearchTheExistanceOf)) {
+                        currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
+                    } else {
+                        i = i - 1;
+                        currentPath = currentPath + "../";
+                    }
+                }
+                trueCount = trueCount + 1;
+                if (trueCount == 100) {
+                    const e = "the function of globalPathFinder() in the file has been running on repeat over 100 times, this is not supposed to do this. Hence the loop is ot be turned off";
+                    return new Error('image.js globalPathFinder() ERROR: ' + e);
+                }
             }
         }
-        return path.join(currentPath, nameOfFile);
+        if (typeof nameOfFile == 'string') {
+            return path.join(currentPath, nameOfFile);
+        }
     } catch (error) {
         console.log("image.js globalPathFinder() ERROR: " + error);
         return "";
@@ -76,11 +88,11 @@ function checkTheType(infoFromURL, imageLocation) {
 
 if (!module.parent) {
     http.createServer(function (req, res) {
-        var infoFromURL = url.parse(req.url, true).query;
-        res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
-        var imageLocation;
-
         try {
+            var infoFromURL = url.parse(req.url, true).query;
+            res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
+            var imageLocation;
+
             function sendImage(imageLocation) {
                 if (imgExistanceChecker(imageLocation) == true) {
                     fs.readFile(imageLocation, function (err, data) {
