@@ -23,6 +23,16 @@ function errorHelper(functionName, error, otherInfo) {
                 + "1. the requested file doesn't exist, hence globalPathFinder() was unable to find it." +
                 + "2. the information regarding the request was made in a wrong manner" +
                 + "3. if the error as described in the first portion of this error text told you that it is about the name not being a string, then that's it";
+
+                var errorHelper_listOfFoldersToGoThrough = "";
+                for (var i = 0; i <= otherInfo[0].length; i++) {
+                    if (typeof otherInfo[0][i] == 'string') {
+                        errorHelper_listOfFoldersToGoThrough = errorHelper_listOfFoldersToGoThrough + otherInfo[0][i];
+                    } else {
+                        errorHelper();
+                        return new Error();
+                    }
+                }
             } else if (functionName == "checkTheType") {
                 //
             } else {
@@ -128,6 +138,7 @@ function checkTheType(infoFromURL, imageLocation) {
     } catch (error) {
         console.log("image.js checkTheType() ERROR: " + error);
         console.log("the requested file is unkown by the program, likely doesn't require any fixing.");
+        errorHelper(currentFunc, error, null);
         return imageLocation;
     }
 }
