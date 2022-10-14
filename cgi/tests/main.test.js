@@ -17,35 +17,40 @@ var mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
 // eval(fs.readFileSync(globalPathFinder(["www", "js"], "main.js")) + '');
 // console.log(mainJS);
 
-function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
+function globalPathFinder(folderList, requestedFile) {
+    currentFunc = "globalPathFinder";
     try {
-        var trueCount = 0;
-        var currentPath = "";
-        for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-            if (typeof listOfFoldersToGoThrough[i] == 'string' && listOfFoldersToGoThrough[i] !== '' && listOfFoldersToGoThrough[i] !== "") {
-                var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-                var pathToSearchTheExistanceOf = null;
-                if (currentPath == "") {
-                    pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
-                } else {
-                    pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
+        var count = 0;
+        var folderPath = "";
+        if (folderList !== [] || folderList !== {} || typeof folderList == 'object') {
+            for (var i = 0; i < folderList.length; i++) {
+                if (typeof folderList[i] == 'string') {
+                    var currentFolder = folderList[i];
+                    var pathKeeper = null;
+                    if (folderPath == "") {
+                        pathKeeper = "./" + currentFolder;
+                    } else {
+                        pathKeeper = folderPath + currentFolder;
+                    }
+                    if (fs.existsSync(pathKeeper)) {
+                        folderPath = folderPath + currentFolder + "/";
+                    } else {
+                        i = i - 1;
+                        folderPath = folderPath + "../";
+                    }
                 }
-                if (fs.existsSync(pathToSearchTheExistanceOf)) {
-                    currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
-                } else {
-                    i = i - 1;
-                    currentPath = currentPath + "../";
+                count = count + 1;
+                if (count == 100) {
+                    return "";
                 }
-            }
-            trueCount = trueCount + 1;
-            if (trueCount == 100) {
-                const e = "the function of globalPathFinder() in the file has been running on repeat over 100 times, this is not supposed to do this. Hence the loop is ot be turned off";
-                return new Error('main.test.js globalPathFinder() ERROR: ' + e);
             }
         }
-        return path.join(currentPath, nameOfFile);
+        if (typeof requestedFile == 'string') {
+            return path.join(folderPath, requestedFile);
+        }
+        return "";
     } catch (e) {
-        console.log("main.test.js globalPathFinder() ERROR: " + e);
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "";
     }
 }

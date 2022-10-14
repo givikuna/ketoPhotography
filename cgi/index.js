@@ -4,45 +4,49 @@ const path = require('path');
 const fs = require('fs');
 const url = require('url');
 
+const fileName = "index.js";
+var currentFunc = "";
+
 const pathToGmailInfo = {
     arr: ["data", "contactGmail"],
     name: "data.txt"
 };
 // "../data/contactGmail.txt";
 
-function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
+function globalPathFinder(folderList, requestedFile) {
+    currentFunc = "globalPathFinder";
     try {
-        var trueCount = 0;
-        var currentPath = "";
-        if (listOfFoldersToGoThrough !== [] || listOfFoldersToGoThrough !== {} || typeof listOfFoldersToGoThrough == 'object') {
-            for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-                if (typeof listOfFoldersToGoThrough[i] == 'string') {
-                    var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-                    var pathToSearchTheExistanceOf = null;
-                    if (currentPath == "") {
-                        pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
+        var count = 0;
+        var folderPath = "";
+        if (folderList !== [] || folderList !== {} || typeof folderList == 'object') {
+            for (var i = 0; i < folderList.length; i++) {
+                if (typeof folderList[i] == 'string') {
+                    var currentFolder = folderList[i];
+                    var pathKeeper = null;
+                    if (folderPath == "") {
+                        pathKeeper = "./" + currentFolder;
                     } else {
-                        pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
+                        pathKeeper = folderPath + currentFolder;
                     }
-                    if (fs.existsSync(pathToSearchTheExistanceOf)) {
-                        currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
+                    if (fs.existsSync(pathKeeper)) {
+                        folderPath = folderPath + currentFolder + "/";
                     } else {
                         i = i - 1;
-                        currentPath = currentPath + "../";
+                        folderPath = folderPath + "../";
                     }
                 }
-                trueCount = trueCount + 1;
-                if (trueCount == 100) {
-                    const e = "the function of globalPathFinder() in the file has been running on repeat over 100 times, this is not supposed to do this. Hence the loop is ot be turned off";
-                    return new Error('index.js globalPathFinder() ERROR: ' + e);
+                count = count + 1;
+                if (count == 100) {
+                    return "";
                 }
             }
         }
-        if (typeof nameOfFile == 'string') {
-            return path.join(currentPath, nameOfFile);
+        if (typeof requestedFile == 'string') {
+            return path.join(folderPath, requestedFile);
         }
-    } catch (error) {
-        console.log("index.js globalPathFinder() ERROR: " + error);
+        return "";
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "";
     }
 }
@@ -53,8 +57,8 @@ function fileExistanceChecker(pathToFile) {
             return true;
         }
         return false;
-    } catch (error) {
-        console.log("index.js fileExistanceChecker() ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return false;
     }
 }
@@ -65,8 +69,8 @@ function pageNullChecker(nameOfPage) {
             return "n";
         }
         return "y";
-    } catch (error) {
-        console.log("index.js pageNullChecker() ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "n";
     }
 }
@@ -79,8 +83,8 @@ function errorTextFunc(sentLang, ketoGmail) {
             return "შეცდომა: ვებსაიტს ამჟამად აქვს გარკვეული პრობლემები, სცადეთ მოგვიანებით ან დაგვიკავშირდით: " + ketoGmail;
         }
         return "ERROR: the website is currently experiencing some issues, try again later or contact us at: " + ketoGmail;
-    } catch (error) {
-        console.log("index.js errorTextFunc() ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "ERROR: the website is currently experiencing some issues, try again later";
     }
 }
@@ -99,8 +103,8 @@ function languageChooser(langInfo) {
                 return "eng";
             }
         }
-    } catch (error) {
-        console.log("index.js languageChooser() ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "eng";
     }
 }
@@ -114,8 +118,8 @@ function giveInformationAboutPage(pageName) {
             }
         }
         return "n";
-    } catch (error) {
-        console.log("index.js giveInformationAboutPage() ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "n";
     }
 }
@@ -163,8 +167,8 @@ function replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail) {
         }
 
         return dataToString;
-    } catch (error) {
-        console.log("index.js replaceText() ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return errorTextFunc("eng", ketoGmail);
     }
 }

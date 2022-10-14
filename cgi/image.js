@@ -6,50 +6,41 @@ const path = require('path');
 const fileName = "image.js";
 var currentFunc = "";
 
-function errorHelper(functionName, error, otherInfo) {
-    currentFunc = "errorHelper";
+function globalPathFinder(folderList, requestedFile) {
+    currentFunc = "globalPathFinder";
     try {
-        var errorMessage = "";
-        var typeofFunctionName = typeof functionName;
-        if (typeof functionName == 'string' && functionName !== "" && functionName !== '') {
-            console.log(fileName + " " + functionName + "() ERROR: " + error);
-            if (functionName == "imgExistanceChecker") {
-                errorMessage = "the path to the image has not been found. A non-existent path was requested or \n" + 
-                + "the file exists and the imgExistanceChecker() function failed in finding it due to an unkown reason \n" +
-                + "likely due to the \"fs\" library having some sort of an error with existsSync() \n" +
-                + "another likely scenario is that globalPathFinder has made a mistake, requiring a fix.";
-            } else if (functionName == "globalPathFinder") {
-                errorMessage = "the solutions and explanations for the error: \n" + 
-                + "1. the requested file doesn't exist, hence globalPathFinder() was unable to find it." +
-                + "2. the information regarding the request was made in a wrong manner" +
-                + "3. if the error as described in the first portion of this error text told you that it is about the name not being a string, then that's it";
-
-                var errorHelper_listOfFoldersToGoThrough = "";
-                for (var i = 0; i <= otherInfo[0].length; i++) {
-                    if (typeof otherInfo[0][i] == 'string') {
-                        errorHelper_listOfFoldersToGoThrough = errorHelper_listOfFoldersToGoThrough + otherInfo[0][i];
+        var count = 0;
+        var folderPath = "";
+        if (folderList !== [] || folderList !== {} || typeof folderList == 'object') {
+            for (var i = 0; i < folderList.length; i++) {
+                if (typeof folderList[i] == 'string') {
+                    var currentFolder = folderList[i];
+                    var pathKeeper = null;
+                    if (folderPath == "") {
+                        pathKeeper = "./" + currentFolder;
                     } else {
-                        errorHelper();
-                        return new Error();
+                        pathKeeper = folderPath + currentFolder;
+                    }
+                    if (fs.existsSync(pathKeeper)) {
+                        folderPath = folderPath + currentFolder + "/";
+                    } else {
+                        i = i - 1;
+                        folderPath = folderPath + "../";
                     }
                 }
-            } else if (functionName == "checkTheType") {
-                //
-            } else {
-                //
+                count = count + 1;
+                if (count == 100) {
+                    return "";
+                }
             }
-        } else {
-            errorMessage = "the variable called \'functionName\' is not a string, but it must be a string to run. It was requested as a " + typeofFunctionName + " type variable; containing: " + functionName;
-            return new Error(errorMessage);
         }
-        if (errorMessage == "") {
-            errorMessage = "errorMessage is equal to \"\", meaning that the function that had an error either doesn\'t exist or is not covered in errorHelper(). The requested function was: " + typeofFunctionName + " type variable and contained: " + functionName;
-            return new Error(errorMessage);
+        if (typeof requestedFile == 'string') {
+            return path.join(folderPath, requestedFile);
         }
-        console.log("possible ERROR explanation: " + errorMessage);
-    }
-    catch (e2) {
-        console.log(fileName + " errorHelper() ERROR: " + e2);
+        return "";
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
+        return "";
     }
 }
 
@@ -60,51 +51,9 @@ function imgExistanceChecker(imgPath) {
             return true;
         }
         return false;
-    } catch (error) {
-        errorHelper(currentFunc, error, null);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return false;
-    }
-}
-
-function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
-    currentFunc = "globalPathFinder";
-    try {
-        var trueCount = 0;
-        var currentPath = "";
-        if (listOfFoldersToGoThrough !== [] || listOfFoldersToGoThrough !== {} || typeof listOfFoldersToGoThrough == 'object') {
-            for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-                if (typeof listOfFoldersToGoThrough[i] == 'string') {
-                    var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-                    var pathToSearchTheExistanceOf = null;
-                    if (currentPath == "") {
-                        pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
-                    } else {
-                        pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
-                    }
-                    if (fs.existsSync(pathToSearchTheExistanceOf)) {
-                        currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
-                    } else {
-                        i = i - 1;
-                        currentPath = currentPath + "../";
-                    }
-                }
-                trueCount = trueCount + 1;
-                if (trueCount == 100) {
-                    const e = "the function of globalPathFinder() in the file has been running on repeat over 100 times, this is not supposed to do this. Hence the loop is ot be turned off";
-                    return new Error('image.js globalPathFinder() ERROR: ' + e);
-                }
-            }
-        }
-        if (typeof nameOfFile == 'string') {
-            return path.join(currentPath, nameOfFile);
-        } else {
-            typeofnameOfFile = typeof nameOfFile;
-            return new Error('the name of the requested file isn\'t a string, rather ' + typeofnameOfFile + ' / მოთხოვნილი ფაილის სახელი არ არის სტრინგის ფორმატში, არამედ: ' + typeofnameOfFile);
-        }
-    } catch (error) {
-        var otherInfo = [listOfFoldersToGoThrough, nameOfFile];
-        errorHelper(currentFunc, error, otherInfo);
-        return "";
     }
 }
 
@@ -135,10 +84,8 @@ function checkTheType(infoFromURL, imageLocation) {
             }
         }
         return imageLocation;
-    } catch (error) {
-        console.log("image.js checkTheType() ERROR: " + error);
-        console.log("the requested file is unkown by the program, likely doesn't require any fixing.");
-        errorHelper(currentFunc, error, null);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return imageLocation;
     }
 }

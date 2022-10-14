@@ -5,65 +5,72 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
+const fileName = "index.js";
+var currentFunc = "";
+
+function globalPathFinder(folderList, requestedFile) {
+    currentFunc = "globalPathFinder";
     try {
-        var trueCount = 0;
-        var currentPath = "";
-        if (listOfFoldersToGoThrough !== [] || listOfFoldersToGoThrough !== {} || typeof listOfFoldersToGoThrough == 'object') {
-            for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-                if (typeof listOfFoldersToGoThrough[i] == 'string') {
-                    var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-                    var pathToSearchTheExistanceOf = null;
-                    if (currentPath == "") {
-                        pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
+        var count = 0;
+        var folderPath = "";
+        if (folderList !== [] || folderList !== {} || typeof folderList == 'object') {
+            for (var i = 0; i < folderList.length; i++) {
+                if (typeof folderList[i] == 'string') {
+                    var currentFolder = folderList[i];
+                    var pathKeeper = null;
+                    if (folderPath == "") {
+                        pathKeeper = "./" + currentFolder;
                     } else {
-                        pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
+                        pathKeeper = folderPath + currentFolder;
                     }
-                    if (fs.existsSync(pathToSearchTheExistanceOf)) {
-                        currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
+                    if (fs.existsSync(pathKeeper)) {
+                        folderPath = folderPath + currentFolder + "/";
                     } else {
                         i = i - 1;
-                        currentPath = currentPath + "../";
+                        folderPath = folderPath + "../";
                     }
                 }
-                trueCount = trueCount + 1;
-                if (trueCount == 100) {
-                    const e = "the function of globalPathFinder() in the file has been running on repeat over 100 times, this is not supposed to do this. Hence the loop is ot be turned off";
-                    return new Error('select.js globalPathFinder() ERROR: ' + e);
+                count = count + 1;
+                if (count == 100) {
+                    return "";
                 }
             }
         }
-        if (typeof nameOfFile == 'string') {
-            return path.join(currentPath, nameOfFile);
+        if (typeof requestedFile == 'string') {
+            return path.join(folderPath, requestedFile);
         }
-    } catch (error) {
-        console.log("select.js globalPathFinder() function ERROR: " + error);
-        return [];
+        return "";
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
+        return "";
     }
 }
 
 function readArrayFile(givenLoc) {
+    currentFunc = "readArrayFile";
     try {
         var theArr = fs.readFileSync(givenLoc, 'utf8');
         return theArr;
-    } catch (error) {
-        console.log("select.js readArrayFile() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return [];
     }
 }
 
 function getArr(theArr, theName) {
+    currentFunc = "getArr";
     try {
         const chosenPath = globalPathFinder(theArr, theName);
         const parsedFile = JSON.parse(readArrayFile(chosenPath));
         return parsedFile;
-    } catch (error) {
-        console.log("select.js getArr() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return [];
     }
 }
 
 function getLang(langInfo) {
+    currentFunc = "getLang";
     try {
         if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo == "number") {
             return "en";
@@ -77,13 +84,14 @@ function getLang(langInfo) {
                 return "en";
             }
         }
-    } catch (error) {
-        console.log("select.js getLang() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "en";
     }
 }
 
 function selectReqRes() {
+    currentFunc = "selectReqRes";
     try {
         var locArr = getArr(["data", "array_information"], "data.json");
         var fullArr = [];
@@ -99,22 +107,24 @@ function selectReqRes() {
             }
         }
         return fullArr;
-    } catch (error) {
-        console.log("select.js selectReqRes() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return [];
     }
 }
 
 function getData(givenArr, givenString) {
+    currentFunc = "getData";
     try {
         return fs.readFileSync(globalPathFinder(givenArr, givenString));
-    } catch (error) {
-        console.log("select.js getData() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "";
     }
 }
 
 function ifAboutMePageChanger(infoFromURL) {
+    currentFunc = "ifAboutMePageChanger";
     try {
         if (infoFromURL !== null && infoFromURL !== [] && infoFromURL !== {} && infoFromURL !== undefined && typeof infoFromURL !== 'undefined' && typeof infoFromURL == 'object') {
             if ("page" in infoFromURL) {
@@ -127,8 +137,8 @@ function ifAboutMePageChanger(infoFromURL) {
             }
         }
         return false;
-    } catch {
-        console.log("select.js ifAboutMePageChanger() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return [];
     }
 }
