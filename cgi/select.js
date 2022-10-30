@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const fileName = "index.js";
+const fileName = "select.js";
 var currentFunc = "";
 
 function globalPathFinder(folderList, requestedFile) {

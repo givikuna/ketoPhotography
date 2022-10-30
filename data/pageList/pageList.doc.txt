@@ -1,1 +1,4 @@
 /data/pageList/ folder has the list of every page on that is on the website
+
+pageList.doc.txt
+data.json

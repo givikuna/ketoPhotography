@@ -1,1 +1,8 @@
 /www/main/error/ folder has all the error html code for the website
+
+/eng
+	error.htm
+/geo
+	error.htm
+/rus
+	error.htm

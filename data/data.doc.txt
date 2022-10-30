@@ -5,3 +5,39 @@ Texts to be used in the website
 JSON arrays which contain information about the website
 Translations for the texts which are used in the website into the Russian and Georgian languages
 Links to Keto's social media accounts
+
+data.doc.txt
+/about_keto
+	about_keto.doc.txt
+	/en
+		en.doc.txt
+		data.txt
+	/ge
+		ge.doc.txt
+		data.txt
+	/ru
+		ru.doc.txt
+		data.txt
+	data.txt
+/array_information
+	array_information.doc.txt
+	data.json
+/contactGmail
+	contactGmail.doc.txt
+	data.txt
+/gallery_data
+	gallery_data.doc.txt
+	data.json
+/idNum
+	idNum.doc.txt
+	data.txt
+/keto_social_media
+	keto_social_media.doc.txt
+	data.json
+/pageList
+	pageList.doc.txt
+	data.json
+/pageTxtInfo
+	pageTxtInfo.doc.txt
+	data.json
+

@@ -1,1 +1,19 @@
 /cgi/ folder contains multiple different nodeJS files and their test files
+
+/cgi
+	cgi.doc.txt
+	image.js
+	index.js
+	select.js
+	src.js
+	/modules
+		modules.doc.txt
+	/tests
+		tests.doc.txt
+		image.test.js
+		index.test.js
+		main.test.js
+		select.test.js
+		src.test.js
+		testCode.txt
+

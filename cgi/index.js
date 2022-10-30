@@ -10,8 +10,7 @@ var currentFunc = "";
 const pathToGmailInfo = {
     arr: ["data", "contactGmail"],
     name: "data.txt"
-};
-// "../data/contactGmail.txt";
+}; // "../data/contactGmail.txt";
 
 function globalPathFinder(folderList, requestedFile) {
     currentFunc = "globalPathFinder";
@@ -52,6 +51,7 @@ function globalPathFinder(folderList, requestedFile) {
 }
 
 function fileExistanceChecker(pathToFile) {
+    currentFunc = "fileExistanceChecker";
     try {
         if (fs.existsSync(pathToFile)) { //checking if the file exists
             return true;
@@ -64,6 +64,7 @@ function fileExistanceChecker(pathToFile) {
 }
 
 function pageNullChecker(nameOfPage) {
+    currentFunc = "pageNullChecker";
     try {
         if (!nameOfPage || nameOfPage == "" || nameOfPage == '' || typeof nameOfPage !== 'string') {
             return "n";
@@ -76,6 +77,7 @@ function pageNullChecker(nameOfPage) {
 }
 
 function errorTextFunc(sentLang, ketoGmail) {
+    currentFunc = "errorTextFunc";
     try {
         if (sentLang == "rus") {
             return "ОШИБКА: на веб-сайте в настоящее время возникают некоторые проблемы, повторите попытку позже или свяжитесь с нами по адресу: " + ketoGmail;
@@ -90,6 +92,7 @@ function errorTextFunc(sentLang, ketoGmail) {
 }
 
 function languageChooser(langInfo) {
+    currentFunc = "languageChooser";
     try {
         if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo == "number") {
             return "eng";
@@ -110,6 +113,7 @@ function languageChooser(langInfo) {
 }
 
 function giveInformationAboutPage(pageName) {
+    currentFunc = "giveInformationAboutPage";
     try {
         if (typeof pageName == 'string') {
             pageName = pageName.toLowerCase();
@@ -125,6 +129,7 @@ function giveInformationAboutPage(pageName) {
 }
 
 function replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail) {
+    currentFunc = "replaceText";
     try {
         var pageName = "index";
 
@@ -173,6 +178,24 @@ function replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail) {
     }
 }
 
+function wrongPageErrorHTML(infoFromURL) {
+    currentFunc = "wrongPageErrorHTML";
+    try {
+        var filePath = globalPathFinder(["www", "main", "error", languageChooser(infoFromURL.lang)], "error.htm");
+
+        if (fs.existsSync(filePath)) {
+            fs.readFile(filePath, 'utf-8', function (err, data) {
+                return data.toString();
+            });
+        } else {
+            return false;
+        }
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
+        return errorTextFunc("eng", ketoGmail);
+    }
+}
+
 //
 
 /* // */
@@ -189,31 +212,41 @@ app.get('/', function (req, res) {
         const currentDynLink = "http://127.0.0.1";
         var infoFromURL = url.parse(req.url, true).query;
 
-        function wrongPageErrorHTML() {
-            console.log("The user is trying to enter a non-existant page.");
-            res.send(errorTextFunc(languageChooser(infoFromURL.lang), ketoGmail));
-            return res.end(); // if just using "return;" it'll keep going, with "res.end()" it won't. Just a little note
-        }
-
-        var htmFilePath = null;
+        var filePath = null;
 
         if (pageNullChecker(infoFromURL.page) == "n") {
-            htmFilePath = globalPathFinder(["www", "main", "page"], "index.html");
+            filePath = globalPathFinder(["www", "main", "page"], "index.html");
         } else if (giveInformationAboutPage(infoFromURL.page) == "model") {
-            htmFilePath = globalPathFinder(["www", "main", "page", "model"], giveInformationAboutPage(infoFromURL.page) + ".html");
+            filePath = globalPathFinder(["www", "main", "page", "model"], giveInformationAboutPage(infoFromURL.page) + ".html");
         } else {
-            htmFilePath = globalPathFinder(["www", "main", "page"], giveInformationAboutPage(infoFromURL.page) + ".html");
+            filePath = globalPathFinder(["www", "main", "page"], giveInformationAboutPage(infoFromURL.page) + ".html");
         }
 
-        if (fileExistanceChecker(htmFilePath) == true) { //checking if the file exists
-            fs.readFile(htmFilePath, 'utf-8', function (err, data) {
+        if (fileExistanceChecker(filePath) == true) { //checking if the file exists
+            fs.readFile(filePath, 'utf-8', function (err, data) {
                 var dataToString = data.toString();
                 //changement of the code is finished
                 res.write(replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail));
                 return res.end();
             });
         } else {
-            wrongPageErrorHTML();
+            var filePath = globalPathFinder(["www", "main", "error", languageChooser(infoFromURL.lang)], "error.html");
+
+            fs.readFile(filePath, 'utf-8', function (err, data) {
+                var dataString = data.toString();
+                if (typeof dataString == 'string' && dataString !== '' && dataString !== "") {
+                    if (dataString.includes("@dynamicLink")) {
+                        if ((currentDynLink && currentDynLink !== "" && currentDynLink !== null && currentDynLink !== undefined && typeof currentDynLink !== 'number') || (currentDynLink !== "" && typeof currentDynLink == 'string')) {
+                            dataString = dataString.replace(/@dynamicLink/g, currentDynLink);
+                            console.log(dataString);
+                        } else {
+                            dataString = dataString.replace(/@dynamicLink/g, "ERROR");
+                        }
+                    }
+                }
+                res.write(dataString);
+                return res.end();
+            });
         }
     } catch (error) {
         console.log("index.js ERROR: " + error);
@@ -234,6 +267,7 @@ if (typeof exports !== 'undefined') {
     exports.pageNullChecker = pageNullChecker;
     exports.fileExistanceChecker = fileExistanceChecker;
     exports.globalPathFinder = globalPathFinder;
+    exports.wrongPageErrorHTML = wrongPageErrorHTML;
 }
 
 

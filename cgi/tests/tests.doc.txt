@@ -1,1 +1,10 @@
 /cgi/tests/ folder contains test files for most of the javascript code used on this project
+
+/tests
+	tests.doc.txt
+	image.test.js
+	index.test.js
+	main.test.js
+	select.test.js
+	src.test.js
+	testCode.txt

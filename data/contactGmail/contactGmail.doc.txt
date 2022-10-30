@@ -1,1 +1,4 @@
 /data/contactGmail/ folder contains information regarding what gmail the client is to send an email to regarding issues or bugs they discover on the website, or really any other reason. This is used as a way for the client to be capable of contacting the team.
+
+contactGmail.doc.txt
+data.txt

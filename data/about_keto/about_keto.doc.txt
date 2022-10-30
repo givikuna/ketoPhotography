@@ -1,3 +1,15 @@
 /data/about_keto/ folder contains information about the 'about me' page of the website which talks about Keto's life, passions and other information regarding her.
 
 NOTE: There are translations of this in the Russian, English and Georgian languages
+
+about_keto.doc.txt
+/en
+	en.doc.txt
+	data.txt
+/ge
+	ge.doc.txt
+	data.txt
+/ru
+	ru.doc.txt
+	data.txt
+data.txt
