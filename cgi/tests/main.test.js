@@ -17,24 +17,42 @@ var mainJS = rewire(globalPathFinder(["www", "js"], "main.js"));
 // eval(fs.readFileSync(globalPathFinder(["www", "js"], "main.js")) + '');
 // console.log(mainJS);
 
-function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
-    var currentPath = "";
-    for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-        var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-        var pathToSearchTheExistanceOf = null;
-        if (currentPath == "") {
-            pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
-        } else {
-            pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
+function globalPathFinder(folderList, requestedFile) {
+    currentFunc = "globalPathFinder";
+    try {
+        var count = 0;
+        var folderPath = "";
+        if (folderList !== [] || folderList !== {} || typeof folderList == 'object') {
+            for (var i = 0; i < folderList.length; i++) {
+                if (typeof folderList[i] == 'string') {
+                    var currentFolder = folderList[i];
+                    var pathKeeper = null;
+                    if (folderPath == "") {
+                        pathKeeper = "./" + currentFolder;
+                    } else {
+                        pathKeeper = folderPath + currentFolder;
+                    }
+                    if (fs.existsSync(pathKeeper)) {
+                        folderPath = folderPath + currentFolder + "/";
+                    } else {
+                        i = i - 1;
+                        folderPath = folderPath + "../";
+                    }
+                }
+                count = count + 1;
+                if (count == 100) {
+                    return "";
+                }
+            }
         }
-        if (fs.existsSync(pathToSearchTheExistanceOf)) {
-            currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
-        } else {
-            i = i - 1;
-            currentPath = currentPath + "../";
+        if (typeof requestedFile == 'string') {
+            return path.join(folderPath, requestedFile);
         }
+        return "";
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
+        return "";
     }
-    return path.join(currentPath, nameOfFile);
 }
 
 

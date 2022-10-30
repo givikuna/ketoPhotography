@@ -1,1 +1,4 @@
 /data/idNum/ contains a random number which is changed by the back end side of the website as a way of ensuring that there are unique IDs for everything
+
+idNum.doc.txt
+data.txt

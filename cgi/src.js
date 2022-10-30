@@ -3,32 +3,49 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path');
 
-function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
+const fileName = "src.js";
+var currentFunc = "";
+
+function globalPathFinder(folderList, requestedFile) {
+    currentFunc = "globalPathFinder";
     try {
-        var currentPath = "";
-        for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-            var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-            var pathToSearchTheExistanceOf = null;
-            if (currentPath == "") {
-                pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
-            } else {
-                pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
-            }
-            if (fs.existsSync(pathToSearchTheExistanceOf)) {
-                currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
-            } else {
-                i = i - 1;
-                currentPath = currentPath + "../";
+        var count = 0;
+        var folderPath = "";
+        if (folderList !== [] || folderList !== {} || typeof folderList == 'object') {
+            for (var i = 0; i < folderList.length; i++) {
+                if (typeof folderList[i] == 'string') {
+                    var currentFolder = folderList[i];
+                    var pathKeeper = null;
+                    if (folderPath == "") {
+                        pathKeeper = "./" + currentFolder;
+                    } else {
+                        pathKeeper = folderPath + currentFolder;
+                    }
+                    if (fs.existsSync(pathKeeper)) {
+                        folderPath = folderPath + currentFolder + "/";
+                    } else {
+                        i = i - 1;
+                        folderPath = folderPath + "../";
+                    }
+                }
+                count = count + 1;
+                if (count == 100) {
+                    return "";
+                }
             }
         }
-        return path.join(currentPath, nameOfFile);
-    } catch (error) {
-        console.log("index.js globalPathFinder() ERROR: " + error);
-        return "index.js globalPathFinder() ERROR: " + error;
+        if (typeof requestedFile == 'string') {
+            return path.join(folderPath, requestedFile);
+        }
+        return "";
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
+        return "";
     }
 }
 
 function languageChooser(langInfo) {
+    currentFunc = "languageChooser";
     try {
         if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo == "number") {
             return "eng";
@@ -42,78 +59,88 @@ function languageChooser(langInfo) {
                 return "eng";
             }
         }
-    } catch (error) {
-        console.log("index.js languageChooser() ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "eng";
     }
 }
 
 function textReplacer(dataToString, infoFromURL, ketoContactGmail, currentDynLink, fileName, theFileExtension) {
-    if (theFileExtension == "js") {
-        if (fileName == "main.js") {
-            if (typeof dataToString == 'string') {
-                if (infoFromURL !== null && infoFromURL !== undefined && infoFromURL !== {} && infoFromURL !== [] && typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number') {
-                    if (dataToString.includes("@lang")) {
-                        if ("lang" in infoFromURL) {
-                            dataToString = dataToString.replace(/@lang/g, languageChooser(infoFromURL.lang));
+    currentFunc = "textReplacer";
+    try {
+        if (theFileExtension == "js") {
+            if (fileName == "main.js") {
+                if (typeof dataToString == 'string') {
+                    if (infoFromURL !== null && infoFromURL !== undefined && infoFromURL !== {} && infoFromURL !== [] && typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number') {
+                        if (dataToString.includes("@lang")) {
+                            if ("lang" in infoFromURL) {
+                                dataToString = dataToString.replace(/@lang/g, languageChooser(infoFromURL.lang));
+                            }
+                        }
+
+                        if ("page" in infoFromURL) {
+                            if (infoFromURL.page == "in_gallery") {
+                                if ("nameOfAlbum" in infoFromURL) {
+                                    if (dataToString.includes("@nameOfTheAlbumForTheGallery")) {
+                                        dataToString = dataToString.replace(/@nameOfTheAlbumForTheGallery/g, infoFromURL.nameOfAlbum);
+                                    }
+                                }
+                                if ("albumID" in infoFromURL) {
+                                    if (dataToString.includes("@infoForTheIDOfTheArrayOfTheGallery")) {
+                                        dataToString = dataToString.replace(/@infoForTheIDOfTheArrayOfTheGallery/g, infoFromURL.albumID);
+                                    }
+                                }
+                            }
                         }
                     }
 
-                    if ("page" in infoFromURL) {
-                        if (infoFromURL.page == "in_gallery") {
-                            if ("nameOfAlbum" in infoFromURL) {
-                                if (dataToString.includes("@nameOfTheAlbumForTheGallery")) {
-                                    dataToString = dataToString.replace(/@nameOfTheAlbumForTheGallery/g, infoFromURL.nameOfAlbum);
-                                }
-                            }
-                            if ("albumID" in infoFromURL) {
-                                if (dataToString.includes("@infoForTheIDOfTheArrayOfTheGallery")) {
-                                    dataToString = dataToString.replace(/@infoForTheIDOfTheArrayOfTheGallery/g, infoFromURL.albumID);
-                                }
-                            }
+                    if (dataToString.includes("@ketoGmailINFORMATION")) {
+                        if (ketoContactGmail !== null && ketoContactGmail !== undefined && typeof ketoContactGmail == 'string' && ketoContactGmail.includes(".") && ketoContactGmail.includes("@")) {
+                            dataToString = dataToString.replace(/@ketoGmailINFORMATION/g, ketoContactGmail);
+                        }
+                    }
+
+                    if (dataToString.includes("@dynamicLink")) {
+                        if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
+                            dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
                         }
                     }
                 }
-
-                if (dataToString.includes("@ketoGmailINFORMATION")) {
-                    if (ketoContactGmail !== null && ketoContactGmail !== undefined && typeof ketoContactGmail == 'string' && ketoContactGmail.includes(".") && ketoContactGmail.includes("@")) {
-                        dataToString = dataToString.replace(/@ketoGmailINFORMATION/g, ketoContactGmail);
-                    }
-                }
-
-                if (dataToString.includes("@dynamicLink")) {
-                    if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
-                        dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
+            }
+        } else if (theFileExtension == "css") {
+            if (fileName == "main.css" || fileName == "aboutme.css") {
+                if (typeof dataToString == 'string') {
+                    if (dataToString.includes("@dynamicLink")) {
+                        if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
+                            dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
+                        }
                     }
                 }
             }
         }
-    } else if (theFileExtension == "css") {
-        if (fileName == "main.css" || fileName == "aboutme.css") {
-            if (typeof dataToString == 'string') {
-                if (dataToString.includes("@dynamicLink")) {
-                    if (currentDynLink !== undefined && currentDynLink !== null && typeof currentDynLink == 'string' && currentDynLink.includes(".")) {
-                        dataToString = dataToString.replace(/@dynamicLink/g, currentDynLink);
-                    }
-                }
-            }
-        }
+
+        return dataToString;
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
     }
-
-    return dataToString;
 }
 
 function infoFromURLChecker(infoFromURL, requestedFile) {
-    if (typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number' && infoFromURL !== {} && infoFromURL !== [] && infoFromURL !== null && infoFromURL !== undefined) {
-        if (!infoFromURL) { } else {
-            if ("file" in infoFromURL) {
-                if (infoFromURL.file == requestedFile) {
-                    return true;
+    currentFunc = "infoFromURLChecker";
+    try {
+        if (typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number' && infoFromURL !== {} && infoFromURL !== [] && infoFromURL !== null && infoFromURL !== undefined) {
+            if (!infoFromURL) { } else {
+                if ("file" in infoFromURL) {
+                    if (infoFromURL.file == requestedFile) {
+                        return true;
+                    }
                 }
             }
         }
+        return false;
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
     }
-    return false;
 }
 
 if (!module.parent) {

@@ -3,44 +3,62 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path');
 
-function imgExistanceChecker(imgPath) { //TESTED VIA tests/image.test.js
+const fileName = "image.js";
+var currentFunc = "";
+
+function globalPathFinder(folderList, requestedFile) {
+    currentFunc = "globalPathFinder";
+    try {
+        var count = 0;
+        var folderPath = "";
+        if (folderList !== [] || folderList !== {} || typeof folderList == 'object') {
+            for (var i = 0; i < folderList.length; i++) {
+                if (typeof folderList[i] == 'string') {
+                    var currentFolder = folderList[i];
+                    var pathKeeper = null;
+                    if (folderPath == "") {
+                        pathKeeper = "./" + currentFolder;
+                    } else {
+                        pathKeeper = folderPath + currentFolder;
+                    }
+                    if (fs.existsSync(pathKeeper)) {
+                        folderPath = folderPath + currentFolder + "/";
+                    } else {
+                        i = i - 1;
+                        folderPath = folderPath + "../";
+                    }
+                }
+                count = count + 1;
+                if (count == 100) {
+                    return "";
+                }
+            }
+        }
+        if (typeof requestedFile == 'string') {
+            return path.join(folderPath, requestedFile);
+        }
+        return "";
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
+        return "";
+    }
+}
+
+function imgExistanceChecker(imgPath) {
+    currentFunc = "imgExistanceChecker";
     try {
         if (fs.existsSync(imgPath)) {
             return true;
         }
         return false;
-    } catch (error) {
-        console.log("image.js imgExistanceChecker() ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return false;
     }
 }
 
-function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
-    try {
-        var currentPath = "";
-        for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-            var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-            var pathToSearchTheExistanceOf = null;
-            if (currentPath == "") {
-                pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
-            } else {
-                pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
-            }
-            if (fs.existsSync(pathToSearchTheExistanceOf)) {
-                currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
-            } else {
-                i = i - 1;
-                currentPath = currentPath + "../";
-            }
-        }
-        return path.join(currentPath, nameOfFile);
-    } catch (error) {
-        console.log("image.js globalPathFinder() ERROR: " + error);
-        return "";
-    }
-}
-
 function checkTheType(infoFromURL, imageLocation) {
+    currentFunc = "checkTheType";
     try {
         if (infoFromURL !== null && infoFromURL !== undefined && infoFromURL !== {} & infoFromURL !== [] && typeof infoFromURL !== 'string' && typeof infoFromURL !== 'number') {
             if ("type" in infoFromURL) {
@@ -55,10 +73,8 @@ function checkTheType(infoFromURL, imageLocation) {
                         imageLocation = globalPathFinder(["www", "img", "onPage", "albumCovers"], infoFromURL.coverImg);
                     }
                 } else if (infoFromURL.type == "img") {
-                    if ("requestedImage" in infoFromURL) {
-                        if ("albumName" in infoFromURL) {
-                            imageLocation = globalPathFinder([infoFromURL.type, "albums", infoFromURL.albumName], infoFromURL.requestedImage);
-                        }
+                    if ("requestedImage" in infoFromURL && "albumName" in infoFromURL) {
+                        imageLocation = globalPathFinder([infoFromURL.type, "albums", infoFromURL.albumName], infoFromURL.requestedImage);
                     }
                 } else if (infoFromURL.type == "ketoPics") {
                     if ("img" in infoFromURL) {
@@ -68,19 +84,19 @@ function checkTheType(infoFromURL, imageLocation) {
             }
         }
         return imageLocation;
-    } catch (error) {
-        console.log("image.js checkTheType() ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return imageLocation;
     }
 }
 
 if (!module.parent) {
     http.createServer(function (req, res) {
-        var infoFromURL = url.parse(req.url, true).query;
-        res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
-        var imageLocation;
-
         try {
+            var infoFromURL = url.parse(req.url, true).query;
+            res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
+            var imageLocation;
+
             function sendImage(imageLocation) {
                 if (imgExistanceChecker(imageLocation) == true) {
                     fs.readFile(imageLocation, function (err, data) {

@@ -5,53 +5,72 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-function globalPathFinder(listOfFoldersToGoThrough, nameOfFile) {
+const fileName = "select.js";
+var currentFunc = "";
+
+function globalPathFinder(folderList, requestedFile) {
+    currentFunc = "globalPathFinder";
     try {
-        var currentPath = "";
-        for (var i = 0; i < listOfFoldersToGoThrough.length; i++) {
-            var folderCurrentlyBeingSearchedFor = listOfFoldersToGoThrough[i];
-            var pathToSearchTheExistanceOf = null;
-            if (currentPath == "") {
-                pathToSearchTheExistanceOf = "./" + folderCurrentlyBeingSearchedFor;
-            } else {
-                pathToSearchTheExistanceOf = currentPath + folderCurrentlyBeingSearchedFor;
-            }
-            if (fs.existsSync(pathToSearchTheExistanceOf)) {
-                currentPath = currentPath + folderCurrentlyBeingSearchedFor + "/";
-            } else {
-                i = i - 1;
-                currentPath = currentPath + "../";
+        var count = 0;
+        var folderPath = "";
+        if (folderList !== [] || folderList !== {} || typeof folderList == 'object') {
+            for (var i = 0; i < folderList.length; i++) {
+                if (typeof folderList[i] == 'string') {
+                    var currentFolder = folderList[i];
+                    var pathKeeper = null;
+                    if (folderPath == "") {
+                        pathKeeper = "./" + currentFolder;
+                    } else {
+                        pathKeeper = folderPath + currentFolder;
+                    }
+                    if (fs.existsSync(pathKeeper)) {
+                        folderPath = folderPath + currentFolder + "/";
+                    } else {
+                        i = i - 1;
+                        folderPath = folderPath + "../";
+                    }
+                }
+                count = count + 1;
+                if (count == 100) {
+                    return "";
+                }
             }
         }
-        return path.join(currentPath, nameOfFile);
-    } catch (error) {
-        console.log("select.js globalPathFinder() function ERROR: " + error);
-        return [];
+        if (typeof requestedFile == 'string') {
+            return path.join(folderPath, requestedFile);
+        }
+        return "";
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
+        return "";
     }
 }
 
 function readArrayFile(givenLoc) {
+    currentFunc = "readArrayFile";
     try {
         var theArr = fs.readFileSync(givenLoc, 'utf8');
         return theArr;
-    } catch (error) {
-        console.log("select.js readArrayFile() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return [];
     }
 }
 
 function getArr(theArr, theName) {
+    currentFunc = "getArr";
     try {
         const chosenPath = globalPathFinder(theArr, theName);
         const parsedFile = JSON.parse(readArrayFile(chosenPath));
         return parsedFile;
-    } catch (error) {
-        console.log("select.js getArr() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return [];
     }
 }
 
 function getLang(langInfo) {
+    currentFunc = "getLang";
     try {
         if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo == "number") {
             return "en";
@@ -65,13 +84,14 @@ function getLang(langInfo) {
                 return "en";
             }
         }
-    } catch (error) {
-        console.log("select.js getLang() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "en";
     }
 }
 
 function selectReqRes() {
+    currentFunc = "selectReqRes";
     try {
         var locArr = getArr(["data", "array_information"], "data.json");
         var fullArr = [];
@@ -87,22 +107,24 @@ function selectReqRes() {
             }
         }
         return fullArr;
-    } catch (error) {
-        console.log("select.js selectReqRes() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return [];
     }
 }
 
 function getData(givenArr, givenString) {
+    currentFunc = "getData";
     try {
         return fs.readFileSync(globalPathFinder(givenArr, givenString));
-    } catch (error) {
-        console.log("select.js getData() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "";
     }
 }
 
 function ifAboutMePageChanger(infoFromURL) {
+    currentFunc = "ifAboutMePageChanger";
     try {
         if (infoFromURL !== null && infoFromURL !== [] && infoFromURL !== {} && infoFromURL !== undefined && typeof infoFromURL !== 'undefined' && typeof infoFromURL == 'object') {
             if ("page" in infoFromURL) {
@@ -115,8 +137,8 @@ function ifAboutMePageChanger(infoFromURL) {
             }
         }
         return false;
-    } catch {
-        console.log("select.js ifAboutMePageChanger() function ERROR: " + error);
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return [];
     }
 }

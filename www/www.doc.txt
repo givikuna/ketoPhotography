@@ -1,1 +1,55 @@
 /www/ folder has all the information the client will actually see on the front side
+
+/www
+	www.doc.txt
+	/css
+		css.doc.txt
+		aboutme.css
+		main.css
+	/img
+		img.doc.txt
+		/icons
+			icons.doc.txt
+			//images of icons/logos
+		/onPage
+			onPage.doc.txt
+			/albumCovers
+				albumCovers.doc.txt
+				//images
+			/cover
+				cover.doc.txt
+				//cover image
+			/ketoPics
+				//random pics of Keto
+			/myWork
+				//random pics from Keto
+	/js
+		js.doc.txt
+		main.js
+	/main
+		main.doc.txt
+		/error
+			error.doc.txt
+			/eng
+				eng.doc.txt
+				error.htm
+			/geo
+				geo.doc.txt
+				error.htm
+			/rus
+				rus.doc.txt
+				error.htm
+		/page
+			page.doc.txt
+			/model
+				model.doc.txt
+				mode.html
+			aboutme.html
+			albums.html
+			contact.html
+			equipment.html
+			index.html
+			in_gallery.html
+			prices.html
+	/tools
+		tools.doc.txt

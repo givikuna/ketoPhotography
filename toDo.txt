@@ -1,0 +1,5 @@
+1. more errorHelper() (currently located in cgi/image.js) function to a module (name it errorSorter.js and save it in cgi/modules) and plug it in into the cgi files with require it.
+
+2. finish the errorHelper() function after moving it to the new location.
+
+3. create a test file in cgi/tests called errorSorter.test.js and then use that file to adequately test the errorSorter() file.
