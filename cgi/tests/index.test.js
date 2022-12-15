@@ -9,13 +9,27 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const chaiAsPromised = require('chai-as-promised');
+const exp = require('constants');
 chai.use(chaiAsPromised);
+/*
+const mock = require('mock-fs');
+
+mock({
+  'path/to/fake/dir': {
+    'some-file.txt': 'file content here',
+    'empty-dir': { empty directory }
+  },
+  'path/to/some.png': Buffer.from([8, 6, 7, 5, 3, 0, 9]),
+  'some/other/path': {/** another empty directory }
+});
+*/
 
 var sandbox = sinon.createSandbox();
 
-var indexJS = rewire('../index');
+var indexJS = rewire('../index.js');
 
 function globalPathFinder(folderList, requestedFile) {
+    mock.restore();
     currentFunc = "globalPathFinder";
     try {
         var count = 0;
@@ -67,11 +81,15 @@ describe('index.js', () => {
     });
 
     context('replaceText()', () => {
+        /*
+            gStub stubs pageNamer()
+            lStub stubs langChooser()
+        */
         var gStub, lStub;
 
         beforeEach(() => {
-            gStub = sinon.stub(indexJS, 'giveInformationAboutPage').returns("in_gallery");
-            lStub = sinon.stub(indexJS, 'languageChooser').returns("randomLang");
+            gStub = sinon.stub(indexJS, 'pageNamer').returns("in_gallery");
+            lStub = sinon.stub(indexJS, 'langChooser').returns("randomLang");
 
             indexJS = rewire('../index');
         });
@@ -84,8 +102,8 @@ describe('index.js', () => {
         });
 
         it('sends \'(null, null, null)\' expects null)', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText(null, null, null)).to.equal(null).and.to.not.equal("");
             expect(gStub.called).to.be.false;
@@ -97,8 +115,8 @@ describe('index.js', () => {
         });
 
         it('sends \'(\"\", [\"hi\"], null)\', expects \"\"', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText("",
                 [
@@ -114,8 +132,8 @@ describe('index.js', () => {
         });
 
         it('sends \'(\"@lang@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@infoForTheNameOfThisPage\", {page: \'thePage\', lang: \'lingua\', galleryID: \'theGallery\'s ID\'}, null)\', expects \"randomLangtheGallery\'s IDERRORin_gallery\"', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText("@lang@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@infoForTheNameOfThisPage",
                 {
@@ -136,8 +154,8 @@ describe('index.js', () => {
         });
 
         it('sends \'(\"@lang@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@infoForTheNameOfThisPage\", {page: \'thePage\', lang: \'lingua\'}, null)\', expects \"randomLang@infoForTheIDOfTheArrayOfTheGalleryERRORin_gallery\"', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText("@lang@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@infoForTheNameOfThisPage",
                 {
@@ -157,8 +175,8 @@ describe('index.js', () => {
         });
 
         it('sends \'(\"@lang@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@infoForTheNameOfThisPage\", {page: \'thePage\'}, null)\', expects \"eng@infoForTheIDOfTheArrayOfTheGalleryERRORin_gallery\"', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText("@lang@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@infoForTheNameOfThisPage",
                 {
@@ -175,8 +193,8 @@ describe('index.js', () => {
         });
 
         it('sends \'(\"@lang@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@infoForTheNameOfThisPage\", null, null)\', expects \"eng@infoForTheIDOfTheArrayOfTheGalleryERRORindex""', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText("@lang@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@infoForTheNameOfThisPage", null, null)).to.equal("eng@infoForTheIDOfTheArrayOfTheGalleryERRORindex");
             expect(gStub).to.not.have.been.called;
@@ -186,8 +204,8 @@ describe('index.js', () => {
         });
 
         it('sends \'(\"@lang@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@infoForTheNameOfThisPage\", {page: \'thePage\'}, null)\', expects \"eng@infoForTheIDOfTheArrayOfTheGalleryERRORin_gallery\"', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText("BLANK",
                 {
@@ -204,8 +222,8 @@ describe('index.js', () => {
         });
 
         it('sends \'(\"@dynamicLink\", ["randomText"], "currentDynLink")\'', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText("@dynamicLink", ["randomText"], "currentDynLink")).to.equal("currentDynLink");
             expect(gStub).to.not.have.been.called;
@@ -215,8 +233,8 @@ describe('index.js', () => {
         });
 
         it('sends \'()\', and expects undefined', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText()).to.be.undefined;
             expect(gStub).to.not.have.been.called;
@@ -226,8 +244,8 @@ describe('index.js', () => {
         });
 
         it('sends \'(\"@infoForTheIDOfTheArrayOfTheGallery@dynamicLink\", {galleryID: \'fakeID\'}, \"randomText\")\'', () => {
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText("@infoForTheIDOfTheArrayOfTheGallery@dynamicLink@lang", { galleryID: 'fakeID' }, "randomText")).to.equal("fakeIDrandomTexteng");
             expect(gStub).to.not.have.been.called;
@@ -237,10 +255,10 @@ describe('index.js', () => {
         });
 
         it('sends \'(\"@infoForTheNameOfThisPage\", { page: \'unusual page name\'}, null)\'', () => {
-            gStub = sinon.stub(indexJS, 'giveInformationAboutPage').returns("pageName");
+            gStub = sinon.stub(indexJS, 'pageNamer').returns("pageName");
 
-            indexJS.__set__('giveInformationAboutPage', gStub);
-            indexJS.__set__('languageChooser', lStub);
+            indexJS.__set__('pageNamer', gStub);
+            indexJS.__set__('langChooser', lStub);
 
             expect(indexJS.replaceText("@infoForTheNameOfThisPage", { page: 'unusual page name' }, null)).to.equal("pageName");
             expect(gStub).to.have.been.calledOnce;
@@ -251,29 +269,46 @@ describe('index.js', () => {
         });
     });
 
-    context('giveInformationAboutPage()', () => {
+    context('pageNamer()', () => {
+        /*
+            pSpy spies on pageNamer()
+        */
+        var pSpy;
+
         beforeEach(() => {
             indexJS = rewire('../index.js');
+
+            pSpy = sinon.spy(indexJS, 'pageNamer');
         });
 
         afterEach(() => {
             indexJS = rewire('../index.js');
+
+            pSpy.restore();
         });
 
         it('sends \'(null)\', expects \"n\"', () => {
-            expect(indexJS.giveInformationAboutPage(null)).to.equal("n");
+            expect(indexJS.pageNamer(null)).to.equal("n");
+            expect(pSpy.callCount).to.equal(1);
+            expect(pSpy()).to.be.a('string');
         });
 
         it('sends \'(undefined)\', expects \"n\"', () => {
-            expect(indexJS.giveInformationAboutPage(undefined)).to.equal("n");
+            expect(indexJS.pageNamer(undefined)).to.equal("n");
+            expect(pSpy.callCount).to.equal(1);
+            expect(pSpy()).to.be.a('string');
         });
 
         it('sends \'(0)\', expects \"n\"', () => {
-            expect(indexJS.giveInformationAboutPage(0)).to.equal("n");
+            expect(indexJS.pageNamer(0)).to.equal("n");
+            expect(pSpy.callCount).to.equal(1);
+            expect(pSpy()).to.be.a('string');
         });
 
         it('sends \'(\"\")\', expects \"n\"', () => {
-            expect(indexJS.giveInformationAboutPage("")).to.equal("n");
+            expect(indexJS.pageNamer("")).to.equal("n");
+            expect(pSpy.callCount).to.equal(1);
+            expect(pSpy()).to.be.a('string');
         });
 
         it('sends different page names and expects to return the names sent', () => {
@@ -288,18 +323,29 @@ describe('index.js', () => {
                 "prices"
             ];
             for (var i = 0; i < pageNameArr.length; i++) {
-                expect(indexJS.giveInformationAboutPage(pageNameArr[i])).to.equal(pageNameArr[i]);
+                expect(indexJS.pageNamer(pageNameArr[i])).to.equal(pageNameArr[i]);
+                expect(pSpy.callCount).to.be.above(0);
+                expect(pSpy()).to.be.a('string');
             }
         });
     });
 
-    context('languageChooser()', () => {
+    context('langChooser()', () => {
+        /*
+            lSpy spies on langChooser()
+        */
+        var lSpy;
+
         beforeEach(() => {
             indexJS = rewire('../index.js');
+
+            lSpy = sinon.spy(indexJS, 'langChooser');
         });
 
         afterEach(() => {
             indexJS = rewire('../index.js');
+
+            lSpy.restore();
         });
 
         it('sends \"rus\" and other types of Russian names shouldn\'t return \"eng\", instead should return \"rus\"', () => {
@@ -317,14 +363,18 @@ describe('index.js', () => {
             ];
 
             for (var i = 0; i < sendArr.length; i++) {
-                expect(indexJS.languageChooser(sendArr[i])).to.not.equal("eng");
-                expect(indexJS.languageChooser(sendArr[i])).to.equal("rus");
+                expect(indexJS.langChooser(sendArr[i])).to.not.equal("eng");
+                expect(indexJS.langChooser(sendArr[i])).to.equal("rus");
+                expect(lSpy.callCount).to.be.above(0);
+                expect(lSpy()).to.be.a('string');
             }
         });
 
         it('sends \'(\"anglish\")\' and shouldn\'t return \"rus\" but instead should return \"eng\"', () => {
-            expect(indexJS.languageChooser("anglish")).to.not.equal("rus");
-            expect(indexJS.languageChooser("anglish")).to.equal("eng");
+            expect(indexJS.langChooser("anglish")).to.not.equal("rus");
+            expect(indexJS.langChooser("anglish")).to.equal("eng");
+            expect(lSpy.callCount).to.equal(2);
+            expect(lSpy()).to.be.a('string');
         });
 
         it('sends different nulls and errors and should return \"eng\"', () => {
@@ -339,7 +389,9 @@ describe('index.js', () => {
             ];
 
             for (var i = 0; i < sendArr.length; i++) {
-                expect(indexJS.languageChooser(sendArr[i])).to.equal("eng");
+                expect(indexJS.langChooser(sendArr[i])).to.equal("eng");
+                expect(lSpy.callCount).to.be.above(0);
+                expect(lSpy()).to.be.a('string');
             }
         });
 
@@ -381,80 +433,246 @@ describe('index.js', () => {
             ];
 
             for (var i = 0; i < sendArr.length; i++) {
-                expect(indexJS.languageChooser(sendArr[i])).to.equal("geo");
+                expect(indexJS.langChooser(sendArr[i])).to.equal("geo");
+                expect(lSpy.callCount).to.be.above(0);
+                expect(lSpy()).to.be.a('string');
             }
         });
     });
 
     context('errorTextFunc()', () => {
+        /*
+            eSpy spies on errorTextFunc()
+        */
+        var eSpy;
         beforeEach(() => {
             indexJS = rewire('../index.js');
+
+            eSpy = sinon.spy(indexJS, 'errorTextFunc');
         });
 
         afterEach(() => {
             indexJS = rewire('../index.js');
+
+            eSpy.restore();
         });
 
         it('sends \'()\', expects \"ERROR: the website is currently down, try again later or contact us at: undefined\"', () => {
             expect(indexJS.errorTextFunc()).to.equal("ERROR: the website is currently experiencing some issues, try again later or contact us at: " + undefined);
+            expect(eSpy.callCount).to.equal(1);
+            expect(eSpy()).to.be.a('string');
+            expect(eSpy()).to.include("ERROR");
         });
 
         it('sends \'(\"randomLang", "randomGmail\")\' and expects \"ERROR: the website is currently down, try again later or contact us at: randomGmail\"', () => {
             expect(indexJS.errorTextFunc("randomLang", "randomGmail")).to.equal("ERROR: the website is currently experiencing some issues, try again later or contact us at: randomGmail");
+            expect(eSpy.callCount).to.equal(1);
+            expect(eSpy()).to.be.a('string');
+            expect(eSpy()).to.include("ERROR");
         });
 
         it('sends \'(\"randomLang", "randomGmail\")\' and expects \"ERROR: the website is currently down, try again later or contact us at: randomGmail\"', () => {
             expect(indexJS.errorTextFunc("randomLang", "randomGmail")).to.equal("ERROR: the website is currently experiencing some issues, try again later or contact us at: randomGmail");
+            expect(eSpy.callCount).to.equal(1);
+            expect(eSpy()).to.be.a('string');
+            expect(eSpy()).to.include("ERROR");
         });
 
         it('sends \'(\"rus", "randomGmail\")\' and expects \"ОШИБКА: веб-сайт в настоящее время не работает, повторите попытку позже или свяжитесь с нами по адресу: randomGmail\"', () => {
             expect(indexJS.errorTextFunc("rus", "randomGmail")).to.equal("ОШИБКА: на веб-сайте в настоящее время возникают некоторые проблемы, повторите попытку позже или свяжитесь с нами по адресу: randomGmail");
+            expect(eSpy.callCount).to.equal(1);
+            expect(eSpy()).to.be.a('string');
+            expect(eSpy()).to.include("ERROR");
         });
 
         it('sends \'(\"geo", "randomGmail\")\' and expects \"შეცდომა: ვებგვერდი ამჟამად გათიშულია, სცადეთ მოგვიანებით ან დაგვიკავშირდით მისამართზე: randomGmail\"', () => {
             expect(indexJS.errorTextFunc("geo", "randomGmail")).to.equal("შეცდომა: ვებსაიტს ამჟამად აქვს გარკვეული პრობლემები, სცადეთ მოგვიანებით ან დაგვიკავშირდით: randomGmail");
+            expect(eSpy.callCount).to.equal(1);
+            expect(eSpy()).to.be.a('string');
+            expect(eSpy()).to.include("ERROR");
         });
     });
 
-    context('pageNullChecker()', () => {
+    /*
+        Rewrite the whole thing
+    */
+    context('isNull()', () => {
+        /*
+            iSpy spies on isNull()
+        */
+        var iSpy;
+
         beforeEach(() => {
             indexJS = rewire('../index.js');
+            iSpy = sinon.spy(indexJS, "isNull");
         });
 
         afterEach(() => {
             indexJS = rewire('../index.js');
+            iSpy.restore();
+        });
+
+        it('sends \'()\', expects true', () => {
+            expect(indexJS.isNull()).to.be.true;
+            expect(iSpy).to.have.returned(true);
+            expect(iSpy.callCount).to.equal(1);
+        });
+
+        it('sends \'(null)\', expects true', () => {
+            expect(indexJS.isNull(null)).to.be.true;
+            expect(iSpy).to.have.returned(true);
+            expect(iSpy.callCount).to.equal(1);
+        });
+
+        it('sends \'(undefined)\', expects true', () => {
+            expect(indexJS.isNull(undefined)).to.be.true;
+            expect(iSpy).to.have.returned(true);
+            expect(iSpy.callCount).to.equal(1);
+        });
+
+        it('sends \'(0)\', expects true', () => {
+            expect(indexJS.isNull(0)).to.be.true;
+            expect(iSpy).to.have.returned(true);
+            expect(iSpy.callCount).to.equal(1);
+        });
+
+        it('sends \'(100)\', expects true', () => {
+            expect(indexJS.isNull(100)).to.be.true;
+            expect(iSpy).to.have.returned(true);
+            expect(iSpy.callCount).to.equal(1);
+        });
+
+        it('sends \'(\"\")\', expects true', () => {
+            expect(indexJS.isNull("")).to.be.true;
+            expect(iSpy).to.have.returned(true);
+            expect(iSpy.callCount).to.equal(1);
+        });
+
+        it('sends \'(\'\')\', expects true', () => {
+            expect(indexJS.isNull('')).to.be.true;
+            expect(iSpy).to.have.returned(true);
+            expect(iSpy.callCount).to.equal(1);
+        });
+
+        it('sends \'([])\', expects true', () => {
+            expect(indexJS.isNull([])).to.be.true;
+            expect(iSpy).to.have.returned(true);
+            expect(iSpy.callCount).to.equal(1);
+        });
+
+        it('sends \'({})\', expects true', () => {
+            expect(indexJS.isNull({})).to.be.true;
+            expect(iSpy).to.have.returned(true);
+            expect(iSpy.callCount).to.equal(1);
+        });
+
+        it('sends \'(\"randomName\")\', expects false', () => {
+            expect(indexJS.isNull("randomName")).to.be.false;
+            expect(iSpy).to.have.returned(false);
+            expect(iSpy.callCount).to.equal(1);
+        });
+    });
+
+    context('emailAssigner()', () => {
+        /*
+            iStub stubs ifExists()
+            
+            gStub stubs globalPathFinder()
+
+            eSpy spies on emailAssigner()
+        */
+        var iStub, gStub, eSpy;
+
+        beforeEach(() => {
+            iStub = sinon.stub(indexJS, 'ifExists').returns(true);
+            gStub = sinon.stub(indexJS, 'globalPathFinder').returns("randomFolder/randomFile.html");
+
+            indexJS = rewire('../index.js');
+
+            eSpy = sinon.spy(indexJS, "emailAssigner");
+            sinon.spy(console, 'log');
+        });
+
+        afterEach(() => {
+            iStub.restore();
+            gStub.restore();
+
+            indexJS = rewire('../index.js');
+
+            eSpy.restore();
+            console.log.restore();
         });
 
         it('sends \'()\', expects \"\"', () => {
-            expect(indexJS.pageNullChecker()).to.equal("n");
+            indexJS.__set__('ifExists', iStub);
+            indexJS.__set__('globalPathFinder', gStub);
+
+            expect(indexJS.emailAssigner()).to.equal("");
+            expect(console.log.callCount).to.equal(1);
+            expect(console.log.calledWith("index.js emailAssigner() ERROR: TypeError: Cannot use \'in\' operator to search for \'arr\' in undefined")).to.be.true;
+            expect(iStub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(0);
+            expect(eSpy.callCount).to.equal(1);
+            expect(eSpy()).to.be.a('string');
         });
 
-        it('sends \'(null)\', expects \"\"', () => {
-            expect(indexJS.pageNullChecker(null)).to.equal("n");
+        it('sends \'({\"name\": \"randomName\"})\', expects \"\"', () => {
+            indexJS.__set__('ifExists', iStub);
+            indexJS.__set__('globalPathFinder', gStub);
+
+            expect(indexJS.emailAssigner({ "name": "randomName" })).to.equal("");
+            expect(iStub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(0);
+            expect(eSpy.callCount).to.equal(1);
         });
 
-        it('sends \'(undefined)\', expects \"\"', () => {
-            expect(indexJS.pageNullChecker(undefined)).to.equal("n");
+        it('sends \'({\"arr\": [\"randomLoc\", \"anotherRandomLoc\"]})\', expects \"\"', () => {
+            indexJS.__set__('ifExists', iStub);
+            indexJS.__set__('globalPathFinder', gStub);
+
+            expect(indexJS.emailAssigner({ "arr": ["randomLoc", "anotherRandomLoc"] })).to.equal("");
+            expect(iStub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(0);
+            expect(eSpy.callCount).to.equal(1);
         });
 
-        it('sends \'(0)\', expects \"\"', () => {
-            expect(indexJS.pageNullChecker(0)).to.equal("n");
+        it('sends \'({\"arr\": []})\', expects \"\"', () => {
+            indexJS.__set__('ifExists', iStub);
+            indexJS.__set__('globalPathFinder', gStub);
+
+            expect(indexJS.emailAssigner({ "arr": [] })).to.equal("");
+            expect(iStub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(0);
+            expect(eSpy.callCount).to.equal(1);
         });
 
-        it('sends \'(\"\")\', expects \"\"', () => {
-            expect(indexJS.pageNullChecker("")).to.equal("n");
+        it('sends \'({\"arr\": [], \"name\": \"randomName\"})\', expects \"\"', () => {
+            indexJS.__set__('ifExists', iStub);
+            indexJS.__set__('globalPathFinder', gStub);
+
+            expect(indexJS.emailAssigner({ "arr": [], "name": "randomName" })).to.equal("");
+            expect(iStub.callCount).to.equal(0);
+            expect(gStub.callCount).to.equal(0);
+            expect(eSpy.callCount).to.equal(1);
         });
 
-        it('sends \'(\'\')\', expects \"\"', () => {
-            expect(indexJS.pageNullChecker('')).to.equal("n");
-        });
+        it('sends \'({ "arr": ["randomFolder", "anotherRandomFolder"], "name": "randomFile" })\', expects \"\"', () => {
+            indexJS.__set__('ifExists', iStub);
+            indexJS.__set__('globalPathFinder', gStub);
 
-        it('sends \'([])\', expects \"\"', () => {
-            expect(indexJS.pageNullChecker([])).to.equal("n");
-        });
-
-        it('sends \'({})\', expects \"\"', () => {
-            expect(indexJS.pageNullChecker({})).to.equal("n");
+            expect(indexJS.emailAssigner({ "arr": ["randomFolder", "anotherRandomFolder"], "name": "randomFile" })).to.equal("");
+            expect(iStub.callCount).to.equal(1);
+            expect(gStub.callCount).to.equal(2);
+            expect(eSpy.callCount).to.equal(1);
+            expect(iStub).to.have.returned(true);
+            expect(gStub).to.have.returned("randomFolder/randomFile.html");
+            expect(eSpy).to.have.returned("");
+            expect(iStub).to.have.been.calledBefore(gStub);
+            expect(gStub).to.have.been.calledAfter(iStub);
+            expect(iStub()).to.be.true;
+            expect(iStub()).to.be.a('boolean');
+            expect(gStub()).to.equal("randomFolder/randomFile.html");
+            expect(gStub()).to.be.a('string');
         });
     });
 });
@@ -477,10 +695,10 @@ describe('index.js', () => {
 
 /*
     replaceText();
-    giveInformationAboutPage();
-    languageChooser();
+    pageNamer();
+    langChooser();
     errorTextFunc();
-    pageNullChecker();
-    fileExistanceChecker();
+    isNull();
+    ifExists();
     globalPathFinder();
 */

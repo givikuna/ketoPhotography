@@ -49,18 +49,18 @@ function globalPathFinder(folderList, requestedFile) {
 function readArrayFile(givenLoc) {
     currentFunc = "readArrayFile";
     try {
-        var theArr = fs.readFileSync(givenLoc, 'utf8');
-        return theArr;
+        var arr = fs.readFileSync(givenLoc, 'utf8');
+        return arr;
     } catch (e) {
         console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return [];
     }
 }
 
-function getArr(theArr, theName) {
+function getArr(arr, name) {
     currentFunc = "getArr";
     try {
-        const chosenPath = globalPathFinder(theArr, theName);
+        const chosenPath = globalPathFinder(arr, name);
         const parsedFile = JSON.parse(readArrayFile(chosenPath));
         return parsedFile;
     } catch (e) {
@@ -69,16 +69,16 @@ function getArr(theArr, theName) {
     }
 }
 
-function getLang(langInfo) {
+function getLang(lang) {
     currentFunc = "getLang";
     try {
-        if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo == "number") {
+        if (lang == null || lang == undefined || lang == "" || !lang || typeof lang == "number") {
             return "en";
         } else {
-            langInfo = langInfo.toLowerCase();
-            if (langInfo == "rus" || langInfo == "russian" || langInfo == "ruso" || langInfo == "rusia" || langInfo == "ruski" || langInfo == "rusian" || langInfo == "ru" || langInfo == "rusuli" || langInfo == "russ" || langInfo == "russian language") {
+            lang = lang.toLowerCase();
+            if (lang == "rus" || lang == "russian" || lang == "ruso" || lang == "rusia" || lang == "ruski" || lang == "rusian" || lang == "ru" || lang == "rusuli" || lang == "russ" || lang == "russian language") {
                 return "ru";
-            } else if (langInfo == "geo" || langInfo == "qartuli nana" || langInfo == "cartuli nana" || langInfo == "kartuli nana" || langInfo == "kartluli" || langInfo == "kartvelian language" || langInfo == "kartuli ena" || langInfo == "deda ena" || langInfo == "qartuli ena" || langInfo == "cartuli ena" || langInfo == "geouri" || langInfo == "gurjistani" || langInfo == "georgiani" || langInfo == "qartveli" || langInfo == "georgianuri" || langInfo == "gurjistan" || langInfo == "georgian" || langInfo == "kartveli" || langInfo == "kutaisuri" || langInfo == "kartuli" || langInfo == "ქართული" || langInfo == "ka" || langInfo == "kar" || langInfo == "cartuli" || langInfo == "cartveluri" || langInfo == "cartvelian" || langInfo == "qartveluri" || langInfo == "qartvelian" || langInfo == "kartvellian" || langInfo == "kartvelian" || langInfo == "qartuli" || langInfo == "gorgian" || langInfo == "ge") {
+            } else if (lang == "geo" || lang == "qartuli nana" || lang == "cartuli nana" || lang == "kartuli nana" || lang == "kartluli" || lang == "kartvelian language" || lang == "kartuli ena" || lang == "deda ena" || lang == "qartuli ena" || lang == "cartuli ena" || lang == "geouri" || lang == "gurjistani" || lang == "georgiani" || lang == "qartveli" || lang == "georgianuri" || lang == "gurjistan" || lang == "georgian" || lang == "kartveli" || lang == "kutaisuri" || lang == "kartuli" || lang == "ქართული" || lang == "ka" || lang == "kar" || lang == "cartuli" || lang == "cartveluri" || lang == "cartvelian" || lang == "qartveluri" || lang == "qartvelian" || lang == "kartvellian" || lang == "kartvelian" || lang == "qartuli" || lang == "gorgian" || lang == "ge") {
                 return "ge";
             } else {
                 return "en";
@@ -113,10 +113,10 @@ function selectReqRes() {
     }
 }
 
-function getData(givenArr, givenString) {
+function getData(arr, mString) {
     currentFunc = "getData";
     try {
-        return fs.readFileSync(globalPathFinder(givenArr, givenString));
+        return fs.readFileSync(globalPathFinder(arr, mString));
     } catch (e) {
         console.log(fileName + " " + currentFunc + "() ERROR: " + e);
         return "";
@@ -151,12 +151,12 @@ if (!module.parent) {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
 
-            const ifAboutMePageChangerVar = ifAboutMePageChanger(infoFromURL);
+            const about_keto_data = ifAboutMePageChanger(infoFromURL);
 
-            var selectReqResVar
+            var selectReqResVar;
 
-            if (ifAboutMePageChangerVar !== false) {
-                selectReqResVar = ifAboutMePageChangerVar;
+            if (about_keto_data != false) {
+                selectReqResVar = about_keto_data;
             } else {
                 selectReqResVar = selectReqRes().toString();
             }
