@@ -50,10 +50,19 @@ function globalPathFinder(folderList, requestedFile) {
     }
 }
 
-function fileExistanceChecker(pathToFile) {
-    currentFunc = "fileExistanceChecker";
+/*
+    ifExists(filePath)
+
+    Returns true if filePath actually leads to an existing file in the project
+    Returns false if filePath does not lead to an existing file in the project
+
+    If caught e:
+    Returns false
+*/
+function ifExists(filePath) {
+    currentFunc = "ifExists";
     try {
-        if (fs.existsSync(pathToFile)) { //checking if the file exists
+        if (fs.existsSync(filePath)) { //checking if the file exists
             return true;
         }
         return false;
@@ -63,16 +72,25 @@ function fileExistanceChecker(pathToFile) {
     }
 }
 
-function pageNullChecker(nameOfPage) {
-    currentFunc = "pageNullChecker";
+/*
+    isNull(pageName)
+
+    Returns false if pageName is a null, a "", a '', an undefined, or anything but a string
+    Returns true if it is a string with more than 0 characters
+
+    If caught e
+    Returns an "ERROR: the website is currently experiencing some issues, try again later"
+*/
+function isNull(pageName) {
+    currentFunc = "isNull";
     try {
-        if (!nameOfPage || nameOfPage == "" || nameOfPage == '' || typeof nameOfPage !== 'string') {
-            return "n";
+        if (!pageName || pageName == "" || pageName == '' || typeof pageName !== 'string') {
+            return false;
         }
-        return "y";
+        return true;
     } catch (e) {
         console.log(fileName + " " + currentFunc + "() ERROR: " + e);
-        return "n";
+        return false;
     }
 }
 
@@ -91,10 +109,20 @@ function errorTextFunc(sentLang, ketoGmail) {
     }
 }
 
-function languageChooser(langInfo) {
-    currentFunc = "languageChooser";
+/*
+    langChooser(langInfo)
+
+    Returns "geo" if Georgian langauge is requested
+    Returns "rus" if the Russian languag es requested
+    Returns "eng" in any other case
+
+    If caught e
+    Returns "eng"
+*/
+function langChooser(langInfo) {
+    currentFunc = "langChooser";
     try {
-        if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo == "number") {
+        if (langInfo == null || langInfo == undefined || langInfo == "" || !langInfo || typeof langInfo != "string") {
             return "eng";
         } else {
             langInfo = langInfo.toLowerCase();
@@ -112,8 +140,8 @@ function languageChooser(langInfo) {
     }
 }
 
-function giveInformationAboutPage(pageName) {
-    currentFunc = "giveInformationAboutPage";
+function pageNamer(pageName) {
+    currentFunc = "pageNamer";
     try {
         if (typeof pageName == 'string') {
             pageName = pageName.toLowerCase();
@@ -136,13 +164,13 @@ function replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail) {
         if (typeof dataToString == 'string') {
             if (infoFromURL !== null && infoFromURL !== [] && infoFromURL !== {} && infoFromURL !== undefined && typeof infoFromURL !== 'undefined' && typeof infoFromURL == 'object') {
                 if ("page" in infoFromURL) {
-                    pageName = giveInformationAboutPage(infoFromURL.page);
+                    pageName = pageNamer(infoFromURL.page);
                 }
 
                 if (dataToString.includes("@lang")) {
                     var daLang = "eng";
                     if ("lang" in infoFromURL) {
-                        daLang = languageChooser(infoFromURL.lang);
+                        daLang = langChooser(infoFromURL.lang);
                     }
                     dataToString = dataToString.replace(/@lang/g, daLang);
                 }
@@ -181,7 +209,7 @@ function replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail) {
 function wrongPageErrorHTML(infoFromURL) {
     currentFunc = "wrongPageErrorHTML";
     try {
-        var filePath = globalPathFinder(["www", "main", "error", languageChooser(infoFromURL.lang)], "error.htm");
+        var filePath = globalPathFinder(["www", "main", "error", langChooser(infoFromURL.lang)], "error.htm");
 
         if (fs.existsSync(filePath)) {
             fs.readFile(filePath, 'utf-8', function (err, data) {
@@ -196,6 +224,54 @@ function wrongPageErrorHTML(infoFromURL) {
     }
 }
 
+/*
+    emailAssigner(p)
+
+    Returns file's location if p is an array containing "arr" and "name" parameters and if globalPathFinder(p.arr, p.name) leads to an existing file in the project
+    Returns "" in any other case
+
+    If caught e:
+    Returns ""
+*/
+function emailAssigner(p) {
+    currentFunc = "emailAssigner";
+    try {
+        if ("arr" in p && "name" in p) {
+            if (p.arr.length > 1) {
+                if (ifExists(globalPathFinder(p.arr, p.name))) {
+                    return fs.readFileSync(globalPathFinder(p.arr, p.name)).toString();
+                }
+            }
+        }
+        return "";
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
+        return "";
+    }
+}
+
+/*
+    Needs to be tested
+
+    filePathAssigner(pageName)
+
+    Returns index.html if the pageName is a null
+*/
+function filePathAssigner(pageName) {
+    currentFunc = "emailAssigner";
+    try {
+        if (!isNull(pageName))
+            return globalPathFinder(["www", "main", "page"], "index.html");
+        else if (pageNamer(pageName) == "model")
+            return globalPathFinder(["www", "main", "page", "model"], pageNamer(pageName) + ".html");
+        else
+            return globalPathFinder(["www", "main", "page"], pageNamer(pageName) + ".html");
+    } catch (e) {
+        console.log(fileName + " " + currentFunc + "() ERROR: " + e);
+        return "";
+    }
+}
+
 //
 
 /* // */
@@ -204,35 +280,21 @@ function wrongPageErrorHTML(infoFromURL) {
 
 app.get('/', function (req, res) {
     try {
-        var ketoGmail;
-        var ketoAddr = globalPathFinder(pathToGmailInfo.arr, pathToGmailInfo.name);
-        if (fileExistanceChecker(ketoAddr) == true) {
-            ketoGmail = fs.readFileSync(ketoAddr).toString();
-        }
-        const currentDynLink = "http://127.0.0.1";
         var infoFromURL = url.parse(req.url, true).query;
+        var ketoGmail = emailAssigner(pathToGmailInfo);
+        const currentDynLink = "http://127.0.0.1";
 
-        var filePath = null;
+        const filePath = filePathAssigner(infoFromURL.page);
 
-        if (pageNullChecker(infoFromURL.page) == "n") {
-            filePath = globalPathFinder(["www", "main", "page"], "index.html");
-        } else if (giveInformationAboutPage(infoFromURL.page) == "model") {
-            filePath = globalPathFinder(["www", "main", "page", "model"], giveInformationAboutPage(infoFromURL.page) + ".html");
-        } else {
-            filePath = globalPathFinder(["www", "main", "page"], giveInformationAboutPage(infoFromURL.page) + ".html");
-        }
-
-        if (fileExistanceChecker(filePath) == true) { //checking if the file exists
+        if (ifExists(filePath)) { //checking if the file exists
             fs.readFile(filePath, 'utf-8', function (err, data) {
-                var dataToString = data.toString();
-                //changement of the code is finished
-                res.write(replaceText(dataToString, infoFromURL, currentDynLink, ketoGmail));
+                res.write(replaceText(data.toString(), infoFromURL, currentDynLink, ketoGmail));
                 return res.end();
             });
         } else {
-            var filePath = globalPathFinder(["www", "main", "error", languageChooser(infoFromURL.lang)], "error.html");
+            var filePath2 = globalPathFinder(["www", "main", "error", langChooser(infoFromURL.lang)], "error.html");
 
-            fs.readFile(filePath, 'utf-8', function (err, data) {
+            fs.readFile(filePath2, 'utf-8', function (err, data) {
                 var dataString = data.toString();
                 if (typeof dataString == 'string' && dataString !== '' && dataString !== "") {
                     if (dataString.includes("@dynamicLink")) {
@@ -261,13 +323,15 @@ if (!module.parent) {
 // If we're running under Node, 
 if (typeof exports !== 'undefined') {
     exports.replaceText = replaceText;
-    exports.giveInformationAboutPage = giveInformationAboutPage;
-    exports.languageChooser = languageChooser;
+    exports.pageNamer = pageNamer;
+    exports.langChooser = langChooser;
     exports.errorTextFunc = errorTextFunc;
-    exports.pageNullChecker = pageNullChecker;
-    exports.fileExistanceChecker = fileExistanceChecker;
+    exports.isNull = isNull;
+    exports.ifExists = ifExists;
     exports.globalPathFinder = globalPathFinder;
     exports.wrongPageErrorHTML = wrongPageErrorHTML;
+    exports.emailAssigner = emailAssigner;
+    exports.filePathAssigner = filePathAssigner;
 }
 
 

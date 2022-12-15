@@ -66,7 +66,7 @@ describe('index.js', () => {
         imageJS = rewire('../image.js');
     });
 
-    context('checkTheType()', () => {
+    context('getLoc()', () => {
         var gStub;
 
         beforeEach(() => {
@@ -84,7 +84,7 @@ describe('index.js', () => {
         it('sends \'()\', expects undefined', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType()).to.equal(undefined);
+            expect(imageJS.getLoc()).to.equal(undefined);
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -94,7 +94,7 @@ describe('index.js', () => {
         it('sends \'(null, \"\")\', expects \"\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType(null, "")).to.equal("");
+            expect(imageJS.getLoc(null, "")).to.equal("");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -104,7 +104,7 @@ describe('index.js', () => {
         it('sends \'(undefined, \"\")\', expects \"\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType(undefined, "")).to.equal("");
+            expect(imageJS.getLoc(undefined, "")).to.equal("");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -114,7 +114,7 @@ describe('index.js', () => {
         it('sends \'(\"\", \"\")\', expects \"\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType("", "")).to.equal("");
+            expect(imageJS.getLoc("", "")).to.equal("");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -124,7 +124,7 @@ describe('index.js', () => {
         it('sends \'({}, \"\")\', expects \"\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({}, "")).to.equal("");
+            expect(imageJS.getLoc({}, "")).to.equal("");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -134,7 +134,7 @@ describe('index.js', () => {
         it('sends \'(\'\', \"\")\', expects \'\'', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType('', "")).to.equal('');
+            expect(imageJS.getLoc('', "")).to.equal('');
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -144,7 +144,7 @@ describe('index.js', () => {
         it('sends \'([], \"\")\', expects \"\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType([], "")).to.equal("");
+            expect(imageJS.getLoc([], "")).to.equal("");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -154,7 +154,7 @@ describe('index.js', () => {
         it('sends \'(5, \"\")\', expects \"\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType(5, "")).to.equal("");
+            expect(imageJS.getLoc(5, "")).to.equal("");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -164,7 +164,7 @@ describe('index.js', () => {
         it('sends \'(\"randomString\", \"\")\', expects \"\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType("randomString", "")).to.equal("");
+            expect(imageJS.getLoc("randomString", "")).to.equal("");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -174,7 +174,7 @@ describe('index.js', () => {
         it('sends \'({ \"noType\": \"randomType\" })\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "noType": "randomType" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "noType": "randomType" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -184,7 +184,7 @@ describe('index.js', () => {
         it('sends \'({ \"noType\": \"randomType\" })\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "noType": "randomType" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "noType": "randomType" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -194,7 +194,7 @@ describe('index.js', () => {
         it('sends \'({ \"noType\": \"randomType\" })\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "noType": "randomType" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "noType": "randomType" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -204,7 +204,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"randomType\" })\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "randomType" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "type": "randomType" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -214,7 +214,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"icon\", \"img\": \"randomName\" })\', expects true', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "icon", "img": "randomName" }, "randomLoc")).to.be.true;
+            expect(imageJS.getLoc({ "type": "icon", "img": "randomName" }, "randomLoc")).to.be.true;
             expect(gStub.calledOnce).to.be.true;
             expect(gStub.callCount).to.equal(1);
             expect(gStub).to.have.returned(true);
@@ -224,7 +224,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"cover\" })\', expects true', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "cover" }, "randomLoc")).to.be.true;
+            expect(imageJS.getLoc({ "type": "cover" }, "randomLoc")).to.be.true;
             expect(gStub.calledOnce).to.be.true;
             expect(gStub).to.have.returned(true);
             expect(gStub.callCount).to.equal(1);
@@ -234,7 +234,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"albumCover\" })\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "albumCover" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "type": "albumCover" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -244,7 +244,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"albumCover\", \"coverImg\": \"randomName\" })\', expects true', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "albumCover", "coverImg": "randomName" }, "randomLoc")).to.be.true;
+            expect(imageJS.getLoc({ "type": "albumCover", "coverImg": "randomName" }, "randomLoc")).to.be.true;
             expect(gStub.calledOnce).to.be.true;
             expect(gStub).to.have.returned(true);
             expect(gStub.callCount).to.equal(1);
@@ -254,7 +254,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"img\" }, \"randomLoc\")\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "img" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "type": "img" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -264,7 +264,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"img\", \"requestedImage\": \"randomRequestedImage\" }, \"randomLoc\")\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "img", "requestedImage": "randomRequestedImage" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "type": "img", "requestedImage": "randomRequestedImage" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -274,7 +274,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"img\", \"albumName\": \"randomName\" }, \"randomLoc\")\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "img", "albumName": "randomName" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "type": "img", "albumName": "randomName" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -284,7 +284,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"img\", \"requestedImage\": \"randomRequestedImage\", \"albumName\": \"randomName\" }, \"randomLoc\")\', expects true', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "img", "requestedImage": "randomRequestedImage", "albumName": "randomName" }, "randomLoc")).to.be.true;
+            expect(imageJS.getLoc({ "type": "img", "requestedImage": "randomRequestedImage", "albumName": "randomName" }, "randomLoc")).to.be.true;
             expect(gStub.calledOnce).to.be.true;
             expect(gStub.callCount).to.equal(1);
             expect(gStub).to.have.returned(true);
@@ -294,7 +294,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"ketoPics\" }, \"randomLoc\")\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "ketoPics" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "type": "ketoPics" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -304,7 +304,7 @@ describe('index.js', () => {
         it('sends \'({ \"img\": \"randomImage\" }, \"randomLoc\")\', expects \"randomLoc\"', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "img": "randomImage" }, "randomLoc")).to.equal("randomLoc");
+            expect(imageJS.getLoc({ "img": "randomImage" }, "randomLoc")).to.equal("randomLoc");
             expect(gStub.called).to.be.false;
             expect(gStub.callCount).to.equal(0);
             expect(gStub).to.have.not.returned(true);
@@ -314,7 +314,7 @@ describe('index.js', () => {
         it('sends \'({ \"type\": \"ketoPics\", \"img\": \"randomImage\" }, \"randomLoc\")\', expects true', () => {
             imageJS.__set__('globalPathFinder', gStub);
 
-            expect(imageJS.checkTheType({ "type": "ketoPics", "img": "randomImage" }, "randomLoc")).to.be.true;
+            expect(imageJS.getLoc({ "type": "ketoPics", "img": "randomImage" }, "randomLoc")).to.be.true;
             expect(gStub.calledOnce).to.be.true;
             expect(gStub.callCount).to.equal(1);
             expect(gStub).to.have.returned(true);

@@ -2,6 +2,130 @@ const ketoContactGmail_G = "@ketoGmailINFORMATION"; //the gmail of Keto, used fo
 const maingLang_G = "@lang"; //the language chosen by the user
 var chosenAlbumID_G = null; //the ID of the album chosen by the user
 
+
+//////////////////////////////////////////////////////////////////////////////////////////// LOADER FUNCTIONS
+
+
+// loads the whole page
+function bodyOnloadFunc(contactedSiteInfo) {
+	var xhttp = new XMLHttpRequest(); //use to connect to the servers
+	var url = "@dynamicLink:8093/?type=mainPage";
+	xhttp.open("GET", url, true);
+
+	xhttp.onreadystatechange = function () {
+		if (this.readyState == 4) {
+			if (this.status == 200) {
+				var fullArray = [JSON.parse(this.responseText)];
+				var mainArray = fullArray[0][0];
+				var headerTextArray = fullArray[0][1];
+				var ketoSocialMediaArray = fullArray[0][2];
+				addSocialMediasToFooter(ketoSocialMediaArray);
+				fillGalleries(headerTextArray, mainArray);
+				fillBlanks(maingLang_G, headerTextArray);
+				if (contactedSiteInfo == 'index') {
+					fillPortfolioSection(mainArray);
+				} else if (contactedSiteInfo == 'in_gallery') {
+					fillImagesInGalleries("@infoForTheIDOfTheArrayOfTheGallery", mainArray);
+				} else if (contactedSiteInfo == 'aboutme') {
+					loadAboutKeto(maingLang_G);
+				} else { }
+			} else {
+				serverDisconnectErr();
+			}
+		}
+	};
+	xhttp.send();
+}
+
+// fills the images in the galleries in
+function fillImagesInGalleries(galleryID, mainArray) {
+	var imagesOfTheGalleryDiv = document.getElementById('imagesOfTheGallery');
+	imagesOfTheGalleryDiv.innerHTML = "";
+	var folderLock = null;
+	for (var i = 0; i < mainArray.length; i++) {
+		if (mainArray[i].id == parseInt(galleryID)) {
+			folderLock = i;
+		}
+	}
+
+	for (var i = 0; i < mainArray[folderLock].images.length; i++) {
+		if (i % 4 == 0) {
+			imagesOfTheGalleryDiv.innerHTML = imagesOfTheGalleryDiv.innerHTML + "<div class=\"centeredDivForImages\">"
+		}
+		imagesOfTheGalleryDiv.innerHTML = imagesOfTheGalleryDiv.innerHTML + "<img class=\"imgForIn_Gallery\" src=\"@dynamicLink:8092/?type=img&albumName=" + mainArray[folderLock].folderName + "&requestedImage=" + mainArray[folderLock].images[i] + "\">";
+		if (i % 4 == 0) {
+			imagesOfTheGalleryDiv.innerHTML = imagesOfTheGalleryDiv.innerHTML + "</div>"
+		}
+	}
+}
+
+// fills the names of the galleries in the header
+function fillGalleries(headerTextArray, mainArray) {
+	var galleriesContent_DIV = document.getElementById('galleriesContent');
+	galleriesContent_DIV.innerHTML = "";
+
+	for (var i = 0; i < mainArray.length; i++) {
+		galleriesContent_DIV.innerHTML = galleriesContent_DIV.innerHTML + "<a class=\"a2\" href=\"@dynamicLink:8091/?page=in_gallery&galleryID=" + mainArray[i].id + "&lang=" + maingLang_G + "\">" + ketoTranslator(maingLang_G, "translation_for_lang_names", i, mainArray) + "</a> ";
+	}
+}
+
+// fills the portfolio section
+function fillPortfolioSection(mainArray) { //ISN'T TESTED VIA test.js
+	var viewMyWorkHomePageId_DIV = document.getElementById('viewMyWorkHomePageId');
+	viewMyWorkHomePageId_DIV.innerHTML = "";
+
+	for (var i = 0; i < mainArray.length; i++) {
+		var coverImg = mainArray[i].cover;
+		// var coverAlbumName = mainArray[i].folderName;
+		viewMyWorkHomePageId_DIV.innerHTML = viewMyWorkHomePageId_DIV.innerHTML + "<a class=\"viewMyWorkA\" href=\"@dynamicLink:8091/?page=in_gallery&galleryID=" + mainArray[i].id + "&galleryfolderName=" + mainArray[i].folderName + "&lang=" + maingLang_G + "\"> <img class=\"viewMyWorkImg\" width=550px height=400px src=\"@dynamicLink:8092/?type=albumCover&coverImg=" + coverImg + "\"> </a>";
+	}
+}
+
+// fills out the words in website in different languages (currently English, Russian and Georgian)
+function fillBlanks(lang, headerTextArray) { //ISN'T TESTED VIA test.js
+	for (let i = 0; i < headerTextArray.length; i++) {
+		if (document.getElementById(headerTextArray[i].id) !== null) {
+			document.getElementById(headerTextArray[i].id).innerHTML = ketoTranslator(lang, "translation_for_the_main_text", i, headerTextArray);
+		}
+	}
+}
+
+function addSocialMediasToFooter(arr) {
+	var footerSocialMediaPDiv = document.getElementById('footerSocialMediaP');
+	footerSocialMediaPDiv.innerHTML = "";
+	for (var i = 0; i < arr.length; i++) {
+		var toSend = "<a class=\"footerImgA\" href=\"" + arr[i].link + "\"><img class=\"footerImg\" width=40px length=40px src=\"@dynamicLink:8092/?type=icon&img=" + arr[i].platformName + ".png\"></a>";
+		footerSocialMediaPDiv.innerHTML = footerSocialMediaPDiv.innerHTML + toSend;
+	}
+}
+
+function loadAboutKeto(lang) {
+	var xhttp = new XMLHttpRequest(); //use to connect to the servers
+	var url = "@dynamicLink:8093/?page=aboutme&lang=" + lang
+	xhttp.open("GET", url, true);
+
+	xhttp.onreadystatechange = function () {
+		if (this.readyState == 4) {
+			if (this.status == 200) {
+				var aboutKetoPElement = document.getElementById("aboutKetoP");
+				aboutKetoPElement.innerHTML = this.responseText;
+			} else {
+				serverDisconnectErr();
+			}
+		}
+	};
+	xhttp.send();
+}
+
+// let's the user know if the server couldn't connect or disconnected and let's them know to contact us
+function serverDisconnectErr() {
+	alert("Server couldn\'t connect, try again later or contact us at " + ketoContactGmail_G);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////// HELPER FUNCTIONS
+
+
 function askForHelp(info) {
 	//
 }
@@ -106,121 +230,6 @@ function ketoTranslator(neededLang, job, otherInfo, givenArr) {
 	}
 }
 
-// let's the user know if the server couldn't connect or disconnected and let's them know to contact us
-function serverDisconnectErr() {
-	alert("Server couldn\'t connect, try again later or contact us at " + ketoContactGmail_G);
-}
-
-// loads the whole page
-function bodyOnloadFunc(contactedSiteInfo) {
-	var xhttp = new XMLHttpRequest(); //use to connect to the servers
-	var url = "@dynamicLink:8093/?type=mainPage";
-	xhttp.open("GET", url, true);
-
-	xhttp.onreadystatechange = function () {
-		if (this.readyState == 4) {
-			if (this.status == 200) {
-				var fullArray = [JSON.parse(this.responseText)];
-				var mainArray = fullArray[0][0];
-				var headerTextArray = fullArray[0][1];
-				var ketoSocialMediaArray = fullArray[0][2];
-				addSocialMediasToFooter(ketoSocialMediaArray);
-				fillGalleries(headerTextArray, mainArray);
-				if (contactedSiteInfo == 'index') {
-					fillPortfolioSection(mainArray);
-				} else if (contactedSiteInfo == 'in_gallery') {
-					fillImagesInGalleries("@infoForTheIDOfTheArrayOfTheGallery", mainArray);
-				} else if (contactedSiteInfo == 'aboutme') {
-					loadAboutKeto(maingLang_G);
-				}
-			} else {
-				serverDisconnectErr();
-			}
-		}
-	};
-	xhttp.send();
-}
-
-// fills the images in the galleries in
-function fillImagesInGalleries(galleryID, mainArray) {
-	var imagesOfTheGalleryDiv = document.getElementById('imagesOfTheGallery');
-	imagesOfTheGalleryDiv.innerHTML = "";
-	var folderLock = null;
-	for (var i = 0; i < mainArray.length; i++) {
-		if (mainArray[i].id == parseInt(galleryID)) {
-			folderLock = i;
-		}
-	}
-
-	for (var i = 0; i < mainArray[folderLock].images.length; i++) {
-		if (i % 4 == 0) {
-			imagesOfTheGalleryDiv.innerHTML = imagesOfTheGalleryDiv.innerHTML + "<div class=\"centeredDivForImages\">"
-		}
-		imagesOfTheGalleryDiv.innerHTML = imagesOfTheGalleryDiv.innerHTML + "<img class=\"imgForIn_Gallery\" src=\"@dynamicLink:8092/?type=img&albumName=" + mainArray[folderLock].folderName + "&requestedImage=" + mainArray[folderLock].images[i] + "\">";
-		if (i % 4 == 0) {
-			imagesOfTheGalleryDiv.innerHTML = imagesOfTheGalleryDiv.innerHTML + "</div>"
-		}
-	}
-}
-
-// fills the names of the galleries in the header
-function fillGalleries(headerTextArray, mainArray) {
-	var galleriesContent_DIV = document.getElementById('galleriesContent');
-	galleriesContent_DIV.innerHTML = "";
-
-	for (var i = 0; i < mainArray.length; i++) {
-		galleriesContent_DIV.innerHTML = galleriesContent_DIV.innerHTML + "<a class=\"a2\" href=\"@dynamicLink:8091/?page=in_gallery&galleryID=" + mainArray[i].id + "&lang=" + maingLang_G + "\">" + ketoTranslator(maingLang_G, "translation_for_lang_names", i, mainArray) + "</a> ";
-	}
-	fillBlanks(maingLang_G, headerTextArray);
-}
-
-// fills the portfolio section
-function fillPortfolioSection(mainArray) { //ISN'T TESTED VIA test.js
-	var viewMyWorkHomePageId_DIV = document.getElementById('viewMyWorkHomePageId');
-	viewMyWorkHomePageId_DIV.innerHTML = "";
-
-	for (var i = 0; i < mainArray.length; i++) {
-		var coverImg = mainArray[i].cover;
-		// var coverAlbumName = mainArray[i].folderName;
-		viewMyWorkHomePageId_DIV.innerHTML = viewMyWorkHomePageId_DIV.innerHTML + "<a class=\"viewMyWorkA\" href=\"@dynamicLink:8091/?page=in_gallery&galleryID=" + mainArray[i].id + "&galleryfolderName=" + mainArray[i].folderName + "&lang=" + maingLang_G + "\"> <img class=\"viewMyWorkImg\" width=550px height=400px src=\"@dynamicLink:8092/?type=albumCover&coverImg=" + coverImg + "\"> </a>";
-	}
-}
-
-// fills out the words in website in different languages (currently English, Russian and Georgian)
-function fillBlanks(language, headerTextArray) { //ISN'T TESTED VIA test.js
-	for (let i = 0; i < headerTextArray.length; i++) {
-		if (document.getElementById(headerTextArray[i].id) !== null) {
-			document.getElementById(headerTextArray[i].id).innerHTML = ketoTranslator(language, "translation_for_the_main_text", i, headerTextArray);
-		}
-	}
-}
-
-function addSocialMediasToFooter(ketoSocialMediaArray) {
-	var footerSocialMediaPDiv = document.getElementById('footerSocialMediaP');
-	footerSocialMediaPDiv.innerHTML = "";
-	for (var i = 0; i < ketoSocialMediaArray.length; i++) {
-		var toSend = "<a class=\"footerImgA\" href=\"" + ketoSocialMediaArray[i].link + "\"><img class=\"footerImg\" width=40px length=40px src=\"@dynamicLink:8092/?type=icon&img=" + ketoSocialMediaArray[i].platformName + ".png\"></a>";
-		footerSocialMediaPDiv.innerHTML = footerSocialMediaPDiv.innerHTML + toSend;
-	}
-}
-
-function loadAboutKeto(lang) {
-	var xhttp = new XMLHttpRequest(); //use to connect to the servers
-	var url = "@dynamicLink:8093/?page=aboutme&lang=" + lang
-	xhttp.open("GET", url, true);
-
-	xhttp.onreadystatechange = function () {
-		if (this.readyState == 4) {
-			if (this.status == 200) {
-				var aboutKetoPElement = document.getElementById("aboutKetoP");
-				aboutKetoPElement.innerHTML = this.responseText;
-			} else {
-				serverDisconnectErr();
-			}
-		}
-	};
-	xhttp.send();
-}
 
 // If we're running under Node
 /*
